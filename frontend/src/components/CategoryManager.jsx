@@ -11,6 +11,7 @@ import {
   ArrowDownRight,
 } from "lucide-react";
 import { ICON_OPTIONS, COLOR_OPTIONS, getCategoryIcon } from "../iconMap";
+import { InfoTooltip } from "./InfoTooltip";
 
 const easeOut = [0.22, 1, 0.36, 1];
 
@@ -270,7 +271,8 @@ function CategoryTypeSection({
         </AnimatePresence>
         {categories.length === 0 && !adding && (
           <p className="py-4 text-center text-xs text-neutral-400">
-            No tienes categorías de {label.toLowerCase()} todavía.
+            Aún no tienes categorías de {label.toLowerCase()}. Usa el botón
+            "Nueva" de arriba para crear la primera.
           </p>
         )}
       </div>
@@ -308,10 +310,12 @@ export function CategoryManager({
         <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-800">
           <Tags className="h-5 w-5 text-neutral-900" />
           Categorías
+          <InfoTooltip text="Las categorías son etiquetas para agrupar tus movimientos, como 'Comida', 'Transporte' o 'Sueldo'. Te ayudan a ver en qué se te va el dinero y a definir presupuestos por tipo de gasto." />
         </h2>
         <p className="mt-1 text-xs text-neutral-500">
-          Crea, renombra o elimina las categorías que usás para clasificar tus
-          ingresos y gastos. Cada una tiene su propio color e ícono.
+          Crea, renombra o elimina las categorías que usas para clasificar tus
+          ingresos y gastos. Cada una tiene su propio color e ícono para que
+          las reconozcas rápido en tus movimientos.
         </p>
       </div>
 

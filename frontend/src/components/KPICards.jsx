@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Wallet, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
+import { InfoTooltip } from "./InfoTooltip";
 
 const easeOut = [0.22, 1, 0.36, 1];
 
@@ -59,7 +60,10 @@ export function KPICards({ transactions = [], wallet }) {
         <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-indigo-500/20 blur-3xl" />
         <div className="relative flex items-start justify-between">
           <div>
-            <p className="text-sm font-medium text-neutral-400">Balance Total</p>
+            <p className="flex items-center gap-1.5 text-sm font-medium text-neutral-400">
+              Balance total
+              <InfoTooltip text="Es lo que te queda hoy: la suma de todos tus ingresos menos todos tus gastos. Si es positivo, te sobra dinero; si es negativo, gastaste más de lo que ganaste." />
+            </p>
             <motion.h3
               key={balance}
               initial={{ opacity: 0, y: 6 }}
@@ -99,7 +103,10 @@ export function KPICards({ transactions = [], wallet }) {
       >
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-neutral-500">Ingresos Totales</p>
+            <p className="flex items-center gap-1.5 text-sm font-medium text-neutral-500">
+              Ingresos totales
+              <InfoTooltip text="Todo el dinero que ha entrado: sueldo, ventas, regalos u otros ingresos que hayas registrado." />
+            </p>
             <motion.h3
               key={totals.income}
               initial={{ opacity: 0, y: 6 }}
@@ -134,7 +141,10 @@ export function KPICards({ transactions = [], wallet }) {
       >
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-neutral-500">Gastos Totales</p>
+            <p className="flex items-center gap-1.5 text-sm font-medium text-neutral-500">
+              Gastos totales
+              <InfoTooltip text="Todo el dinero que ha salido: compras, servicios, suscripciones y cualquier otro gasto que hayas registrado." />
+            </p>
             <motion.h3
               key={totals.expense}
               initial={{ opacity: 0, y: 6 }}
@@ -151,7 +161,9 @@ export function KPICards({ transactions = [], wallet }) {
         </div>
         <div className="mt-4 flex items-center gap-1.5 text-[11px] font-medium text-neutral-400">
           <TrendingUp className="h-3.5 w-3.5" />
-          {totals.expense > totals.income ? "Superaste tus ingresos" : "Dentro de tus ingresos"}
+          {totals.expense > totals.income
+            ? "Gastaste más de lo que ingresó"
+            : "Vas bien: gastas menos de lo que ingresa"}
         </div>
       </motion.div>
     </motion.div>

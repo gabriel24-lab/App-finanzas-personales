@@ -19,18 +19,18 @@ export function BudgetManager({
     <div className="rounded-2xl border border-neutral-100 bg-white p-6 shadow-sm">
       <h2 className="text-lg font-semibold text-neutral-800 mb-1 flex items-center gap-2">
         <Settings2 className="h-5 w-5 text-neutral-900" />
-        Definir Presupuestos
+        Definir presupuestos
       </h2>
       <p className="text-xs text-neutral-500 mb-5">
-        Establece un límite mensual para cada categoría de gasto. Un valor de 0
-        significa sin límite.
+        Escribe cuánto quieres gastar como máximo este mes en cada categoría.
+        Déjalo en 0 si no quieres ponerle límite todavía.
       </p>
 
       <div className="space-y-3">
         {expenseCategories.length === 0 && (
           <p className="py-4 text-center text-xs text-neutral-400">
-            Todavía no tienes categorías de gasto. Creá alguna en la pestaña de
-            Categorías.
+            Todavía no tienes categorías de gasto. Crea alguna en la pestaña
+            de Categorías para poder asignarle un presupuesto.
           </p>
         )}
         {expenseCategories.map((category) => (

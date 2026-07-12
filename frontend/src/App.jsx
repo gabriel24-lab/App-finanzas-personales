@@ -1,15 +1,18 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Landmark,
   LayoutDashboard,
   PiggyBank,
   Tags,
+  Target,
   Loader2,
   AlertCircle,
   LogOut,
 } from "lucide-react";
 import { KPICards } from "./components/KPICards";
+import { InsightsPanel } from "./components/InsightsPanel";
+import { OnboardingChecklist } from "./components/OnboardingChecklist";
 import { DashboardCharts } from "./components/DashboardCharts";
 import { TransactionForm } from "./components/TransactionForm";
 import { TransactionFilters } from "./components/TransactionFilters";
@@ -17,6 +20,8 @@ import { TransactionList } from "./components/TransactionList";
 import { BudgetOverview } from "./components/BudgetOverview";
 import { BudgetManager } from "./components/BudgetManager";
 import { CategoryManager } from "./components/CategoryManager";
+import { SavingsGoals } from "./components/SavingsGoals";
+import { UpcomingPayments } from "./components/UpcomingPayments";
 import { LanguageSwitcher } from "./components/LanguageSwitcher";
 import { LandingPage } from "./pages/LandingPage";
 import { AuthPage } from "./pages/AuthPage";
@@ -41,6 +46,17 @@ const easeOut = [0.22, 1, 0.36, 1];
 function Dashboard() {
   const { user, token, logout } = useAuth();
   const { t } = useLanguage();
+
+  // Guard: al cerrar sesión, `user` pasa a null de inmediato, pero este
+  // componente sigue montado unos milisegundos más mientras AnimatePresence
+  // reproduce la animación de salida (mode="wait"). Sin este guard, las
+  // líneas de abajo (user.wallets, user.name, etc.) intentan leer
+  // propiedades de null y lanzan un error que rompe todo el árbol de React,
+  // dejando la pantalla en blanco hasta recargar. Con el guard, el
+  // componente simplemente no dibuja nada durante ese instante y la
+  // transición hacia la landing page ocurre con normalidad.
+  if (!user) return null;
+
   const wallet = user.wallets?.[0];
 
   const [transactions, setTransactions] = useState([]);
@@ -197,6 +213,17 @@ function Dashboard() {
 
   const firstName = user.name?.split(" ")[0] || "";
 
+  const greetingHour = new Date().getHours();
+  const greetingKey =
+    greetingHour < 12
+      ? "dashboard.greeting.morning"
+      : greetingHour < 19
+        ? "dashboard.greeting.afternoon"
+        : "dashboard.greeting.evening";
+
+  const hasBudget = Object.values(budgets).some((amount) => Number(amount) > 0);
+  const hasCustomCategory = categories.some((c) => !c.isDefault);
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-neutral-50">
@@ -234,7 +261,7 @@ function Dashboard() {
             </div>
             <div>
               <h1 className="text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl">
-                {t("dashboard.greeting", { name: firstName })}
+                {t(greetingKey, { name: firstName })}
               </h1>
               <p className="text-sm font-medium text-neutral-500">{t("dashboard.subtitle")}</p>
             </div>
@@ -294,6 +321,23 @@ function Dashboard() {
                   />
                 )}
               </button>
+              <button
+                type="button"
+                onClick={() => setActiveView("goals")}
+                className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                  activeView === "goals" ? "text-white" : "text-neutral-500 hover:text-neutral-900"
+                }`}
+              >
+                <Target className="h-3.5 w-3.5" />
+                {t("dashboard.nav.goals")}
+                {activeView === "goals" && (
+                  <motion.span
+                    layoutId="viewSwitcherPill"
+                    transition={{ duration: 0.35, ease: easeOut }}
+                    className="absolute inset-0 -z-10 rounded-xl bg-neutral-900 shadow-sm"
+                  />
+                )}
+              </button>
             </div>
 
             <LanguageSwitcher variant="default" />
@@ -309,6 +353,15 @@ function Dashboard() {
             </button>
           </div>
         </motion.header>
+
+        <OnboardingChecklist
+          userId={user._id}
+          hasTransactions={transactions.length > 0}
+          hasBudget={hasBudget}
+          hasCustomCategory={hasCustomCategory}
+          onGoToBudgets={() => setActiveView("budgets")}
+          onGoToCategories={() => setActiveView("categories")}
+        />
 
         <AnimatePresence>
           {error && (
@@ -328,8 +381,9 @@ function Dashboard() {
         {/* Dashboard Layout */}
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
           {/* Left Column: Form */}
-          <div className="lg:sticky lg:top-8 lg:col-span-4">
+          <div className="space-y-6 lg:sticky lg:top-8 lg:col-span-4">
             <TransactionForm categories={categories} onAddTransaction={handleAddTransaction} />
+            <UpcomingPayments transactions={transactions} categories={categories} wallet={wallet} />
           </div>
 
           {/* Right Column: Cards, Filters & List */}
@@ -345,6 +399,10 @@ function Dashboard() {
                   className="space-y-6"
                 >
                   <KPICards transactions={transactions} wallet={wallet} />
+
+                  {transactions.length > 0 && (
+                    <InsightsPanel token={token} walletId={wallet?.wallet_id} />
+                  )}
 
                   <DashboardCharts transactions={transactions} categories={categories} wallet={wallet} />
 
@@ -377,6 +435,7 @@ function Dashboard() {
                       transactions={filteredTransactions}
                       categories={categories}
                       onDeleteTransaction={handleDeleteTransaction}
+                      wallet={wallet}
                     />
                   </div>
                 </motion.div>
@@ -391,7 +450,7 @@ function Dashboard() {
                   transition={{ duration: 0.32, ease: easeOut }}
                   className="space-y-6"
                 >
-                  <BudgetOverview transactions={transactions} budgets={budgets} categories={categories} />
+                  <BudgetOverview transactions={transactions} budgets={budgets} categories={categories} wallet={wallet} />
                   <BudgetManager categories={categories} budgets={budgets} onUpdateBudget={handleUpdateBudget} />
                 </motion.div>
               )}
@@ -413,6 +472,19 @@ function Dashboard() {
                   />
                 </motion.div>
               )}
+
+              {activeView === "goals" && (
+                <motion.div
+                  key="goals-view"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.32, ease: easeOut }}
+                  className="space-y-6"
+                >
+                  <SavingsGoals userId={user._id} wallet={wallet} />
+                </motion.div>
+              )}
             </AnimatePresence>
           </div>
         </div>
@@ -427,6 +499,28 @@ function App() {
   const [publicView, setPublicView] = useState("landing");
   const [authMode, setAuthMode] = useState("login");
   const [infoSlug, setInfoSlug] = useState(null);
+
+  // Recuerda si en el render anterior había una sesión activa, para poder
+  // detectar el momento exacto del logout (user pasa de "algo" a null).
+  const wasLoggedInRef = useRef(false);
+
+  useEffect(() => {
+    if (user) {
+      wasLoggedInRef.current = true;
+      return;
+    }
+    // Si justo veníamos de tener sesión iniciada, es un logout: llevamos a
+    // la persona a la página de inicio (landing), no a la de login, que es
+    // simplemente el último "publicView" que quedó guardado de antes de
+    // entrar a la cuenta.
+    if (wasLoggedInRef.current) {
+      wasLoggedInRef.current = false;
+      setPublicView("landing");
+      setAuthMode("login");
+      setInfoSlug(null);
+      window.location.hash = "";
+    }
+  }, [user]);
 
   useEffect(() => {
     function applyRouteFromHash() {

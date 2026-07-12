@@ -9,6 +9,7 @@ import {
   FileText,
 } from "lucide-react";
 import { TRANSACTION_TYPES } from "../types";
+import { InfoTooltip } from "./InfoTooltip";
 
 export function TransactionForm({ categories = [], onAddTransaction }) {
   const [description, setDescription] = useState("");
@@ -90,10 +91,14 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
 
   return (
     <div className="rounded-2xl border border-neutral-100 bg-white p-6 shadow-sm">
-      <h2 className="text-lg font-semibold text-neutral-800 mb-5 flex items-center gap-2">
+      <h2 className="text-lg font-semibold text-neutral-800 flex items-center gap-2">
         <PlusCircle className="h-5 w-5 text-neutral-900" />
-        Agregar Transacción
+        Agregar movimiento
       </h2>
+      <p className="mb-5 mt-1 text-xs text-neutral-500">
+        Un "movimiento" es cualquier entrada o salida de dinero: un pago, una
+        compra, tu sueldo o cualquier otro ingreso.
+      </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Type Selector (Tabs) */}
@@ -154,8 +159,9 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
 
         {/* Amount */}
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wider text-neutral-500 block mb-1">
-            Monto ($)
+          <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-1">
+            Monto
+            <InfoTooltip text="Escribe solo el número, sin el símbolo de moneda. Usa un punto para los decimales, por ejemplo: 25000 o 25000.50." />
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-400">
@@ -182,35 +188,42 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
           <label className="text-xs font-semibold uppercase tracking-wider text-neutral-500 block mb-1">
             Categoría
           </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-400">
-              <Tag className="h-4 w-4" />
-            </div>
-            <select
-              value={category}
-              onChange={(e) => {
-                setCategory(e.target.value);
-                setError("");
-              }}
-              className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900/5 focus:border-neutral-900 focus:bg-white transition-all appearance-none cursor-pointer"
-              required
-            >
-              {categoriesByType(type).map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-neutral-400">
-              <svg
-                className="fill-current h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
+          {categoriesByType(type).length > 0 ? (
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-400">
+                <Tag className="h-4 w-4" />
+              </div>
+              <select
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setError("");
+                }}
+                className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900/5 focus:border-neutral-900 focus:bg-white transition-all appearance-none cursor-pointer"
+                required
               >
-                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-              </svg>
+                {categoriesByType(type).map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-neutral-400">
+                <svg
+                  className="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
             </div>
-          </div>
+          ) : (
+            <p className="rounded-2xl border border-dashed border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-500">
+              Todavía no tienes categorías de {type === TRANSACTION_TYPES.income ? "ingreso" : "gasto"}.
+              Ve a la pestaña <strong>Categorías</strong> para crear la primera; solo toma unos segundos.
+            </p>
+          )}
         </div>
 
         {/* Date */}

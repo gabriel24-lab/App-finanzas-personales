@@ -1,10 +1,11 @@
 import React, { useMemo } from "react";
 import { PiggyBank, AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
+import { InfoTooltip } from "./InfoTooltip";
 
-const formatCurrency = (value) =>
+const formatCurrency = (value, currencyCode = "COP") =>
   new Intl.NumberFormat("es-CO", {
     style: "currency",
-    currency: "COP",
+    currency: currencyCode,
     minimumFractionDigits: 2,
   }).format(value);
 
@@ -41,7 +42,9 @@ export function BudgetOverview({
   transactions = [],
   budgets = {},
   categories = [],
+  wallet,
 }) {
+  const currencyCode = wallet?.currency_code || "COP";
   const expenseCategoryNames = useMemo(
     () => categories.filter((c) => c.type === "expense").map((c) => c.name),
     [categories],
@@ -86,9 +89,10 @@ export function BudgetOverview({
   return (
     <div className="rounded-2xl border border-neutral-100 bg-white p-6 shadow-sm">
       <div className="flex items-center justify-between mb-1">
-        <h2 className="text-lg font-semibold text-neutral-800 flex items-center gap-2">
+        <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-800">
           <PiggyBank className="h-5 w-5 text-neutral-900" />
-          Presupuesto Mensual
+          Presupuesto mensual
+          <InfoTooltip text="Un presupuesto es el límite de dinero que decides gastar en una categoría (por ejemplo, Comida) durante el mes. Aquí ves cuánto llevas gastado frente a ese límite." />
         </h2>
         <span className="text-xs font-medium text-neutral-500 capitalize bg-neutral-50 border border-neutral-100 px-2.5 py-1 rounded-full">
           {monthLabel}
@@ -102,11 +106,12 @@ export function BudgetOverview({
       {summary.withBudget.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-neutral-200 py-8 px-4 text-center">
           <p className="text-sm font-semibold text-neutral-700">
-            Aún no has definido presupuestos
+            Todavía no has definido ningún presupuesto
           </p>
           <p className="text-xs text-neutral-500 mt-1 max-w-xs mx-auto">
-            Asigna un límite mensual a tus categorías de gasto para empezar a
-            controlar tu presupuesto.
+            Por ejemplo, puedes ponerle un límite de $300.000 al mes a la
+            categoría "Comida". Ve a la pestaña <strong>Presupuestos</strong>{" "}
+            y elige un monto para cada categoría que quieras controlar.
           </p>
         </div>
       ) : (
@@ -118,7 +123,7 @@ export function BudgetOverview({
                 Presupuestado
               </p>
               <p className="text-sm font-bold text-neutral-800 mt-1">
-                {formatCurrency(summary.totalBudgeted)}
+                {formatCurrency(summary.totalBudgeted, currencyCode)}
               </p>
             </div>
             <div className="rounded-2xl bg-neutral-50 border border-neutral-100 p-3">
@@ -126,7 +131,7 @@ export function BudgetOverview({
                 Gastado
               </p>
               <p className="text-sm font-bold text-neutral-800 mt-1">
-                {formatCurrency(summary.totalSpent)}
+                {formatCurrency(summary.totalSpent, currencyCode)}
               </p>
             </div>
             <div className="rounded-2xl bg-neutral-50 border border-neutral-100 p-3">
@@ -140,7 +145,7 @@ export function BudgetOverview({
                     : "text-emerald-600"
                 }`}
               >
-                {formatCurrency(summary.totalBudgeted - summary.totalSpent)}
+                {formatCurrency(summary.totalBudgeted - summary.totalSpent, currencyCode)}
               </p>
             </div>
           </div>
@@ -167,9 +172,9 @@ export function BudgetOverview({
                         </span>
                       </div>
                       <span className="text-xs font-medium text-neutral-500">
-                        {formatCurrency(row.spent)}{" "}
+                        {formatCurrency(row.spent, currencyCode)}{" "}
                         <span className="text-neutral-400">
-                          / {formatCurrency(row.limit)}
+                          / {formatCurrency(row.limit, currencyCode)}
                         </span>
                       </span>
                     </div>
@@ -182,7 +187,7 @@ export function BudgetOverview({
                     {row.percentage >= 100 && (
                       <p className="text-[11px] text-rose-600 font-medium mt-1">
                         Excediste el presupuesto por{" "}
-                        {formatCurrency(row.spent - row.limit)}
+                        {formatCurrency(row.spent - row.limit, currencyCode)}
                       </p>
                     )}
                   </div>

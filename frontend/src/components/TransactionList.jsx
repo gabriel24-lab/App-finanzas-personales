@@ -14,11 +14,18 @@ const getCategoryDetails = (categoryName, categories) => {
   return { IconComponent: getCategoryIcon(match.icon), color: match.color };
 };
 
-export function TransactionList({ transactions = [], categories = [], onDeleteTransaction }) {
+export function TransactionList({
+  transactions = [],
+  categories = [],
+  onDeleteTransaction,
+  wallet,
+}) {
+  const currencyCode = wallet?.currency_code || "COP";
+
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("es-CO", {
       style: "currency",
-      currency: "COP",
+      currency: currencyCode,
       minimumFractionDigits: 2,
     }).format(value);
   };
@@ -41,11 +48,12 @@ export function TransactionList({ transactions = [], categories = [], onDeleteTr
           <Inbox className="h-6 w-6" />
         </div>
         <h3 className="mt-4 text-sm font-semibold text-neutral-800">
-          No hay movimientos
+          No hay movimientos para mostrar
         </h3>
         <p className="mt-1 text-xs text-neutral-500 max-w-xs mx-auto">
-          No se encontraron transacciones. Intenta ajustando los filtros o
-          agrega una nueva transacción para comenzar.
+          Si acabas de crear tu cuenta, usa el formulario "Agregar movimiento"
+          para registrar tu primer ingreso o gasto. Si esperabas ver algo
+          aquí, prueba a quitar los filtros de búsqueda.
         </p>
       </div>
     );
