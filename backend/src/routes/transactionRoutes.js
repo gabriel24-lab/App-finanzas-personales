@@ -7,6 +7,7 @@ const {
   getComparativeReport,
   getCashFlowProjection,
   getInsights,
+  getOpportunities,
   searchTransactions,
   exportTransactions,
 } = require("../controllers/transactionController");
@@ -24,6 +25,7 @@ router.post("/", createTransaction);
 router.get("/report/comparative", getComparativeReport);
 router.get("/report/projection", getCashFlowProjection);
 router.get("/report/insights", getInsights);
+router.get("/report/opportunities", getOpportunities);
 router.get("/search", searchTransactions);
 router.get("/export", exportTransactions);
 

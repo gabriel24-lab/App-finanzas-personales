@@ -202,6 +202,13 @@ export async function getInsights(token, walletId) {
   return request(`/transactions/report/insights${qs ? `?${qs}` : ""}`, { token });
 }
 
+export async function getOpportunities(token, walletId) {
+  const params = new URLSearchParams();
+  if (walletId) params.set("wallet_id", walletId);
+  const qs = params.toString();
+  return request(`/transactions/report/opportunities${qs ? `?${qs}` : ""}`, { token });
+}
+
 export async function searchTransactions(token, query, options = {}) {
   const params = new URLSearchParams({ q: query });
   if (options.walletId) params.set("wallet_id", options.walletId);

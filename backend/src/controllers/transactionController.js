@@ -600,6 +600,103 @@ const getInsights = asyncHandler(async (req, res) => {
 });
 
 /**
+ * GET /api/transactions/report/opportunities
+ *
+ * Analiza los propios datos del usuario para estimar cuánto dinero le
+ * "sobra" en promedio cada mes después de sus gastos habituales.
+ *
+ * IMPORTANTE (alcance deliberado): este endpoint NUNCA sugiere qué comprar,
+ * en qué instrumento invertir, ni menciona activos/mercados específicos.
+ * Solo describe el propio flujo de caja histórico del usuario (información
+ * derivada, no asesoría). Cualquier contenido educativo genérico o listado
+ * de plataformas reguladas vive en el frontend como contenido estático,
+ * justamente para no mezclar "tus datos" con "recomendaciones".
+ */
+const getOpportunities = asyncHandler(async (req, res) => {
+  const { wallet_id } = req.query;
+  const user = await User.findById(req.userId);
+  if (!user) throw new ApiError(404, "Usuario no encontrado.");
+
+  const wallet = wallet_id ? user.findWallet(wallet_id) : user.wallets?.[0];
+  if (!wallet) throw new ApiError(404, "Billetera no encontrada.");
+
+  const baseFilter = { user_id: req.userId, wallet_id: wallet.wallet_id };
+
+  // Se usan los últimos 3 meses ya *cerrados* (sin contar el mes en curso,
+  // que está incompleto y distorsionaría el promedio).
+  const currentStart = monthRange(0).start;
+  const threeMonthsAgo = new Date(currentStart.getFullYear(), currentStart.getMonth() - 3, 1);
+
+  const [historical, lastMonthTxs, twoMonthsAgoTxs] = await Promise.all([
+    Transaction.find({ ...baseFilter, date: { $gte: threeMonthsAgo, $lt: currentStart } }),
+    Transaction.find({
+      ...baseFilter,
+      date: { $gte: monthRange(-1).start, $lte: monthRange(-1).end },
+    }),
+    Transaction.find({
+      ...baseFilter,
+      date: { $gte: monthRange(-2).start, $lte: monthRange(-2).end },
+    }),
+  ]);
+
+  const monthsWithData = new Set(
+    historical.map((t) => `${new Date(t.date).getFullYear()}-${new Date(t.date).getMonth()}`)
+  ).size;
+
+  if (monthsWithData === 0) {
+    return res.status(200).json({
+      currency: wallet.currency_code,
+      hasEnoughHistory: false,
+      message:
+        "Todavía no hay suficiente historial de movimientos para estimar tu capacidad de ahorro. Registra algunos meses de ingresos y gastos y vuelve a esta sección.",
+    });
+  }
+
+  const avgIncome = sumByType(historical, "income") / 3;
+  const avgExpense = sumByType(historical, "expense") / 3;
+  const avgSurplus = avgIncome - avgExpense;
+
+  const lastMonthSurplus = sumByType(lastMonthTxs, "income") - sumByType(lastMonthTxs, "expense");
+  const twoMonthsAgoSurplus =
+    sumByType(twoMonthsAgoTxs, "income") - sumByType(twoMonthsAgoTxs, "expense");
+  const surplusTrendPct = pctChange(lastMonthSurplus, twoMonthsAgoSurplus);
+
+  let severity = "neutral";
+  let message;
+  if (avgSurplus > 0) {
+    severity = "positive";
+    message = `En promedio, cada mes te quedan libres cerca de ${wallet.currency_symbol}${avgSurplus.toFixed(
+      0
+    )} después de tus gastos habituales. Es un buen momento para pensar qué destino darle: ahorro, un fondo de emergencia o inversión.`;
+  } else if (avgSurplus < 0) {
+    severity = "warning";
+    message = `En promedio, tus gastos han superado tus ingresos en cerca de ${
+      wallet.currency_symbol
+    }${Math.abs(avgSurplus).toFixed(
+      0
+    )} por mes. Antes de pensar en invertir, conviene revisar el presupuesto para equilibrar la balanza.`;
+  } else {
+    message =
+      "Tus ingresos y gastos están prácticamente equilibrados este trimestre, así que no te queda un excedente claro todavía para destinar a ahorro o inversión.";
+  }
+
+  res.status(200).json({
+    currency: wallet.currency_code,
+    currencySymbol: wallet.currency_symbol,
+    hasEnoughHistory: true,
+    monthsAnalyzed: monthsWithData,
+    averages: {
+      monthlyIncome: Number(avgIncome.toFixed(2)),
+      monthlyExpense: Number(avgExpense.toFixed(2)),
+      monthlySurplus: Number(avgSurplus.toFixed(2)),
+    },
+    surplusTrendPercent: surplusTrendPct,
+    severity,
+    message,
+  });
+});
+
+/**
  * GET /api/transactions/search?q=...
  * Búsqueda por descripción, categoría o monto.
  */
@@ -715,6 +812,7 @@ module.exports = {
   getComparativeReport,
   getCashFlowProjection,
   getInsights,
+  getOpportunities,
   searchTransactions,
   exportTransactions,
 };

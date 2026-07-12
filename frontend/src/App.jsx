@@ -6,12 +6,14 @@ import {
   PiggyBank,
   Tags,
   Target,
+  Compass,
   Loader2,
   AlertCircle,
   LogOut,
 } from "lucide-react";
 import { KPICards } from "./components/KPICards";
 import { InsightsPanel } from "./components/InsightsPanel";
+import { InvestmentExplorer } from "./components/InvestmentExplorer";
 import { OnboardingChecklist } from "./components/OnboardingChecklist";
 import { DashboardCharts } from "./components/DashboardCharts";
 import { TransactionForm } from "./components/TransactionForm";
@@ -338,6 +340,23 @@ function Dashboard() {
                   />
                 )}
               </button>
+              <button
+                type="button"
+                onClick={() => setActiveView("explore")}
+                className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                  activeView === "explore" ? "text-white" : "text-neutral-500 hover:text-neutral-900"
+                }`}
+              >
+                <Compass className="h-3.5 w-3.5" />
+                {t("dashboard.nav.explore")}
+                {activeView === "explore" && (
+                  <motion.span
+                    layoutId="viewSwitcherPill"
+                    transition={{ duration: 0.35, ease: easeOut }}
+                    className="absolute inset-0 -z-10 rounded-xl bg-neutral-900 shadow-sm"
+                  />
+                )}
+              </button>
             </div>
 
             <LanguageSwitcher variant="default" />
@@ -483,6 +502,19 @@ function Dashboard() {
                   className="space-y-6"
                 >
                   <SavingsGoals userId={user._id} wallet={wallet} />
+                </motion.div>
+              )}
+
+              {activeView === "explore" && (
+                <motion.div
+                  key="explore-view"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.32, ease: easeOut }}
+                  className="space-y-6"
+                >
+                  <InvestmentExplorer token={token} walletId={wallet?.wallet_id} />
                 </motion.div>
               )}
             </AnimatePresence>
