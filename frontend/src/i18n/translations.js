@@ -1,3 +1,10 @@
+import {
+  infoPagesEs,
+  infoPagesEn,
+  infoPagesPt,
+  infoPagesFr,
+} from "./infoPages";
+
 // Diccionario central de traducciones.
 // Cada idioma es un objeto plano con las mismas claves; así, cambiar de
 // idioma en cualquier parte de la app es tan simple como cambiar el
@@ -93,8 +100,26 @@ export const translations = {
     "landing.cta.subtitle": "Crea tu cuenta gratis, no necesitas tarjeta de crédito.",
     "landing.cta.button": "Crear mi cuenta gratis",
 
+    "landing.footer.heading": "Pie de página",
     "landing.footer.rights": "Todos los derechos reservados.",
     "landing.footer.tagline": "Hecho para ayudarte a tomar mejores decisiones con tu dinero.",
+    "landing.footer.product.title": "Producto",
+    "landing.footer.product.features": "Características",
+    "landing.footer.product.preview": "Vista previa",
+    "landing.footer.product.budgets": "Presupuestos",
+    "landing.footer.product.categories": "Categorías",
+    "landing.footer.support.title": "Soporte",
+    "landing.footer.support.help": "Centro de ayuda",
+    "landing.footer.support.docs": "Documentación",
+    "landing.footer.support.guides": "Guías",
+    "landing.footer.company.title": "Empresa",
+    "landing.footer.company.about": "Sobre nosotros",
+    "landing.footer.company.blog": "Blog",
+    "landing.footer.company.contact": "Contacto",
+    "landing.footer.legal.title": "Legal",
+    "landing.footer.legal.terms": "Términos de servicio",
+    "landing.footer.legal.privacy": "Política de privacidad",
+    "landing.footer.legal.license": "Licencia",
 
     // Autenticación
     "auth.tagline.title": "Controla tu dinero con total claridad.",
@@ -132,6 +157,7 @@ export const translations = {
     "dashboard.subtitle": "Así están tus finanzas hoy.",
     "dashboard.nav.transactions": "Movimientos",
     "dashboard.nav.budgets": "Presupuestos",
+    "dashboard.nav.categories": "Categorías",
     "dashboard.history.title": "Historial de Movimientos",
     "dashboard.history.count.one": "transacción",
     "dashboard.history.count.other": "transacciones",
@@ -139,7 +165,9 @@ export const translations = {
     "dashboard.error.budget": "No se pudo guardar el presupuesto: {detail}",
     "dashboard.error.transaction": "No se pudo guardar la transacción: {detail}",
     "dashboard.error.delete": "No se pudo eliminar la transacción: {detail}",
+    "dashboard.error.category": "No se pudo guardar la categoría: {detail}",
     "dashboard.confirm.delete": "¿Estás seguro de que deseas eliminar este movimiento?",
+    ...infoPagesEs,
   },
 
   en: {
@@ -220,8 +248,26 @@ export const translations = {
     "landing.cta.subtitle": "Create your free account, no credit card needed.",
     "landing.cta.button": "Create my free account",
 
+    "landing.footer.heading": "Footer",
     "landing.footer.rights": "All rights reserved.",
     "landing.footer.tagline": "Built to help you make better decisions with your money.",
+    "landing.footer.product.title": "Product",
+    "landing.footer.product.features": "Features",
+    "landing.footer.product.preview": "Preview",
+    "landing.footer.product.budgets": "Budgets",
+    "landing.footer.product.categories": "Categories",
+    "landing.footer.support.title": "Support",
+    "landing.footer.support.help": "Help center",
+    "landing.footer.support.docs": "Documentation",
+    "landing.footer.support.guides": "Guides",
+    "landing.footer.company.title": "Company",
+    "landing.footer.company.about": "About",
+    "landing.footer.company.blog": "Blog",
+    "landing.footer.company.contact": "Contact",
+    "landing.footer.legal.title": "Legal",
+    "landing.footer.legal.terms": "Terms of service",
+    "landing.footer.legal.privacy": "Privacy policy",
+    "landing.footer.legal.license": "License",
 
     "auth.tagline.title": "Take full control of your money.",
     "auth.tagline.subtitle":
@@ -257,6 +303,7 @@ export const translations = {
     "dashboard.subtitle": "Here's how your finances look today.",
     "dashboard.nav.transactions": "Transactions",
     "dashboard.nav.budgets": "Budgets",
+    "dashboard.nav.categories": "Categories",
     "dashboard.history.title": "Transaction History",
     "dashboard.history.count.one": "transaction",
     "dashboard.history.count.other": "transactions",
@@ -264,7 +311,9 @@ export const translations = {
     "dashboard.error.budget": "Couldn't save the budget: {detail}",
     "dashboard.error.transaction": "Couldn't save the transaction: {detail}",
     "dashboard.error.delete": "Couldn't delete the transaction: {detail}",
+    "dashboard.error.category": "Couldn't save the category: {detail}",
     "dashboard.confirm.delete": "Are you sure you want to delete this transaction?",
+    ...infoPagesEn,
   },
 
   pt: {
@@ -345,8 +394,26 @@ export const translations = {
     "landing.cta.subtitle": "Crie sua conta grátis, sem necessidade de cartão de crédito.",
     "landing.cta.button": "Criar minha conta grátis",
 
+    "landing.footer.heading": "Rodapé",
     "landing.footer.rights": "Todos os direitos reservados.",
     "landing.footer.tagline": "Feito para ajudar você a tomar melhores decisões com seu dinheiro.",
+    "landing.footer.product.title": "Produto",
+    "landing.footer.product.features": "Recursos",
+    "landing.footer.product.preview": "Prévia",
+    "landing.footer.product.budgets": "Orçamentos",
+    "landing.footer.product.categories": "Categorias",
+    "landing.footer.support.title": "Suporte",
+    "landing.footer.support.help": "Central de ajuda",
+    "landing.footer.support.docs": "Documentação",
+    "landing.footer.support.guides": "Guias",
+    "landing.footer.company.title": "Empresa",
+    "landing.footer.company.about": "Sobre nós",
+    "landing.footer.company.blog": "Blog",
+    "landing.footer.company.contact": "Contato",
+    "landing.footer.legal.title": "Legal",
+    "landing.footer.legal.terms": "Termos de serviço",
+    "landing.footer.legal.privacy": "Política de privacidade",
+    "landing.footer.legal.license": "Licença",
 
     "auth.tagline.title": "Controle seu dinheiro com total clareza.",
     "auth.tagline.subtitle":
@@ -382,6 +449,7 @@ export const translations = {
     "dashboard.subtitle": "É assim que suas finanças estão hoje.",
     "dashboard.nav.transactions": "Movimentos",
     "dashboard.nav.budgets": "Orçamentos",
+    "dashboard.nav.categories": "Categorias",
     "dashboard.history.title": "Histórico de Movimentos",
     "dashboard.history.count.one": "transação",
     "dashboard.history.count.other": "transações",
@@ -389,7 +457,9 @@ export const translations = {
     "dashboard.error.budget": "Não foi possível salvar o orçamento: {detail}",
     "dashboard.error.transaction": "Não foi possível salvar a transação: {detail}",
     "dashboard.error.delete": "Não foi possível excluir a transação: {detail}",
+    "dashboard.error.category": "Não foi possível salvar a categoria: {detail}",
     "dashboard.confirm.delete": "Tem certeza de que deseja excluir este movimento?",
+    ...infoPagesPt,
   },
 
   fr: {
@@ -470,8 +540,26 @@ export const translations = {
     "landing.cta.subtitle": "Créez votre compte gratuit, sans carte bancaire nécessaire.",
     "landing.cta.button": "Créer mon compte gratuit",
 
+    "landing.footer.heading": "Pied de page",
     "landing.footer.rights": "Tous droits réservés.",
     "landing.footer.tagline": "Conçu pour vous aider à mieux gérer votre argent.",
+    "landing.footer.product.title": "Produit",
+    "landing.footer.product.features": "Fonctionnalités",
+    "landing.footer.product.preview": "Aperçu",
+    "landing.footer.product.budgets": "Budgets",
+    "landing.footer.product.categories": "Catégories",
+    "landing.footer.support.title": "Support",
+    "landing.footer.support.help": "Centre d'aide",
+    "landing.footer.support.docs": "Documentation",
+    "landing.footer.support.guides": "Guides",
+    "landing.footer.company.title": "Entreprise",
+    "landing.footer.company.about": "À propos",
+    "landing.footer.company.blog": "Blog",
+    "landing.footer.company.contact": "Contact",
+    "landing.footer.legal.title": "Légal",
+    "landing.footer.legal.terms": "Conditions d'utilisation",
+    "landing.footer.legal.privacy": "Politique de confidentialité",
+    "landing.footer.legal.license": "Licence",
 
     "auth.tagline.title": "Maîtrisez votre argent en toute clarté.",
     "auth.tagline.subtitle":
@@ -507,6 +595,7 @@ export const translations = {
     "dashboard.subtitle": "Voici l'état de vos finances aujourd'hui.",
     "dashboard.nav.transactions": "Transactions",
     "dashboard.nav.budgets": "Budgets",
+    "dashboard.nav.categories": "Catégories",
     "dashboard.history.title": "Historique des transactions",
     "dashboard.history.count.one": "transaction",
     "dashboard.history.count.other": "transactions",
@@ -514,6 +603,8 @@ export const translations = {
     "dashboard.error.budget": "Impossible d'enregistrer le budget : {detail}",
     "dashboard.error.transaction": "Impossible d'enregistrer la transaction : {detail}",
     "dashboard.error.delete": "Impossible de supprimer la transaction : {detail}",
+    "dashboard.error.category": "Impossible d'enregistrer la catégorie : {detail}",
     "dashboard.confirm.delete": "Voulez-vous vraiment supprimer ce mouvement ?",
+    ...infoPagesFr,
   },
 };

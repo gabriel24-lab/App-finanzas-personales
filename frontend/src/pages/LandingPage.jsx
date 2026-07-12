@@ -18,6 +18,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { FloatingCoins } from "../components/FloatingCoins";
 import { Reveal, RevealGroup, revealItemVariants } from "../components/Reveal";
+import { Footer } from "../components/Footer";
 
 const easeOut = [0.22, 1, 0.36, 1];
 
@@ -442,22 +443,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
         </Reveal>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-neutral-200 bg-neutral-50 py-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 text-center sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 text-sm font-bold text-neutral-800">
-            <Landmark className="h-4 w-4" />
-            {t("common.appName")}
-          </div>
-          <p className="text-xs text-neutral-400">
-            {t("landing.footer.tagline")}
-          </p>
-          <p className="text-[11px] text-neutral-300">
-            © {new Date().getFullYear()} {t("common.appName")} —{" "}
-            {t("landing.footer.rights")}
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -1,7 +1,9 @@
 const User = require("../models/User");
+const Category = require("../models/Category");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 const generateToken = require("../utils/generateToken");
+const DEFAULT_CATEGORIES = require("../utils/defaultCategories");
 
 // Nunca devolvemos el hash de la contraseña al cliente.
 function toSafeUser(user) {
@@ -53,6 +55,12 @@ const register = asyncHandler(async (req, res) => {
       },
     ],
   });
+
+  // Le damos a cada usuario nuevo su propio set de categorías editable desde
+  // el día uno (nombre, color e ícono), en vez de una lista fija en el código.
+  await Category.insertMany(
+    DEFAULT_CATEGORIES.map((c) => ({ ...c, user_id: user._id, is_default: true }))
+  );
 
   const token = generateToken(user._id);
 

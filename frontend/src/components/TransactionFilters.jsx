@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from "react";
 import { Search, Filter, RefreshCw } from "lucide-react";
-import { CATEGORIES } from "../mockData";
 
 export function TransactionFilters({
+  categories = [],
   search,
   setSearch,
   typeFilter,
@@ -12,12 +12,11 @@ export function TransactionFilters({
   onResetFilters,
 }) {
   const displayedCategories = useMemo(() => {
-    if (typeFilter === "all") {
-      return [...CATEGORIES.income, ...CATEGORIES.expense];
-    }
-
-    return CATEGORIES[typeFilter] || [];
-  }, [typeFilter]);
+    const names = categories
+      .filter((c) => typeFilter === "all" || c.type === typeFilter)
+      .map((c) => c.name);
+    return names;
+  }, [typeFilter, categories]);
 
   // Reset category filter if it's no longer in the list when type filter changes
   useEffect(() => {

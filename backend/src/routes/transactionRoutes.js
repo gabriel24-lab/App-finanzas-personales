@@ -4,6 +4,11 @@ const {
   getTransactions,
   deleteTransaction,
   updateTransaction,
+  getComparativeReport,
+  getCashFlowProjection,
+  getInsights,
+  searchTransactions,
+  exportTransactions,
 } = require("../controllers/transactionController");
 const { protect } = require("../middleware/auth");
 
@@ -14,6 +19,13 @@ router.use(protect);
 
 // POST /api/transactions
 router.post("/", createTransaction);
+
+// Reportes y utilidades (rutas estáticas antes de /:userId)
+router.get("/report/comparative", getComparativeReport);
+router.get("/report/projection", getCashFlowProjection);
+router.get("/report/insights", getInsights);
+router.get("/search", searchTransactions);
+router.get("/export", exportTransactions);
 
 // GET /api/transactions/:userId?wallet_id=...&currency_code=...&page=1&limit=20
 router.get("/:userId", getTransactions);

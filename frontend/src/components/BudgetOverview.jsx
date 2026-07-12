@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { PiggyBank, AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
-import { CATEGORIES } from "../mockData";
 
 const formatCurrency = (value) =>
   new Intl.NumberFormat("es-CO", {
@@ -38,7 +37,16 @@ const getStatus = (percentage) => {
   };
 };
 
-export function BudgetOverview({ transactions = [], budgets = {} }) {
+export function BudgetOverview({
+  transactions = [],
+  budgets = {},
+  categories = [],
+}) {
+  const expenseCategoryNames = useMemo(
+    () => categories.filter((c) => c.type === "expense").map((c) => c.name),
+    [categories],
+  );
+
   const summary = useMemo(() => {
     const now = new Date();
     const currentMonth = now.getMonth();
@@ -56,7 +64,7 @@ export function BudgetOverview({ transactions = [], budgets = {} }) {
       return acc;
     }, {});
 
-    const rows = CATEGORIES.expense.map((category) => {
+    const rows = expenseCategoryNames.map((category) => {
       const limit = Number(budgets[category]) || 0;
       const spent = spentByCategory[category] || 0;
       const percentage = limit > 0 ? Math.min((spent / limit) * 100, 999) : 0;
@@ -68,7 +76,7 @@ export function BudgetOverview({ transactions = [], budgets = {} }) {
     const totalSpent = withBudget.reduce((sum, r) => sum + r.spent, 0);
 
     return { rows, withBudget, totalBudgeted, totalSpent };
-  }, [transactions, budgets]);
+  }, [transactions, budgets, expenseCategoryNames]);
 
   const monthLabel = new Date().toLocaleDateString("es-CO", {
     month: "long",

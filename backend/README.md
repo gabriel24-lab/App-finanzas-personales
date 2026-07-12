@@ -123,6 +123,37 @@ curl -X POST http://localhost:4000/api/transactions \
 curl "http://localhost:4000/api/transactions/<ID_DEL_USUARIO>?wallet_id=wallet_usd&page=1&limit=10"
 ```
 
+### Categorías
+
+Cada usuario tiene su propio set de categorías (nombre, tipo, color e ícono),
+sembrado automáticamente con valores por defecto al registrarse. Las
+transacciones y presupuestos siguen guardando el *nombre* de la categoría
+como texto plano, así que renombrar o borrar una categoría no afecta el
+histórico ya registrado.
+
+| Método | Ruta                     | Descripción                                    |
+|--------|--------------------------|-------------------------------------------------|
+| GET    | `/api/categories/:userId`| Lista las categorías del usuario (las siembra si no tiene ninguna) |
+| POST   | `/api/categories`        | Crea una categoría nueva                        |
+| PUT    | `/api/categories/:id`    | Edita nombre, color y/o ícono (el `type` no se puede cambiar) |
+| DELETE | `/api/categories/:id`    | Elimina una categoría                           |
+
+Todas requieren `Authorization: Bearer <token>` (igual que transacciones y presupuestos).
+
+**Crear una categoría:**
+```bash
+curl -X POST http://localhost:4000/api/categories \
+  -H "Authorization: Bearer <TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "<ID_DEL_USUARIO>",
+    "name": "Mascotas",
+    "type": "expense",
+    "color": "#14b8a6",
+    "icon": "PawPrint"
+  }'
+```
+
 ## Notas de diseño / próximos pasos sugeridos
 
 - **Autenticación**: el modelo ya hashea `password` con bcrypt (`pre('save')`) y expone

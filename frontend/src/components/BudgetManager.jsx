@@ -1,8 +1,14 @@
 import React from "react";
 import { Settings2, DollarSign } from "lucide-react";
-import { CATEGORIES } from "../mockData";
 
-export function BudgetManager({ budgets = {}, onUpdateBudget }) {
+export function BudgetManager({
+  categories = [],
+  budgets = {},
+  onUpdateBudget,
+}) {
+  const expenseCategories = categories
+    .filter((c) => c.type === "expense")
+    .map((c) => c.name);
   const handleChange = (category, value) => {
     // Allow clearing the field; store as 0 when empty or invalid
     const parsed = value === "" ? 0 : parseFloat(value);
@@ -21,7 +27,13 @@ export function BudgetManager({ budgets = {}, onUpdateBudget }) {
       </p>
 
       <div className="space-y-3">
-        {CATEGORIES.expense.map((category) => (
+        {expenseCategories.length === 0 && (
+          <p className="py-4 text-center text-xs text-neutral-400">
+            Todavía no tienes categorías de gasto. Creá alguna en la pestaña de
+            Categorías.
+          </p>
+        )}
+        {expenseCategories.map((category) => (
           <div
             key={category}
             className="flex items-center justify-between gap-3"

@@ -1,8 +1,17 @@
 const mongoose = require("mongoose");
+const { Parser } = require("json2csv");
+const ExcelJS = require("exceljs");
 const User = require("../models/User");
 const Transaction = require("../models/Transaction");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
+const {
+  monthRange,
+  pctChange,
+  sumByType,
+  groupByCategory,
+  escapeRegex,
+} = require("../utils/reportUtils");
 
 /**
  * POST /api/transactions
@@ -328,9 +337,384 @@ const updateTransaction = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * GET /api/transactions/report/comparative
+ * Compara el mes actual vs el anterior por categoría y totales.
+ */
+const getComparativeReport = asyncHandler(async (req, res) => {
+  const { wallet_id } = req.query;
+  const current = monthRange(0);
+  const previous = monthRange(-1);
+
+  const baseFilter = { user_id: req.userId };
+  if (wallet_id) baseFilter.wallet_id = wallet_id;
+
+  const [currentTxs, previousTxs] = await Promise.all([
+    Transaction.find({
+      ...baseFilter,
+      date: { $gte: current.start, $lte: current.end },
+    }),
+    Transaction.find({
+      ...baseFilter,
+      date: { $gte: previous.start, $lte: previous.end },
+    }),
+  ]);
+
+  const currentIncome = sumByType(currentTxs, "income");
+  const currentExpense = sumByType(currentTxs, "expense");
+  const previousIncome = sumByType(previousTxs, "income");
+  const previousExpense = sumByType(previousTxs, "expense");
+
+  const currentByCat = groupByCategory(currentTxs, "expense");
+  const previousByCat = groupByCategory(previousTxs, "expense");
+  const allCategories = new Set([
+    ...Object.keys(currentByCat),
+    ...Object.keys(previousByCat),
+  ]);
+
+  const categoryComparison = [...allCategories]
+    .map((category) => {
+      const curr = currentByCat[category] || 0;
+      const prev = previousByCat[category] || 0;
+      return {
+        category,
+        current: curr,
+        previous: prev,
+        change: curr - prev,
+        changePercent: pctChange(curr, prev),
+      };
+    })
+    .sort((a, b) => b.current - a.current);
+
+  res.status(200).json({
+    currentMonth: {
+      year: current.year,
+      month: current.month + 1,
+      income: currentIncome,
+      expense: currentExpense,
+      net: currentIncome - currentExpense,
+    },
+    previousMonth: {
+      year: previous.year,
+      month: previous.month + 1,
+      income: previousIncome,
+      expense: previousExpense,
+      net: previousIncome - previousExpense,
+    },
+    trends: {
+      incomeChangePercent: pctChange(currentIncome, previousIncome),
+      expenseChangePercent: pctChange(currentExpense, previousExpense),
+      netChangePercent: pctChange(
+        currentIncome - currentExpense,
+        previousIncome - previousExpense
+      ),
+    },
+    categoryComparison,
+  });
+});
+
+/**
+ * GET /api/transactions/report/projection
+ * Proyecta flujo de caja a fin de mes basado en promedios de los últimos 3 meses.
+ */
+const getCashFlowProjection = asyncHandler(async (req, res) => {
+  const { wallet_id } = req.query;
+  const user = await User.findById(req.userId);
+  if (!user) throw new ApiError(404, "Usuario no encontrado.");
+
+  const wallet = wallet_id
+    ? user.findWallet(wallet_id)
+    : user.wallets?.[0];
+  if (!wallet) throw new ApiError(404, "Billetera no encontrada.");
+
+  const now = new Date();
+  const threeMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+
+  const historical = await Transaction.find({
+    user_id: req.userId,
+    wallet_id: wallet.wallet_id,
+    date: { $gte: threeMonthsAgo, $lt: monthRange(0).start },
+  });
+
+  const avgIncome =
+    historical.filter((t) => t.type === "income").reduce((s, t) => s + t.amount, 0) / 3;
+  const avgExpense =
+    historical.filter((t) => t.type === "expense").reduce((s, t) => s + t.amount, 0) / 3;
+
+  const currentMonthTxs = await Transaction.find({
+    user_id: req.userId,
+    wallet_id: wallet.wallet_id,
+    date: { $gte: monthRange(0).start, $lte: monthRange(0).end },
+  });
+
+  const mtdIncome = sumByType(currentMonthTxs, "income");
+  const mtdExpense = sumByType(currentMonthTxs, "expense");
+
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const dayOfMonth = now.getDate();
+  const daysRemaining = daysInMonth - dayOfMonth;
+
+  const projectedIncome = mtdIncome + (avgIncome / daysInMonth) * daysRemaining;
+  const projectedExpense = mtdExpense + (avgExpense / daysInMonth) * daysRemaining;
+  const projectedNet = projectedIncome - projectedExpense;
+
+  const dailyProjection = [];
+  let runningBalance = wallet.current_balance;
+  for (let d = dayOfMonth; d <= daysInMonth; d += 1) {
+    const dailyIncome = avgIncome / daysInMonth;
+    const dailyExpense = avgExpense / daysInMonth;
+    runningBalance += dailyIncome - dailyExpense;
+    dailyProjection.push({
+      day: d,
+      projectedBalance: Number(runningBalance.toFixed(2)),
+      optimistic: Number((runningBalance + dailyIncome * 0.2).toFixed(2)),
+      pessimistic: Number((runningBalance - dailyExpense * 0.2).toFixed(2)),
+    });
+  }
+
+  res.status(200).json({
+    currentBalance: wallet.current_balance,
+    currency: wallet.currency_code,
+    monthToDate: { income: mtdIncome, expense: mtdExpense, net: mtdIncome - mtdExpense },
+    averages: {
+      monthlyIncome: Number(avgIncome.toFixed(2)),
+      monthlyExpense: Number(avgExpense.toFixed(2)),
+    },
+    projection: {
+      projectedIncome: Number(projectedIncome.toFixed(2)),
+      projectedExpense: Number(projectedExpense.toFixed(2)),
+      projectedNet: Number(projectedNet.toFixed(2)),
+      projectedEndBalance: Number(
+        (wallet.current_balance + projectedNet - (mtdIncome - mtdExpense)).toFixed(2)
+      ),
+      daysRemaining,
+    },
+    dailyProjection,
+  });
+});
+
+/**
+ * GET /api/transactions/report/insights
+ * Genera insights automáticos comparando el mes actual vs el anterior.
+ */
+const getInsights = asyncHandler(async (req, res) => {
+  const { wallet_id } = req.query;
+  const baseFilter = { user_id: req.userId };
+  if (wallet_id) baseFilter.wallet_id = wallet_id;
+
+  const current = monthRange(0);
+  const previous = monthRange(-1);
+
+  const [currentTxs, previousTxs] = await Promise.all([
+    Transaction.find({
+      ...baseFilter,
+      date: { $gte: current.start, $lte: current.end },
+    }),
+    Transaction.find({
+      ...baseFilter,
+      date: { $gte: previous.start, $lte: previous.end },
+    }),
+  ]);
+
+  const insights = [];
+  const currentExpense = sumByType(currentTxs, "expense");
+  const previousExpense = sumByType(previousTxs, "expense");
+  const currentIncome = sumByType(currentTxs, "income");
+  const previousIncome = sumByType(previousTxs, "income");
+  const currentNet = currentIncome - currentExpense;
+  const previousNet = previousIncome - previousExpense;
+
+  const expensePct = pctChange(currentExpense, previousExpense);
+  if (previousExpense > 0 || currentExpense > 0) {
+    insights.push({
+      id: "expense-trend",
+      type: "expense",
+      severity: expensePct > 15 ? "warning" : expensePct < -10 ? "positive" : "neutral",
+      icon: expensePct > 0 ? "trending-up" : "trending-down",
+      message:
+        expensePct > 0
+          ? `Gastaste ${Math.abs(expensePct)}% más este mes que el anterior`
+          : expensePct < 0
+            ? `Redujiste tus gastos un ${Math.abs(expensePct)}% respecto al mes pasado`
+            : "Tus gastos se mantienen similares al mes anterior",
+      changePercent: expensePct,
+    });
+  }
+
+  const savingsPct = pctChange(currentNet, previousNet);
+  if (previousNet !== 0 || currentNet !== 0) {
+    insights.push({
+      id: "savings-trend",
+      type: "savings",
+      severity: savingsPct > 10 ? "positive" : savingsPct < -10 ? "warning" : "neutral",
+      icon: "piggy-bank",
+      message:
+        savingsPct > 0
+          ? `Tu ahorro neto subió ${Math.abs(savingsPct)}% vs el mes anterior`
+          : savingsPct < 0
+            ? `Tu ahorro neto bajó ${Math.abs(savingsPct)}% vs el mes anterior`
+            : "Tu ahorro neto se mantiene estable",
+      changePercent: savingsPct,
+    });
+  }
+
+  const currentByCat = groupByCategory(currentTxs, "expense");
+  const previousByCat = groupByCategory(previousTxs, "expense");
+
+  Object.keys(currentByCat).forEach((category) => {
+    const curr = currentByCat[category];
+    const prev = previousByCat[category] || 0;
+    const change = pctChange(curr, prev);
+    if (Math.abs(change) >= 20 && curr > 0) {
+      insights.push({
+        id: `cat-${category}`,
+        type: "category",
+        category,
+        severity: change > 30 ? "warning" : change < -20 ? "positive" : "neutral",
+        icon: "tag",
+        message:
+          change > 0
+            ? `Gastaste ${Math.abs(change)}% más en ${category}`
+            : `Gastaste ${Math.abs(change)}% menos en ${category}`,
+        changePercent: change,
+      });
+    }
+  });
+
+  const topCategory = Object.entries(currentByCat).sort((a, b) => b[1] - a[1])[0];
+  if (topCategory && currentExpense > 0) {
+    const [name, amount] = topCategory;
+    const share = Number(((amount / currentExpense) * 100).toFixed(0));
+    insights.push({
+      id: "top-category",
+      type: "highlight",
+      category: name,
+      severity: "neutral",
+      icon: "star",
+      message: `${name} concentra el ${share}% de tus gastos este mes`,
+      changePercent: share,
+    });
+  }
+
+  res.status(200).json({ insights: insights.slice(0, 8) });
+});
+
+/**
+ * GET /api/transactions/search?q=...
+ * Búsqueda por descripción, categoría o monto.
+ */
+const searchTransactions = asyncHandler(async (req, res) => {
+  const { q, wallet_id, type, limit = 20 } = req.query;
+
+  if (!q || String(q).trim().length < 2) {
+    throw new ApiError(400, "La búsqueda debe tener al menos 2 caracteres.");
+  }
+
+  const query = String(q).trim();
+  const filter = { user_id: req.userId };
+
+  if (wallet_id) filter.wallet_id = wallet_id;
+  if (type) filter.type = type;
+
+  const numericQuery = Number(query.replace(/[^\d.-]/g, ""));
+  const orConditions = [
+    { description: { $regex: escapeRegex(query), $options: "i" } },
+    { category: { $regex: escapeRegex(query), $options: "i" } },
+  ];
+  if (!Number.isNaN(numericQuery) && numericQuery > 0) {
+    orConditions.push({ amount: numericQuery });
+  }
+
+  filter.$or = orConditions;
+
+  const limitNum = Math.min(Math.max(Number(limit) || 20, 1), 50);
+  const results = await Transaction.find(filter)
+    .sort({ date: -1 })
+    .limit(limitNum);
+
+  res.status(200).json({ data: results, query, total: results.length });
+});
+
+/**
+ * GET /api/transactions/export?format=csv|xlsx
+ * Exporta transacciones filtradas a CSV o Excel.
+ */
+const exportTransactions = asyncHandler(async (req, res) => {
+  const { format = "csv", wallet_id, type, category, from, to } = req.query;
+
+  if (!["csv", "xlsx"].includes(format)) {
+    throw new ApiError(400, "Formato no soportado. Usa csv o xlsx.");
+  }
+
+  const filter = { user_id: req.userId };
+  if (wallet_id) filter.wallet_id = wallet_id;
+  if (type) filter.type = type;
+  if (category) filter.category = category;
+  if (from || to) {
+    filter.date = {};
+    if (from) filter.date.$gte = new Date(from);
+    if (to) filter.date.$lte = new Date(to);
+  }
+
+  const transactions = await Transaction.find(filter).sort({ date: -1 }).limit(5000);
+
+  const rows = transactions.map((t) => ({
+    fecha: new Date(t.date).toISOString().split("T")[0],
+    descripcion: t.description,
+    categoria: t.category,
+    tipo: t.type === "income" ? "Ingreso" : "Gasto",
+    monto: t.amount,
+    moneda: t.currency_code,
+    billetera: t.wallet_id,
+  }));
+
+  const timestamp = new Date().toISOString().split("T")[0];
+
+  if (format === "csv") {
+    const parser = new Parser({ fields: Object.keys(rows[0] || {}) });
+    const csv = rows.length > 0 ? parser.parse(rows) : "fecha,descripcion,categoria,tipo,monto,moneda,billetera\n";
+    res.setHeader("Content-Type", "text/csv; charset=utf-8");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="transacciones-${timestamp}.csv"`
+    );
+    return res.send("\uFEFF" + csv);
+  }
+
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet("Transacciones");
+  sheet.columns = [
+    { header: "Fecha", key: "fecha", width: 14 },
+    { header: "Descripción", key: "descripcion", width: 32 },
+    { header: "Categoría", key: "categoria", width: 18 },
+    { header: "Tipo", key: "tipo", width: 12 },
+    { header: "Monto", key: "monto", width: 14 },
+    { header: "Moneda", key: "moneda", width: 10 },
+    { header: "Billetera", key: "billetera", width: 16 },
+  ];
+  sheet.addRows(rows);
+  sheet.getRow(1).font = { bold: true };
+
+  res.setHeader(
+    "Content-Type",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  );
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="transacciones-${timestamp}.xlsx"`
+  );
+  await workbook.xlsx.write(res);
+  res.end();
+});
+
 module.exports = {
   createTransaction,
   getTransactions,
   deleteTransaction,
   updateTransaction,
+  getComparativeReport,
+  getCashFlowProjection,
+  getInsights,
+  searchTransactions,
+  exportTransactions,
 };

@@ -8,10 +8,9 @@ import {
   DollarSign,
   FileText,
 } from "lucide-react";
-import { CATEGORIES } from "../mockData";
 import { TRANSACTION_TYPES } from "../types";
 
-export function TransactionForm({ onAddTransaction }) {
+export function TransactionForm({ categories = [], onAddTransaction }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState(TRANSACTION_TYPES.expense);
@@ -19,16 +18,19 @@ export function TransactionForm({ onAddTransaction }) {
   const [date, setDate] = useState("");
   const [error, setError] = useState("");
 
+  const categoriesByType = (t) => categories.filter((c) => c.type === t).map((c) => c.name);
+
   // Sync category options with the current type
   useEffect(() => {
     // Select the first category by default when type changes
-    const availableCategories = CATEGORIES[type] || [];
+    const availableCategories = categoriesByType(type);
     if (availableCategories.length > 0) {
       setCategory(availableCategories[0]);
     } else {
       setCategory("");
     }
-  }, [type]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type, categories]);
 
   // Set today's date by default
   useEffect(() => {
@@ -73,7 +75,7 @@ export function TransactionForm({ onAddTransaction }) {
     setError("");
     const today = new Date().toISOString().split("T")[0];
     setDate(today);
-    const availableCategories = CATEGORIES[type] || [];
+    const availableCategories = categoriesByType(type);
     if (availableCategories.length > 0) {
       setCategory(availableCategories[0]);
     }
@@ -193,7 +195,7 @@ export function TransactionForm({ onAddTransaction }) {
               className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900/5 focus:border-neutral-900 focus:bg-white transition-all appearance-none cursor-pointer"
               required
             >
-              {(CATEGORIES[type] || []).map((cat) => (
+              {categoriesByType(type).map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
                 </option>

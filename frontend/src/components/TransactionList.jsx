@@ -1,82 +1,20 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Utensils,
-  Car,
-  BookOpen,
-  HeartPulse,
-  Home,
-  Tv,
-  Coins,
-  Briefcase,
-  Laptop,
-  HelpCircle,
-  Trash2,
-  Inbox,
-} from "lucide-react";
+import { Trash2, Inbox } from "lucide-react";
+import { getCategoryIcon } from "../iconMap";
 
-// Helper function to return category specific icon and styling
-const getCategoryDetails = (category) => {
-  switch (category) {
-    // Income categories
-    case "Salario":
-      return {
-        icon: Briefcase,
-        bgClass: "bg-emerald-50 text-emerald-600 border-emerald-100",
-      };
-    case "Freelance":
-      return { icon: Laptop, bgClass: "bg-sky-50 text-sky-600 border-sky-100" };
-    case "Inversiones":
-      return {
-        icon: Coins,
-        bgClass: "bg-amber-50 text-amber-600 border-amber-100",
-      };
-    case "Otros Ingresos":
-      return {
-        icon: Coins,
-        bgClass: "bg-teal-50 text-teal-600 border-teal-100",
-      };
-
-    // Expense categories
-    case "Comida":
-      return {
-        icon: Utensils,
-        bgClass: "bg-orange-50 text-orange-600 border-orange-100",
-      };
-    case "Transporte":
-      return { icon: Car, bgClass: "bg-blue-50 text-blue-600 border-blue-100" };
-    case "Educación":
-      return {
-        icon: BookOpen,
-        bgClass: "bg-violet-50 text-violet-600 border-violet-100",
-      };
-    case "Salud":
-      return {
-        icon: HeartPulse,
-        bgClass: "bg-rose-50 text-rose-600 border-rose-100",
-      };
-    case "Hogar":
-      return {
-        icon: Home,
-        bgClass: "bg-neutral-100 text-neutral-900 border-neutral-200",
-      };
-    case "Entretenimiento":
-      return { icon: Tv, bgClass: "bg-pink-50 text-pink-600 border-pink-100" };
-    case "Otros Gastos":
-      return {
-        icon: HelpCircle,
-        bgClass: "bg-neutral-50 text-neutral-600 border-neutral-100",
-      };
-
-    default:
-      return {
-        icon: HelpCircle,
-        bgClass: "bg-neutral-50 text-neutral-600 border-neutral-100",
-      };
+// Busca la categoría del usuario por nombre para tomar su color/ícono real.
+// Si la transacción quedó "huérfana" (la categoría fue borrada luego), cae
+// a un estilo neutro genérico en vez de romper la fila.
+const getCategoryDetails = (categoryName, categories) => {
+  const match = categories.find((c) => c.name === categoryName);
+  if (!match) {
+    return { IconComponent: getCategoryIcon("Tag"), color: "#a3a3a3" };
   }
+  return { IconComponent: getCategoryIcon(match.icon), color: match.color };
 };
 
-export function TransactionList({ transactions = [], onDeleteTransaction }) {
+export function TransactionList({ transactions = [], categories = [], onDeleteTransaction }) {
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("es-CO", {
       style: "currency",
@@ -132,8 +70,9 @@ export function TransactionList({ transactions = [], onDeleteTransaction }) {
           <tbody className="divide-y divide-neutral-100">
             <AnimatePresence initial={false}>
               {transactions.map((transaction) => {
-                const { icon: IconComponent, bgClass } = getCategoryDetails(
+                const { IconComponent, color } = getCategoryDetails(
                   transaction.category,
+                  categories,
                 );
                 const isIncome = transaction.type === "income";
 
@@ -151,7 +90,12 @@ export function TransactionList({ transactions = [], onDeleteTransaction }) {
                   <td className="py-4 px-4">
                     <div className="flex items-center gap-3">
                       <div
-                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border ${bgClass}`}
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border"
+                        style={{
+                          backgroundColor: `${color}14`,
+                          borderColor: `${color}33`,
+                          color,
+                        }}
                       >
                         <IconComponent className="h-5 w-5" />
                       </div>

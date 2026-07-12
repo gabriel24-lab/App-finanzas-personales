@@ -4,19 +4,24 @@ import {
   Landmark,
   LayoutDashboard,
   PiggyBank,
+  Tags,
   Loader2,
   AlertCircle,
   LogOut,
 } from "lucide-react";
 import { KPICards } from "./components/KPICards";
+import { DashboardCharts } from "./components/DashboardCharts";
 import { TransactionForm } from "./components/TransactionForm";
 import { TransactionFilters } from "./components/TransactionFilters";
 import { TransactionList } from "./components/TransactionList";
 import { BudgetOverview } from "./components/BudgetOverview";
 import { BudgetManager } from "./components/BudgetManager";
+import { CategoryManager } from "./components/CategoryManager";
 import { LanguageSwitcher } from "./components/LanguageSwitcher";
 import { LandingPage } from "./pages/LandingPage";
 import { AuthPage } from "./pages/AuthPage";
+import { InfoPage } from "./pages/InfoPage";
+import { parseAppHash, scrollToLandingSection } from "./utils/hashRoute";
 import { useAuth } from "./context/AuthContext";
 import { useLanguage } from "./context/LanguageContext";
 import {
@@ -25,6 +30,10 @@ import {
   deleteTransactionApi,
   fetchBudgets,
   upsertBudgetApi,
+  fetchCategories,
+  createCategoryApi,
+  updateCategoryApi,
+  deleteCategoryApi,
 } from "./api";
 
 const easeOut = [0.22, 1, 0.36, 1];
@@ -36,6 +45,7 @@ function Dashboard() {
 
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState({});
+  const [categories, setCategories] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -45,7 +55,7 @@ function Dashboard() {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [activeView, setActiveView] = useState("dashboard");
 
-  // Carga inicial de transacciones y presupuestos del usuario autenticado.
+  // Carga inicial de transacciones, presupuestos y categorías del usuario autenticado.
   useEffect(() => {
     let cancelled = false;
 
@@ -54,14 +64,16 @@ function Dashboard() {
         setLoading(true);
         setError("");
 
-        const [txs, budgetMap] = await Promise.all([
+        const [txs, budgetMap, cats] = await Promise.all([
           fetchTransactions(token, user._id),
           fetchBudgets(token, user._id),
+          fetchCategories(token, user._id),
         ]);
 
         if (cancelled) return;
         setTransactions(txs);
         setBudgets(budgetMap);
+        setCategories(cats);
       } catch (err) {
         if (!cancelled) {
           setError(t("dashboard.error.load", { detail: err.message }));
@@ -119,6 +131,48 @@ function Dashboard() {
       }
     },
     [token, t]
+  );
+
+  const handleCreateCategory = useCallback(
+    async (values) => {
+      try {
+        const created = await createCategoryApi(token, user._id, values);
+        setCategories((prev) => [...prev, created]);
+      } catch (err) {
+        setError(t("dashboard.error.category", { detail: err.message }));
+      }
+    },
+    [token, user._id, t]
+  );
+
+  const handleUpdateCategory = useCallback(
+    async (categoryId, updates) => {
+      const previous = categories;
+      setCategories((prev) =>
+        prev.map((c) => (c.id === categoryId ? { ...c, ...updates } : c))
+      );
+      try {
+        await updateCategoryApi(token, categoryId, updates);
+      } catch (err) {
+        setCategories(previous);
+        setError(t("dashboard.error.category", { detail: err.message }));
+      }
+    },
+    [token, categories, t]
+  );
+
+  const handleDeleteCategory = useCallback(
+    async (categoryId) => {
+      const previous = categories;
+      setCategories((prev) => prev.filter((c) => c.id !== categoryId));
+      try {
+        await deleteCategoryApi(token, categoryId);
+      } catch (err) {
+        setCategories(previous);
+        setError(t("dashboard.error.category", { detail: err.message }));
+      }
+    },
+    [token, categories, t]
   );
 
   const handleResetFilters = () => {
@@ -223,6 +277,23 @@ function Dashboard() {
                   />
                 )}
               </button>
+              <button
+                type="button"
+                onClick={() => setActiveView("categories")}
+                className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                  activeView === "categories" ? "text-white" : "text-neutral-500 hover:text-neutral-900"
+                }`}
+              >
+                <Tags className="h-3.5 w-3.5" />
+                {t("dashboard.nav.categories")}
+                {activeView === "categories" && (
+                  <motion.span
+                    layoutId="viewSwitcherPill"
+                    transition={{ duration: 0.35, ease: easeOut }}
+                    className="absolute inset-0 -z-10 rounded-xl bg-neutral-900 shadow-sm"
+                  />
+                )}
+              </button>
             </div>
 
             <LanguageSwitcher variant="default" />
@@ -258,13 +329,13 @@ function Dashboard() {
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
           {/* Left Column: Form */}
           <div className="lg:sticky lg:top-8 lg:col-span-4">
-            <TransactionForm onAddTransaction={handleAddTransaction} />
+            <TransactionForm categories={categories} onAddTransaction={handleAddTransaction} />
           </div>
 
           {/* Right Column: Cards, Filters & List */}
           <div className="space-y-6 lg:col-span-8">
             <AnimatePresence mode="wait">
-              {activeView === "dashboard" ? (
+              {activeView === "dashboard" && (
                 <motion.div
                   key="dashboard-view"
                   initial={{ opacity: 0, y: 10 }}
@@ -275,7 +346,10 @@ function Dashboard() {
                 >
                   <KPICards transactions={transactions} wallet={wallet} />
 
+                  <DashboardCharts transactions={transactions} categories={categories} wallet={wallet} />
+
                   <TransactionFilters
+                    categories={categories}
                     search={search}
                     setSearch={setSearch}
                     typeFilter={typeFilter}
@@ -301,11 +375,14 @@ function Dashboard() {
                     </div>
                     <TransactionList
                       transactions={filteredTransactions}
+                      categories={categories}
                       onDeleteTransaction={handleDeleteTransaction}
                     />
                   </div>
                 </motion.div>
-              ) : (
+              )}
+
+              {activeView === "budgets" && (
                 <motion.div
                   key="budgets-view"
                   initial={{ opacity: 0, y: 10 }}
@@ -314,8 +391,26 @@ function Dashboard() {
                   transition={{ duration: 0.32, ease: easeOut }}
                   className="space-y-6"
                 >
-                  <BudgetOverview transactions={transactions} budgets={budgets} />
-                  <BudgetManager budgets={budgets} onUpdateBudget={handleUpdateBudget} />
+                  <BudgetOverview transactions={transactions} budgets={budgets} categories={categories} />
+                  <BudgetManager categories={categories} budgets={budgets} onUpdateBudget={handleUpdateBudget} />
+                </motion.div>
+              )}
+
+              {activeView === "categories" && (
+                <motion.div
+                  key="categories-view"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.32, ease: easeOut }}
+                  className="space-y-6"
+                >
+                  <CategoryManager
+                    categories={categories}
+                    onCreateCategory={handleCreateCategory}
+                    onUpdateCategory={handleUpdateCategory}
+                    onDeleteCategory={handleDeleteCategory}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -328,9 +423,39 @@ function Dashboard() {
 
 function App() {
   const { user, loading } = useAuth();
-  // "landing" -> página de inicio pública | "auth" -> login/registro
+  // "landing" -> página de inicio pública | "auth" -> login/registro | "info" -> páginas legales/soporte
   const [publicView, setPublicView] = useState("landing");
   const [authMode, setAuthMode] = useState("login");
+  const [infoSlug, setInfoSlug] = useState(null);
+
+  useEffect(() => {
+    function applyRouteFromHash() {
+      const route = parseAppHash();
+
+      if (route.kind === "info") {
+        setPublicView("info");
+        setInfoSlug(route.slug);
+        return;
+      }
+
+      if (route.kind === "landing") {
+        setPublicView("landing");
+        setInfoSlug(null);
+        scrollToLandingSection(route.section);
+      }
+    }
+
+    applyRouteFromHash();
+    window.addEventListener("hashchange", applyRouteFromHash);
+    return () => window.removeEventListener("hashchange", applyRouteFromHash);
+  }, []);
+
+  const goHome = () => {
+    window.location.hash = "";
+    setPublicView("landing");
+    setInfoSlug(null);
+    scrollToLandingSection(null);
+  };
 
   if (loading) {
     return (
@@ -378,6 +503,17 @@ function App() {
               setPublicView("auth");
             }}
           />
+        </motion.div>
+      )}
+      {viewKey === "info" && (
+        <motion.div
+          key={`info-${infoSlug}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.35, ease: easeOut }}
+        >
+          <InfoPage slug={infoSlug} onBack={goHome} />
         </motion.div>
       )}
       {viewKey === "dashboard" && (
