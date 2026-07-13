@@ -55,7 +55,7 @@ export function KPICards({ transactions = [], wallet }) {
         variants={cardVariants}
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3, ease: easeOut }}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-neutral-900 to-black p-6 text-white shadow-xl shadow-neutral-900/10"
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-700 to-brand-950 p-6 text-white shadow-xl shadow-brand-900/20"
       >
         <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-indigo-500/20 blur-3xl" />
         <div className="relative flex items-start justify-between">

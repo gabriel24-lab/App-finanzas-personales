@@ -84,7 +84,7 @@ export function SearchBar({ token, walletId, onSelectResult, placeholder = "Busc
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => results.length > 0 && setOpen(true)}
           placeholder={placeholder}
-          className="w-full rounded-2xl border border-neutral-200 bg-white py-2 pl-10 pr-9 text-sm text-neutral-800 placeholder-neutral-400 shadow-sm transition-all focus:border-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-900/5"
+          className="w-full rounded-2xl border border-neutral-200 bg-white py-2 pl-10 pr-9 text-sm text-neutral-800 placeholder-neutral-400 shadow-sm transition-all focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/10"
         />
         {query && (
           <button

@@ -134,7 +134,7 @@ export function OnboardingChecklist({
                 step.done
                   ? "border-emerald-100 bg-emerald-50/60 cursor-default"
                   : step.onClick
-                    ? "border-neutral-200 bg-white hover:border-neutral-900 cursor-pointer"
+                    ? "border-neutral-200 bg-white hover:border-brand-600 cursor-pointer"
                     : "border-neutral-100 bg-white cursor-default"
               }`}
             >

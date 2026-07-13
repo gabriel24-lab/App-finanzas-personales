@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Landmark,
   LayoutDashboard,
   PiggyBank,
   Tags,
@@ -258,8 +257,8 @@ function Dashboard() {
           className="flex flex-col gap-4 pb-6 sm:flex-row sm:items-center sm:justify-between"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-neutral-900 text-white shadow-lg shadow-neutral-900/10">
-              <Landmark className="h-6 w-6" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-lg shadow-brand-900/20">
+              <img src="/isotipo.png" alt={t("common.appName")} className="h-7 w-7 object-contain" />
             </div>
             <div>
               <h1 className="text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl">
@@ -285,7 +284,7 @@ function Dashboard() {
                   <motion.span
                     layoutId="viewSwitcherPill"
                     transition={{ duration: 0.35, ease: easeOut }}
-                    className="absolute inset-0 -z-10 rounded-xl bg-neutral-900 shadow-sm"
+                    className="absolute inset-0 -z-10 rounded-xl bg-brand-600 shadow-sm"
                   />
                 )}
               </button>
@@ -302,7 +301,7 @@ function Dashboard() {
                   <motion.span
                     layoutId="viewSwitcherPill"
                     transition={{ duration: 0.35, ease: easeOut }}
-                    className="absolute inset-0 -z-10 rounded-xl bg-neutral-900 shadow-sm"
+                    className="absolute inset-0 -z-10 rounded-xl bg-brand-600 shadow-sm"
                   />
                 )}
               </button>
@@ -319,7 +318,7 @@ function Dashboard() {
                   <motion.span
                     layoutId="viewSwitcherPill"
                     transition={{ duration: 0.35, ease: easeOut }}
-                    className="absolute inset-0 -z-10 rounded-xl bg-neutral-900 shadow-sm"
+                    className="absolute inset-0 -z-10 rounded-xl bg-brand-600 shadow-sm"
                   />
                 )}
               </button>
@@ -336,7 +335,7 @@ function Dashboard() {
                   <motion.span
                     layoutId="viewSwitcherPill"
                     transition={{ duration: 0.35, ease: easeOut }}
-                    className="absolute inset-0 -z-10 rounded-xl bg-neutral-900 shadow-sm"
+                    className="absolute inset-0 -z-10 rounded-xl bg-brand-600 shadow-sm"
                   />
                 )}
               </button>
@@ -353,7 +352,7 @@ function Dashboard() {
                   <motion.span
                     layoutId="viewSwitcherPill"
                     transition={{ duration: 0.35, ease: easeOut }}
-                    className="absolute inset-0 -z-10 rounded-xl bg-neutral-900 shadow-sm"
+                    className="absolute inset-0 -z-10 rounded-xl bg-brand-600 shadow-sm"
                   />
                 )}
               </button>

@@ -151,7 +151,7 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
                 setDescription(e.target.value);
                 setError("");
               }}
-              className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900/5 focus:border-neutral-900 focus:bg-white transition-all"
+              className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-600/10 focus:border-brand-600 focus:bg-white transition-all"
               required
             />
           </div>
@@ -177,7 +177,7 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
                 setAmount(e.target.value);
                 setError("");
               }}
-              className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900/5 focus:border-neutral-900 focus:bg-white transition-all"
+              className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-600/10 focus:border-brand-600 focus:bg-white transition-all"
               required
             />
           </div>
@@ -199,7 +199,7 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
                   setCategory(e.target.value);
                   setError("");
                 }}
-                className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900/5 focus:border-neutral-900 focus:bg-white transition-all appearance-none cursor-pointer"
+                className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-brand-600/10 focus:border-brand-600 focus:bg-white transition-all appearance-none cursor-pointer"
                 required
               >
                 {categoriesByType(type).map((cat) => (
@@ -242,7 +242,7 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
                 setDate(e.target.value);
                 setError("");
               }}
-              className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900/5 focus:border-neutral-900 focus:bg-white transition-all cursor-pointer"
+              className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-brand-600/10 focus:border-brand-600 focus:bg-white transition-all cursor-pointer"
               required
             />
           </div>
@@ -260,7 +260,7 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
           disabled={!isFormValid}
           className={`w-full py-2.5 px-4 rounded-2xl text-sm font-semibold flex items-center justify-center gap-2 transition-all ${
             isFormValid
-              ? "bg-neutral-900 text-white hover:bg-neutral-800 hover:shadow-md active:scale-[0.98] cursor-pointer"
+              ? "bg-brand-600 text-white hover:bg-brand-700 hover:shadow-md active:scale-[0.98] cursor-pointer"
               : "bg-neutral-100 text-neutral-400 cursor-not-allowed"
           }`}
         >

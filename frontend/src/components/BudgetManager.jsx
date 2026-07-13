@@ -56,7 +56,7 @@ export function BudgetManager({
                 placeholder="0.00"
                 value={budgets[category] || ""}
                 onChange={(e) => handleChange(category, e.target.value)}
-                className="w-full pl-8 pr-2 py-1.5 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900/5 focus:border-neutral-900 focus:bg-white transition-all text-right"
+                className="w-full pl-8 pr-2 py-1.5 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-600/10 focus:border-brand-600 focus:bg-white transition-all text-right"
               />
             </div>
           </div>

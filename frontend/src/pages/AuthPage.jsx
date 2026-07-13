@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Landmark,
   Mail,
   Lock,
   User,
@@ -17,6 +16,7 @@ import {
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
+import { CurrencySelector } from "../components/CurrencySelector";
 
 function FieldInput({ icon: Icon, error, ...props }) {
   return (
@@ -30,7 +30,7 @@ function FieldInput({ icon: Icon, error, ...props }) {
           className={`w-full rounded-2xl border bg-neutral-50 py-3 pl-11 pr-4 text-sm font-medium text-neutral-900 placeholder-neutral-400 transition-all focus:bg-white focus:outline-none focus:ring-4 ${
             error
               ? "border-rose-300 focus:border-rose-400 focus:ring-rose-100"
-              : "border-neutral-200 focus:border-neutral-900 focus:ring-neutral-900/5"
+              : "border-neutral-200 focus:border-brand-600 focus:ring-brand-600/10"
           }`}
         />
       </div>
@@ -42,14 +42,14 @@ function FieldInput({ icon: Icon, error, ...props }) {
 // de tarjetas oscuras + acentos en degradado que pediste como referencia.
 function BrandPanel({ t }) {
   return (
-    <div className="relative hidden h-full flex-col justify-between overflow-hidden bg-linear-to-b from-neutral-950 via-black to-neutral-900 p-10 text-white lg:flex">
+    <div className="relative hidden h-full flex-col justify-between overflow-hidden bg-linear-to-b from-brand-950 via-brand-900 to-brand-800 p-10 text-white lg:flex">
       {/* Glow ambiental */}
       <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-600/30 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-lime-400/10 blur-3xl" />
 
       <div className="relative flex items-center gap-2.5">
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 backdrop-blur">
-          <Landmark className="h-4.5 w-4.5" />
+          <img src="/isotipo.png" alt={t("common.appName")} className="h-6 w-6 object-contain" />
         </div>
         <span className="text-sm font-semibold tracking-tight">
           {t("common.appName")}
@@ -78,7 +78,7 @@ function BrandPanel({ t }) {
                 delay: 0.6,
               },
             }}
-            className="absolute left-0 top-10 w-72 rounded-3xl border border-white/10 bg-linear-to-br from-neutral-800 to-neutral-950 p-5 shadow-2xl"
+            className="absolute left-0 top-10 w-72 rounded-3xl border border-white/10 bg-linear-to-br from-brand-800 to-brand-950 p-5 shadow-2xl"
           >
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-medium text-neutral-400">
@@ -159,6 +159,7 @@ export function AuthPage({ onBack, initialMode = "login" }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [currencyCode, setCurrencyCode] = useState("USD");
   const [showPassword, setShowPassword] = useState(false);
 
   const [error, setError] = useState("");
@@ -204,7 +205,7 @@ export function AuthPage({ onBack, initialMode = "login" }) {
       if (isLogin) {
         await login(email.trim(), password);
       } else {
-        await register(name.trim(), email.trim(), password);
+        await register(name.trim(), email.trim(), password, currencyCode);
       }
     } catch (err) {
       setError(err.message || t("auth.error.generic"));
@@ -239,8 +240,8 @@ export function AuthPage({ onBack, initialMode = "login" }) {
         <div className="w-full max-w-sm">
           {/* Logo visible solo en mobile */}
           <div className="mb-8 flex items-center gap-2.5 lg:hidden">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-900 text-white">
-              <Landmark className="h-5 w-5" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white">
+              <img src="/isotipo.png" alt={t("common.appName")} className="h-7 w-7 object-contain" />
             </div>
             <span className="text-sm font-semibold tracking-tight text-neutral-900">
               {t("common.appName")}
@@ -324,6 +325,24 @@ export function AuthPage({ onBack, initialMode = "login" }) {
                     }}
                     autoComplete="name"
                   />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <AnimatePresence initial={false}>
+              {!isLogin && (
+                <motion.div
+                  key="currency-field"
+                  initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                  animate={{ opacity: 1, height: "auto", marginBottom: 16 }}
+                  exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  className="overflow-hidden"
+                >
+                  <label className="mb-1.5 block px-1 text-xs font-semibold text-neutral-500">
+                    {t("auth.field.currency")}
+                  </label>
+                  <CurrencySelector value={currencyCode} onChange={setCurrencyCode} />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -415,7 +434,7 @@ export function AuthPage({ onBack, initialMode = "login" }) {
               disabled={submitting}
               whileHover={{ scale: submitting ? 1 : 1.015 }}
               whileTap={{ scale: submitting ? 1 : 0.98 }}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-neutral-900 py-3.5 text-sm font-semibold text-white transition-shadow hover:bg-black hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-600 py-3.5 text-sm font-semibold text-white transition-shadow hover:bg-brand-800 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? (
                 <motion.div

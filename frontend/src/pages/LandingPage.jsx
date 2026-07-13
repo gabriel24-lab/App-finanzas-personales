@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  Landmark,
   ArrowRight,
   Zap,
   PiggyBank,
@@ -49,7 +48,7 @@ function FeatureCard({ Icon, titleKey, descKey, t }) {
       <motion.div
         whileHover={{ rotate: 8, scale: 1.08 }}
         transition={{ duration: 0.35, ease: easeOut }}
-        className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-neutral-900 text-white"
+        className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-600 text-white"
       >
         <Icon className="h-5 w-5" />
       </motion.div>
@@ -72,7 +71,7 @@ function DashboardPreviewMock({ t }) {
       <div className="pointer-events-none absolute -top-10 -left-10 h-56 w-56 rounded-full bg-indigo-200/40 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-10 -right-10 h-56 w-56 rounded-full bg-lime-200/40 blur-3xl" />
 
-      <div className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-2xl shadow-neutral-900/10">
+      <div className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-2xl shadow-brand-900/20">
         {/* Barra de título estilo ventana */}
         <div className="flex items-center gap-1.5 border-b border-neutral-100 bg-neutral-50 px-4 py-3">
           <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
@@ -82,7 +81,7 @@ function DashboardPreviewMock({ t }) {
 
         <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-3">
           {/* KPI: Balance */}
-          <div className="rounded-2xl bg-neutral-900 p-4 text-white">
+          <div className="rounded-2xl bg-brand-600 p-4 text-white">
             <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-neutral-400">
               <Wallet className="h-3.5 w-3.5" />
               {t("landing.preview.balance")}
@@ -196,7 +195,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
 
   return (
     <div className="min-h-screen bg-neutral-50 text-neutral-800 antialiased">
-      <div className="relative overflow-hidden bg-neutral-950">
+      <div className="relative overflow-hidden bg-brand-950">
         {/* Fondo atmosférico: capas de color difuminadas + textura sutil + viñeta,
             emulando la profundidad de una fotografía sin usar una imagen real. */}
         <div className="pointer-events-none absolute inset-0">
@@ -218,7 +217,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
                 "radial-gradient(ellipse 70% 60% at 50% 30%, transparent 40%, rgba(0,0,0,0.55) 100%)",
             }}
           />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-neutral-950 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-brand-950 to-transparent" />
         </div>
 
         {/* Monedas flotando de fondo: suben y bajan suavemente, nunca caen */}
@@ -234,7 +233,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
           <div className="mx-auto grid max-w-6xl grid-cols-2 items-center px-4 py-6 sm:px-6 lg:grid-cols-3 lg:px-8">
             <div className="flex items-center gap-2.5">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 backdrop-blur">
-                <Landmark className="h-4 w-4 text-white" />
+                <img src="/isotipo.png" alt={t("common.appName")} className="h-5 w-5 object-contain" />
               </div>
               <span className="hidden text-sm font-bold tracking-tight text-white sm:inline">
                 {t("common.appName")}
@@ -419,7 +418,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
       {/* CTA final */}
       <section
         id="empezar"
-        className="relative overflow-hidden bg-neutral-900 py-20 text-white"
+        className="relative overflow-hidden bg-brand-600 py-20 text-white"
       >
         <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-600/30 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-lime-400/10 blur-3xl" />

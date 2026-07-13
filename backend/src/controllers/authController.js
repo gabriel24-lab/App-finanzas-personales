@@ -4,6 +4,7 @@ const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 const generateToken = require("../utils/generateToken");
 const DEFAULT_CATEGORIES = require("../utils/defaultCategories");
+const { CURRENCY_BY_CODE, DEFAULT_CURRENCY_CODE } = require("../utils/currencies");
 
 // Nunca devolvemos el hash de la contraseña al cliente.
 function toSafeUser(user) {
@@ -13,14 +14,16 @@ function toSafeUser(user) {
 
 /**
  * POST /api/auth/register
- * Body: { name, email, password }
+ * Body: { name, email, password, currency_code }
  *
- * Crea la cuenta con una billetera inicial en pesos (COP) en $0 y devuelve
- * un token de sesión: el usuario queda logueado inmediatamente después de
+ * Crea la cuenta con una billetera inicial en la moneda elegida por el
+ * usuario (USD, EUR, COP u otra de la lista soportada; si no manda nada o
+ * manda un código inválido, se usa COP como respaldo) en $0 y devuelve un
+ * token de sesión: el usuario queda logueado inmediatamente después de
  * registrarse, sin pasos extra.
  */
 const register = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, currency_code } = req.body;
 
   if (!name || !email || !password) {
     throw new ApiError(400, "Nombre, email y contraseña son obligatorios.");
@@ -41,6 +44,10 @@ const register = asyncHandler(async (req, res) => {
     throw new ApiError(409, "Ya existe una cuenta registrada con ese email.");
   }
 
+  const normalizedCurrencyCode = String(currency_code || "").toUpperCase().trim();
+  const currency =
+    CURRENCY_BY_CODE[normalizedCurrencyCode] || CURRENCY_BY_CODE[DEFAULT_CURRENCY_CODE];
+
   const user = await User.create({
     name: name.trim(),
     email: normalizedEmail,
@@ -48,8 +55,8 @@ const register = asyncHandler(async (req, res) => {
     wallets: [
       {
         wallet_id: "wallet_main",
-        currency_code: "COP",
-        currency_symbol: "$",
+        currency_code: currency.code,
+        currency_symbol: currency.symbol,
         account_name: "Efectivo",
         current_balance: 0,
       },

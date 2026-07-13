@@ -42,10 +42,10 @@ async function downloadFile(path, { token, filename, ...options } = {}) {
 
 // --- Autenticación ---
 
-export async function registerApi(name, email, password) {
+export async function registerApi(name, email, password, currencyCode) {
   const { token, user } = await request("/auth/register", {
     method: "POST",
-    body: JSON.stringify({ name, email, password }),
+    body: JSON.stringify({ name, email, password, currency_code: currencyCode }),
   });
   return { token, user };
 }

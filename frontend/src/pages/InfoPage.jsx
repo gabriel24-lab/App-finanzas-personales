@@ -134,7 +134,7 @@ function ContactPanel({ t, contactEmail }) {
             id="contact-name"
             name="name"
             required
-            className="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm text-neutral-900 focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-4 focus:ring-neutral-900/5"
+            className="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm text-neutral-900 focus:border-brand-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-600/10"
           />
         </div>
         <div>
@@ -146,7 +146,7 @@ function ContactPanel({ t, contactEmail }) {
             name="email"
             type="email"
             required
-            className="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm text-neutral-900 focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-4 focus:ring-neutral-900/5"
+            className="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm text-neutral-900 focus:border-brand-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-600/10"
           />
         </div>
         <div>
@@ -157,7 +157,7 @@ function ContactPanel({ t, contactEmail }) {
             id="contact-subject"
             name="subject"
             required
-            className="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm text-neutral-900 focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-4 focus:ring-neutral-900/5"
+            className="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm text-neutral-900 focus:border-brand-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-600/10"
           />
         </div>
         <div>
@@ -169,7 +169,7 @@ function ContactPanel({ t, contactEmail }) {
             name="message"
             rows={5}
             required
-            className="mt-1.5 w-full resize-y rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm text-neutral-900 focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-4 focus:ring-neutral-900/5"
+            className="mt-1.5 w-full resize-y rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm text-neutral-900 focus:border-brand-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-600/10"
           />
         </div>
 
@@ -180,7 +180,7 @@ function ContactPanel({ t, contactEmail }) {
         ) : (
           <button
             type="submit"
-            className="inline-flex rounded-xl bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-neutral-800 cursor-pointer"
+            className="inline-flex rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700 cursor-pointer"
           >
             {t("info.contact.form.submit")}
           </button>

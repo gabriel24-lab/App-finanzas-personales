@@ -44,7 +44,7 @@ export function InfoTooltip({ text, label = "Más información" }) {
         onClick={() => setOpen((v) => !v)}
         onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}
-        className="inline-flex h-4 w-4 items-center justify-center rounded-full text-neutral-300 transition-colors hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-900/10 cursor-help"
+        className="inline-flex h-4 w-4 items-center justify-center rounded-full text-neutral-300 transition-colors hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-brand-600/20 cursor-help"
       >
         <HelpCircle className="h-3.5 w-3.5" />
       </button>

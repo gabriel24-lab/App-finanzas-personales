@@ -29,7 +29,7 @@ function IconPicker({ value, onChange }) {
             onClick={() => onChange(name)}
             className={`flex h-8 w-8 items-center justify-center rounded-xl border transition-all cursor-pointer ${
               selected
-                ? "border-neutral-900 bg-neutral-900 text-white"
+                ? "border-brand-600 bg-brand-600 text-white"
                 : "border-transparent bg-white text-neutral-500 hover:border-neutral-200 hover:text-neutral-800"
             }`}
           >
@@ -52,7 +52,7 @@ function ColorPicker({ value, onChange }) {
             type="button"
             onClick={() => onChange(hex)}
             className={`h-6 w-6 rounded-full border-2 transition-transform cursor-pointer ${
-              selected ? "scale-110 border-neutral-900" : "border-white"
+              selected ? "scale-110 border-brand-600" : "border-white"
             }`}
             style={{
               backgroundColor: hex,
@@ -100,7 +100,7 @@ function CategoryForm({ initial, type, onCancel, onSubmit, submitLabel }) {
           }}
           placeholder="Nombre de la categoría"
           autoFocus
-          className="w-full rounded-2xl border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900/5 focus:border-neutral-900"
+          className="w-full rounded-2xl border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-600/10 focus:border-brand-600"
         />
 
         <div>
@@ -130,7 +130,7 @@ function CategoryForm({ initial, type, onCancel, onSubmit, submitLabel }) {
           </button>
           <button
             type="submit"
-            className="flex items-center gap-1 rounded-xl bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-neutral-800 cursor-pointer"
+            className="flex items-center gap-1 rounded-xl bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-700 cursor-pointer"
           >
             <Check className="h-3.5 w-3.5" />
             {submitLabel}
@@ -236,7 +236,7 @@ function CategoryTypeSection({
           <button
             type="button"
             onClick={() => setAdding(true)}
-            className="flex items-center gap-1 rounded-xl border border-neutral-200 px-2.5 py-1.5 text-xs font-semibold text-neutral-600 hover:border-neutral-900 hover:text-neutral-900 cursor-pointer"
+            className="flex items-center gap-1 rounded-xl border border-neutral-200 px-2.5 py-1.5 text-xs font-semibold text-neutral-600 hover:border-brand-600 hover:text-neutral-900 cursor-pointer"
           >
             <Plus className="h-3.5 w-3.5" />
             Nueva

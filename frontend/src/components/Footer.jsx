@@ -43,7 +43,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-neutral-900" aria-labelledby="footer-heading">
+    <footer className="bg-brand-950" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         {t("landing.footer.heading")}
       </h2>

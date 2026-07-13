@@ -51,7 +51,7 @@ export function LanguageSwitcher({ variant = "default" }) {
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
             className={`absolute right-0 z-50 mt-2 w-48 overflow-hidden rounded-2xl border shadow-xl ${
               isLight
-                ? "border-white/10 bg-neutral-900/95 backdrop-blur"
+                ? "border-white/10 bg-brand-950/95 backdrop-blur"
                 : "border-neutral-200 bg-white"
             }`}
           >

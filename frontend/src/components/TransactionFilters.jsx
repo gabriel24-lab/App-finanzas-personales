@@ -42,7 +42,7 @@ export function TransactionFilters({
             placeholder="Buscar por descripción..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900/5 focus:border-neutral-900 focus:bg-white transition-all"
+            className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-600/10 focus:border-brand-600 focus:bg-white transition-all"
           />
         </div>
 
@@ -93,7 +93,7 @@ export function TransactionFilters({
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="pl-3 pr-8 py-1.5 bg-neutral-50 border border-neutral-200 rounded-2xl text-xs text-neutral-700 font-medium focus:outline-none focus:ring-2 focus:ring-neutral-900/5 focus:border-neutral-900 focus:bg-white transition-all cursor-pointer appearance-none"
+            className="pl-3 pr-8 py-1.5 bg-neutral-50 border border-neutral-200 rounded-2xl text-xs text-neutral-700 font-medium focus:outline-none focus:ring-2 focus:ring-brand-600/10 focus:border-brand-600 focus:bg-white transition-all cursor-pointer appearance-none"
           >
             <option value="">Todas las categorías</option>
             {displayedCategories.map((cat) => (
