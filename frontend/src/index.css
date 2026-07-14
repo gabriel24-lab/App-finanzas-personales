@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  /* Paleta de marca derivada del isotipo de Monu (violeta/índigo) */
-  --color-brand-50: #faf5fc;
-  --color-brand-100: #f2e4f7;
-  --color-brand-200: #e3c3ee;
-  --color-brand-300: #cd93df;
-  --color-brand-400: #ab5fc7;
-  --color-brand-500: #8b3aab;
-  --color-brand-600: #7a238b;
-  --color-brand-700: #602070;
-  --color-brand-800: #481a56;
-  --color-brand-900: #2e206f;
-  --color-brand-950: #1c1444;
+  /* Paleta de marca actualizada (azul marino / azul eléctrico) */
+  --color-brand-50: #e2e8f0;
+  --color-brand-100: #cdd6e1;
+  --color-brand-200: #aebacb;
+  --color-brand-300: #94a3b8;
+  --color-brand-400: #7096d1;
+  --color-brand-500: #538be5;
+  --color-brand-600: #3b82f6;
+  --color-brand-700: #2c589f;
+  --color-brand-800: #1b2a41;
+  --color-brand-900: #111a2c;
+  --color-brand-950: #0a0f1e;
 }
 
 :root {
@@ -73,11 +73,11 @@ select {
 button:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
 
 ::selection {
-  background: #c7d2fe;
+  background: #aebacb;
   color: #111827;
 }

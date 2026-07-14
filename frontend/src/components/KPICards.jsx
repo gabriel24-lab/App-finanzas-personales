@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import gsap from "gsap";
 import { Wallet, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
 import { InfoTooltip } from "./InfoTooltip";
 
@@ -16,6 +17,35 @@ const containerVariants = {
 };
 
 export function KPICards({ transactions = [], wallet }) {
+  const cardsRef = useRef(null);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from("[data-gsap='kpi-card']", {
+        y: 24,
+        opacity: 0,
+        scale: 0.98,
+        stagger: 0.08,
+        ease: "power3.out",
+        duration: 0.65,
+      });
+
+      gsap.to("[data-gsap='kpi-glow']", {
+        x: 18,
+        y: -12,
+        scale: 1.08,
+        duration: 3.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    }, cardsRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const totals = transactions.reduce(
     (acc, transaction) => {
       const amount = Number(transaction.amount) || 0;
@@ -45,6 +75,7 @@ export function KPICards({ transactions = [], wallet }) {
 
   return (
     <motion.div
+      ref={cardsRef}
       variants={containerVariants}
       initial="hidden"
       animate="show"
@@ -52,15 +83,16 @@ export function KPICards({ transactions = [], wallet }) {
     >
       {/* Balance Card — hero oscuro */}
       <motion.div
+        data-gsap="kpi-card"
         variants={cardVariants}
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3, ease: easeOut }}
         className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-700 to-brand-950 p-6 text-white shadow-xl shadow-brand-900/20"
       >
-        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-indigo-500/20 blur-3xl" />
+        <div data-gsap="kpi-glow" className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-indigo-500/20 blur-3xl" />
         <div className="relative flex items-start justify-between">
           <div>
-            <p className="flex items-center gap-1.5 text-sm font-medium text-neutral-400">
+            <p className="flex items-center gap-1.5 text-sm font-medium text-white/80">
               Balance total
               <InfoTooltip text="Es lo que te queda hoy: la suma de todos tus ingresos menos todos tus gastos. Si es positivo, te sobra dinero; si es negativo, gastaste más de lo que ganaste." />
             </p>
@@ -87,7 +119,7 @@ export function KPICards({ transactions = [], wallet }) {
           </div>
         </div>
         {wallet?.account_name && (
-          <div className="relative mt-5 flex items-center justify-between rounded-2xl bg-white/5 px-4 py-2.5 text-xs font-medium text-neutral-300">
+          <div className="relative mt-5 flex items-center justify-between rounded-2xl bg-white/10 px-4 py-2.5 text-xs font-medium text-white/80">
             <span>{wallet.account_name}</span>
             <span className="font-semibold tracking-wide">{currencyCode}</span>
           </div>
@@ -96,6 +128,7 @@ export function KPICards({ transactions = [], wallet }) {
 
       {/* Income Card */}
       <motion.div
+        data-gsap="kpi-card"
         variants={cardVariants}
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3, ease: easeOut }}
@@ -134,6 +167,7 @@ export function KPICards({ transactions = [], wallet }) {
 
       {/* Expense Card */}
       <motion.div
+        data-gsap="kpi-card"
         variants={cardVariants}
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3, ease: easeOut }}
@@ -159,7 +193,7 @@ export function KPICards({ transactions = [], wallet }) {
             <ArrowDownRight className="h-5 w-5" />
           </div>
         </div>
-        <div className="mt-4 flex items-center gap-1.5 text-[11px] font-medium text-neutral-400">
+        <div className="mt-4 flex items-center gap-1.5 text-[11px] font-medium text-neutral-600">
           <TrendingUp className="h-3.5 w-3.5" />
           {totals.expense > totals.income
             ? "Gastaste más de lo que ingresó"

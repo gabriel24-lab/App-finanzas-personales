@@ -90,7 +90,7 @@ export function OnboardingChecklist({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, height: 0, marginBottom: 0 }}
         transition={{ duration: 0.35, ease: easeOut }}
-        className="relative overflow-hidden rounded-3xl border border-neutral-100 bg-gradient-to-br from-white to-neutral-50 p-6 shadow-sm"
+        className="relative overflow-hidden rounded-3xl border border-neutral-100 bg-linear-to-br from-white to-neutral-50 p-6 shadow-sm"
       >
         <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-indigo-500/10 blur-3xl" />
 
@@ -119,7 +119,7 @@ export function OnboardingChecklist({
             initial={false}
             animate={{ width: `${(completedCount / steps.length) * 100}%` }}
             transition={{ duration: 0.4, ease: easeOut }}
-            className="h-full rounded-full bg-gradient-to-r from-indigo-400 to-indigo-600"
+            className="h-full rounded-full bg-linear-to-r from-indigo-400 to-indigo-600"
           />
         </div>
 

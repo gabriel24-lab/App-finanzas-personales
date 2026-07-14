@@ -13,9 +13,11 @@ export function Reveal({
   className = "",
   once = true,
   amount = 0.25,
+  ...props
 }) {
   return (
     <motion.div
+      {...props}
       className={className}
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}

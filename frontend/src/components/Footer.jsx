@@ -55,10 +55,10 @@ export function Footer() {
               alt={t("common.appName")}
               className="h-9 w-auto"
             />
-            <p className="max-w-xs text-sm leading-relaxed text-neutral-400">
+            <p className="max-w-xs text-sm leading-relaxed text-white/75">
               {t("landing.footer.tagline")}
             </p>
-            <p className="text-xs text-neutral-500">
+            <p className="text-xs text-white/60">
               © {year} {t("common.appName")}. {t("landing.footer.rights")}
             </p>
           </div>
@@ -74,7 +74,7 @@ export function Footer() {
                     <li key={link.labelKey}>
                       <a
                         href={link.href}
-                        className="text-sm text-neutral-400 transition-colors hover:text-white"
+                        className="text-sm text-white/75 transition-colors hover:text-white"
                       >
                         {t(link.labelKey)}
                       </a>

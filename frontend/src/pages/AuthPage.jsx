@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import gsap from "gsap";
 import {
   Mail,
   Lock,
@@ -47,67 +48,47 @@ function BrandPanel({ t }) {
       <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-600/30 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-lime-400/10 blur-3xl" />
 
-      <div className="relative flex items-center gap-2.5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 backdrop-blur">
-          <img src="/isotipo.png" alt={t("common.appName")} className="h-6 w-6 object-contain" />
+      <div data-gsap="auth-brand" className="relative flex items-center gap-2.5">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 backdrop-blur">
+          <img src="/isotipo.png" alt={t("common.appName")} className="h-8 w-8 object-contain" />
         </div>
         <span className="text-sm font-semibold tracking-tight">
           {t("common.appName")}
         </span>
       </div>
 
-      <div className="relative">
+      <div data-gsap="auth-copy" className="relative">
         <h1 className="max-w-sm text-3xl font-bold leading-tight tracking-tight">
           {t("auth.tagline.title")}
         </h1>
-        <p className="mt-3 max-w-xs text-sm text-neutral-400">
+        <p className="mt-3 max-w-xs text-sm text-white/80">
           {t("auth.tagline.subtitle")}
         </p>
 
         {/* Stack de tarjetas decorativas */}
         <div className="relative mt-10 h-64 w-full max-w-sm">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: [0, -6, 0] }}
-            transition={{
-              opacity: { duration: 0.6, delay: 0.1 },
-              y: {
-                duration: 4.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.6,
-              },
-            }}
+          <div
+            data-gsap="auth-card"
             className="absolute left-0 top-10 w-72 rounded-3xl border border-white/10 bg-linear-to-br from-brand-800 to-brand-950 p-5 shadow-2xl"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-medium text-neutral-400">
+              <span className="text-[11px] font-medium text-white/75">
                 Tu Balance
               </span>
-              <span className="text-[11px] font-medium text-neutral-500">
+              <span className="text-[11px] font-medium text-white/65">
                 **** 1189
               </span>
             </div>
             <p className="mt-3 text-2xl font-bold tracking-tight">
-              $34,788<span className="text-neutral-500">.90</span>
+              $34,788<span className="text-white/65">.90</span>
             </p>
             <p className="mt-1 text-[11px] font-medium text-lime-400">
               +4.88% este mes
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: [0, 7, 0] }}
-            transition={{
-              opacity: { duration: 0.6, delay: 0.22 },
-              y: {
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.9,
-              },
-            }}
+          <div
+            data-gsap="auth-card"
             className="absolute left-10 top-32 w-72 rounded-3xl bg-linear-to-br from-blue-500 to-indigo-600 p-5 shadow-2xl"
           >
             <div className="flex items-center justify-between text-white">
@@ -116,20 +97,10 @@ function BrandPanel({ t }) {
               </span>
               <span className="text-xs font-bold italic">VISA</span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: [0, -5, 0] }}
-            transition={{
-              opacity: { duration: 0.6, delay: 0.34 },
-              y: {
-                duration: 4.2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1.2,
-              },
-            }}
+          <div
+            data-gsap="auth-card"
             className="absolute left-20 top-46 w-72 rounded-3xl bg-linear-to-br from-pink-300 to-fuchsia-400 p-5 shadow-2xl"
           >
             <div className="flex items-center justify-between text-neutral-900">
@@ -138,11 +109,11 @@ function BrandPanel({ t }) {
               </span>
               <span className="text-xs font-bold italic">VISA</span>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
-      <div className="relative flex items-center gap-2 text-xs font-medium text-neutral-500">
+      <div className="relative flex items-center gap-2 text-xs font-medium text-white/75">
         <ShieldCheck className="h-4 w-4 text-lime-400" />
         {t("auth.tagline.secure")}
       </div>
@@ -164,8 +135,41 @@ export function AuthPage({ onBack, initialMode = "login" }) {
 
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const authRef = useRef(null);
 
   const isLogin = mode === "login";
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const ctx = gsap.context(() => {
+      gsap
+        .timeline({ defaults: { ease: "power3.out", duration: 0.75 } })
+        .from("[data-gsap='auth-brand']", { x: -18, opacity: 0 })
+        .from("[data-gsap='auth-copy']", { y: 22, opacity: 0 }, "-=0.45")
+        .from(
+          "[data-gsap='auth-card']",
+          { y: 28, opacity: 0, rotate: -2, stagger: 0.12 },
+          "-=0.35"
+        )
+        .from(
+          "[data-gsap='auth-form'] > *",
+          { y: 18, opacity: 0, stagger: 0.06 },
+          "-=0.55"
+        );
+
+      gsap.to("[data-gsap='auth-card']", {
+        y: (i) => (i % 2 === 0 ? -8 : 8),
+        duration: 3.8,
+        yoyo: true,
+        repeat: -1,
+        ease: "sine.inOut",
+        stagger: 0.4,
+      });
+    }, authRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const resetFieldsError = () => error && setError("");
 
@@ -215,7 +219,7 @@ export function AuthPage({ onBack, initialMode = "login" }) {
   };
 
   return (
-    <div className="grid min-h-screen grid-cols-1 bg-neutral-50 lg:grid-cols-2">
+    <div ref={authRef} className="grid min-h-screen grid-cols-1 bg-neutral-50 lg:grid-cols-2">
       <BrandPanel t={t} />
 
       {/* Panel del formulario */}
@@ -237,11 +241,11 @@ export function AuthPage({ onBack, initialMode = "login" }) {
           <LanguageSwitcher variant="default" />
         </div>
 
-        <div className="w-full max-w-sm">
+        <div data-gsap="auth-form" className="w-full max-w-sm">
           {/* Logo visible solo en mobile */}
           <div className="mb-8 flex items-center gap-2.5 lg:hidden">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white">
-              <img src="/isotipo.png" alt={t("common.appName")} className="h-7 w-7 object-contain" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-600 text-white">
+              <img src="/isotipo.png" alt={t("common.appName")} className="h-9 w-9 object-contain" />
             </div>
             <span className="text-sm font-semibold tracking-tight text-neutral-900">
               {t("common.appName")}

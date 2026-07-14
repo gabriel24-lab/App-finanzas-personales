@@ -57,7 +57,7 @@ export function LanguageSwitcher({ variant = "default" }) {
           >
             <div
               className={`px-3.5 pb-1.5 pt-3 text-[10px] font-bold uppercase tracking-wider ${
-                isLight ? "text-neutral-400" : "text-neutral-400"
+                isLight ? "text-white/75" : "text-neutral-500"
               }`}
             >
               {t("common.language")}
