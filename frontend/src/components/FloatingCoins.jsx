@@ -7,19 +7,19 @@ import { motion } from "framer-motion";
 function Coin({ size, symbol, tone }) {
   const tones = {
     gold: {
-      face: "url(#coin-gold-face)",
-      rim: "#8a6416",
-      shine: "#fff6d9",
+      face: "url(#coin-light-face)",
+      rim: "#9e9e9e",
+      shine: "#ffffff",
     },
     silver: {
       face: "url(#coin-silver-face)",
-      rim: "#7c828c",
+      rim: "#757575",
       shine: "#f4f6f8",
     },
     indigo: {
-      face: "url(#coin-indigo-face)",
-      rim: "#312e81",
-      shine: "#c7d2fe",
+      face: "url(#coin-dark-face)",
+      rim: "#000000",
+      shine: "#dcdcdc",
     },
   };
   const c = tones[tone] || tones.gold;
@@ -32,20 +32,20 @@ function Coin({ size, symbol, tone }) {
       className="block drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]"
     >
       <defs>
-        <radialGradient id="coin-gold-face" cx="35%" cy="30%" r="75%">
-          <stop offset="0%" stopColor="#ffe9a8" />
-          <stop offset="55%" stopColor="#f0c04d" />
-          <stop offset="100%" stopColor="#c8901f" />
+        <radialGradient id="coin-light-face" cx="35%" cy="30%" r="75%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="55%" stopColor="#ececec" />
+          <stop offset="100%" stopColor="#c2c2c2" />
         </radialGradient>
         <radialGradient id="coin-silver-face" cx="35%" cy="30%" r="75%">
           <stop offset="0%" stopColor="#f4f6f8" />
           <stop offset="55%" stopColor="#c9d0d8" />
           <stop offset="100%" stopColor="#9aa2ad" />
         </radialGradient>
-        <radialGradient id="coin-indigo-face" cx="35%" cy="30%" r="75%">
-          <stop offset="0%" stopColor="#c7d2fe" />
-          <stop offset="55%" stopColor="#818cf8" />
-          <stop offset="100%" stopColor="#4338ca" />
+        <radialGradient id="coin-dark-face" cx="35%" cy="30%" r="75%">
+          <stop offset="0%" stopColor="#c2c2c2" />
+          <stop offset="55%" stopColor="#757575" />
+          <stop offset="100%" stopColor="#1c1c1c" />
         </radialGradient>
       </defs>
       <circle cx="50" cy="50" r="47" fill={c.rim} />

@@ -1,25 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  /* Paleta de marca actualizada (azul marino / azul eléctrico) */
-  --color-brand-50: #e2e8f0;
-  --color-brand-100: #cdd6e1;
-  --color-brand-200: #aebacb;
-  --color-brand-300: #94a3b8;
-  --color-brand-400: #7096d1;
-  --color-brand-500: #538be5;
-  --color-brand-600: #3b82f6;
-  --color-brand-700: #2c589f;
-  --color-brand-800: #1b2a41;
-  --color-brand-900: #111a2c;
-  --color-brand-950: #0a0f1e;
+  /* Paleta de marca: escala de grises (blanco → gris claro → carbón → negro),
+     tomada de la paleta subida por el usuario. Progresión suave de 11 pasos
+     para que no haya saltos de luminosidad entre secciones claras y oscuras. */
+  --color-brand-50: #ffffff;
+  --color-brand-100: #f7f7f7;
+  --color-brand-200: #ececec;
+  --color-brand-300: #dcdcdc;
+  --color-brand-400: #c2c2c2;
+  --color-brand-500: #9e9e9e;
+  --color-brand-600: #757575;
+  --color-brand-700: #4a4a4a;
+  --color-brand-800: #1c1c1c;
+  --color-brand-900: #0a0a0a;
+  --color-brand-950: #000000;
+
+  --font-body: "Montserrat", sans-serif;
+  --font-heading: "Poiret One", sans-serif;
+  --font-sans: "Montserrat", sans-serif;
 }
 
 :root {
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #1e293b;
-  background: #f8fafc;
+  font-family: var(--font-body), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #1c1c1c;
+  background: #f7f7f7;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -31,7 +36,7 @@
 }
 
 html {
-  background: #f8fafc;
+  background: #f7f7f7;
   scroll-behavior: smooth;
 }
 
@@ -64,20 +69,33 @@ body {
   min-height: 100vh;
 }
 
-button,
-input,
-select {
-  font: inherit;
-}
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
 
-button:focus-visible,
-input:focus-visible,
-select:focus-visible {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+  button,
+  input,
+  select {
+    font: inherit;
+  }
+
+  button {
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    background-color: transparent;
+  }
+
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible {
+    outline: 2px solid #1c1c1c;
+    outline-offset: 2px;
+  }
 }
 
 ::selection {
-  background: #aebacb;
-  color: #111827;
+  background: #dcdcdc;
+  color: #1c1c1c;
 }

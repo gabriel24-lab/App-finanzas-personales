@@ -204,7 +204,7 @@ export function ReportsView({ token, wallet }) {
             {[
               { label: "Ingresos", curr: comparative.currentMonth.income, trend: comparative.trends.incomeChangePercent, color: "text-emerald-600" },
               { label: "Gastos", curr: comparative.currentMonth.expense, trend: comparative.trends.expenseChangePercent, color: "text-rose-600" },
-              { label: "Balance neto", curr: comparative.currentMonth.net, trend: comparative.trends.netChangePercent, color: "text-indigo-600" },
+              { label: "Balance neto", curr: comparative.currentMonth.net, trend: comparative.trends.netChangePercent, color: "text-brand-800" },
             ].map((item) => (
               <div key={item.label} className="rounded-2xl border border-neutral-100 bg-neutral-50 p-4">
                 <p className="text-xs font-medium text-neutral-500">{item.label}</p>
@@ -305,9 +305,9 @@ export function ReportsView({ token, wallet }) {
                 {formatCurrency(projection.projection.projectedExpense, currency)}
               </p>
             </div>
-            <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-4">
-              <p className="text-xs text-indigo-600">Balance fin de mes</p>
-              <p className="mt-1 text-lg font-bold text-indigo-700">
+            <div className="rounded-2xl border border-brand-200 bg-brand-100 p-4">
+              <p className="text-xs text-brand-700">Balance fin de mes</p>
+              <p className="mt-1 text-lg font-bold text-brand-900">
                 {formatCurrency(projection.projection.projectedEndBalance, currency)}
               </p>
             </div>

@@ -44,7 +44,7 @@ function GuideCards({ guides }) {
           key={guide.title}
           className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm"
         >
-          <p className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+          <p className="text-xs font-bold uppercase tracking-wider text-brand-700">
             {guide.step}
           </p>
           <h2 className="mt-2 text-base font-bold text-neutral-900">{guide.title}</h2>
@@ -93,7 +93,7 @@ function ContactPanel({ t, contactEmail }) {
               <p className="text-sm font-semibold text-neutral-900">{t("info.contact.emailLabel")}</p>
               <a
                 href={`mailto:${contactEmail}`}
-                className="mt-1 block text-sm text-indigo-600 hover:text-indigo-500"
+                className="mt-1 block text-sm text-brand-800 hover:text-brand-950"
               >
                 {contactEmail}
               </a>

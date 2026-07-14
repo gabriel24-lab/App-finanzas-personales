@@ -257,8 +257,8 @@ function Dashboard() {
           className="flex flex-col gap-4 pb-6 sm:flex-row sm:items-center sm:justify-between"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-lg shadow-brand-900/20">
-              <img src="/isotipo.png" alt={t("common.appName")} className="h-12 w-12 object-contain" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-900 text-white shadow-lg shadow-black/20">
+              <img src="/isotipo-light.png" alt={t("common.appName")} className="h-10 w-10 object-contain" />
             </div>
             <div>
               <h1 className="text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl">

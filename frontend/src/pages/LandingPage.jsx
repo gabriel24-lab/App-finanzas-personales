@@ -70,9 +70,9 @@ function MiniDashboardCard({ t }) {
   return (
     <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-2xl shadow-black/30">
       <div className="flex items-center gap-1.5 border-b border-neutral-100 bg-neutral-50 px-4 py-3">
-        <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
-        <span className="h-2.5 w-2.5 rounded-full bg-lime-300" />
+        <span className="h-2.5 w-2.5 rounded-full bg-brand-300" />
+        <span className="h-2.5 w-2.5 rounded-full bg-brand-400" />
+        <span className="h-2.5 w-2.5 rounded-full bg-brand-500" />
       </div>
 
       <div className="space-y-4 p-5">
@@ -103,8 +103,8 @@ function MiniDashboardCard({ t }) {
 
         <div className="space-y-2.5 rounded-2xl border border-neutral-200 p-4">
           {[
-            { label: "🍔 Comida", pct: 72, color: "bg-amber-400" },
-            { label: "🚗 Transporte", pct: 45, color: "bg-indigo-400" },
+            { label: "🍔 Comida", pct: 72, color: "bg-brand-800" },
+            { label: "🚗 Transporte", pct: 45, color: "bg-brand-500" },
           ].map((b) => (
             <div key={b.label}>
               <div className="mb-1 flex items-center justify-between text-[11px] font-medium text-neutral-600">
@@ -133,15 +133,15 @@ function MiniDashboardCard({ t }) {
 function DashboardPreviewMock({ t }) {
   return (
     <div className="relative mx-auto w-full max-w-3xl">
-      <div className="pointer-events-none absolute -top-10 -left-10 h-56 w-56 rounded-full bg-indigo-200/40 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-10 -right-10 h-56 w-56 rounded-full bg-lime-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -top-10 -left-10 h-56 w-56 rounded-full bg-brand-300/40 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-10 -right-10 h-56 w-56 rounded-full bg-brand-500/20 blur-3xl" />
 
       <div className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-2xl shadow-brand-900/20">
         {/* Barra de título estilo ventana */}
         <div className="flex items-center gap-1.5 border-b border-neutral-100 bg-neutral-50 px-4 py-3">
-          <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
-          <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
-          <span className="h-2.5 w-2.5 rounded-full bg-lime-300" />
+          <span className="h-2.5 w-2.5 rounded-full bg-brand-300" />
+          <span className="h-2.5 w-2.5 rounded-full bg-brand-400" />
+          <span className="h-2.5 w-2.5 rounded-full bg-brand-500" />
         </div>
 
         <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-3">
@@ -182,9 +182,9 @@ function DashboardPreviewMock({ t }) {
               {t("landing.preview.card2.title")}
             </p>
             {[
-              { label: "🍔 Comida", pct: 72, color: "bg-amber-400" },
-              { label: "🚗 Transporte", pct: 45, color: "bg-indigo-400" },
-              { label: "🎬 Ocio", pct: 90, color: "bg-rose-400" },
+              { label: "🍔 Comida", pct: 72, color: "bg-brand-800" },
+              { label: "🚗 Transporte", pct: 45, color: "bg-brand-500" },
+              { label: "🎬 Ocio", pct: 90, color: "bg-brand-300" },
             ].map((b) => (
               <div key={b.label}>
                 <div className="mb-1 flex items-center justify-between text-xs font-medium text-neutral-600">
@@ -298,9 +298,9 @@ export function LandingPage({ onGetStarted, onLogin }) {
         {/* Fondo atmosférico: capas de color difuminadas + textura sutil + viñeta
             sobre la foto de fondo, para mantener el contraste del texto blanco. */}
         <div className="pointer-events-none absolute inset-0">
-          <div data-gsap="hero-blob" className="absolute -top-40 left-[8%] h-112 w-md rounded-full bg-indigo-600/30 blur-[110px]" />
-          <div data-gsap="hero-blob" className="absolute -top-24 right-[10%] h-96 w-[24rem] rounded-full bg-fuchsia-600/15 blur-[110px]" />
-          <div data-gsap="hero-blob" className="absolute -bottom-32 left-1/3 h-104 w-104 rounded-full bg-blue-700/20 blur-[120px]" />
+          <div data-gsap="hero-blob" className="absolute -top-40 left-[8%] h-112 w-md rounded-full bg-brand-500/20 blur-[110px]" />
+          <div data-gsap="hero-blob" className="absolute -top-24 right-[10%] h-96 w-[24rem] rounded-full bg-brand-300/15 blur-[110px]" />
+          <div data-gsap="hero-blob" className="absolute -bottom-32 left-1/3 h-104 w-104 rounded-full bg-brand-700/20 blur-[120px]" />
           <div
             className="absolute inset-0 opacity-[0.15]"
             style={{
@@ -331,8 +331,8 @@ export function LandingPage({ onGetStarted, onLogin }) {
         >
           <div className="mx-auto grid max-w-6xl grid-cols-2 items-center px-4 py-6 sm:px-6 lg:grid-cols-3 lg:px-8">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 backdrop-blur">
-                <img src="/isotipo.png" alt={t("common.appName")} className="h-7 w-7 object-contain" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 backdrop-blur">
+                <img src="/isotipo-light.png" alt={t("common.appName")} className="h-9 w-9 object-contain" />
               </div>
               <span className="hidden text-sm font-bold tracking-tight text-white sm:inline">
                 {t("common.appName")}
@@ -393,7 +393,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
             className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-neutral-200 backdrop-blur transition-colors hover:bg-white/15 cursor-pointer"
           >
             {t("landing.hero.badge")}
-            <span className="font-semibold text-indigo-300">
+            <span className="font-semibold text-brand-300">
               {t("landing.hero.badgeLink")} →
             </span>
           </motion.button>
@@ -427,7 +427,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               transition={{ duration: 0.25, ease: easeOut }}
-              className="flex items-center justify-center gap-2 rounded-xl bg-indigo-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-shadow hover:bg-indigo-400 hover:shadow-xl cursor-pointer"
+              className="flex items-center justify-center gap-2 rounded-xl bg-brand-800 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-black/30 transition-shadow hover:bg-brand-950 hover:shadow-xl cursor-pointer"
             >
               {t("landing.hero.ctaPrimary")}
             </motion.button>
@@ -541,8 +541,8 @@ export function LandingPage({ onGetStarted, onLogin }) {
               backgroundSize: "56px 56px",
             }}
           />
-          <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-600/30 blur-3xl" />
-          <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-lime-400/10 blur-3xl" />
+          <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl" />
+          <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-brand-300/10 blur-3xl" />
         </div>
 
         {/* Mismas monedas flotantes del hero, atenuadas para no competir con el contenido */}

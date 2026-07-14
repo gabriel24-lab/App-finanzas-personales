@@ -51,9 +51,9 @@ export function Footer() {
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-6">
             <img
-              src="/isotipo.png"
+              src="/isotipo-dark.png"
               alt={t("common.appName")}
-              className="h-9 w-auto"
+              className="h-12 w-auto"
             />
             <p className="max-w-xs text-sm leading-relaxed text-neutral-500">
               {t("landing.footer.tagline")}

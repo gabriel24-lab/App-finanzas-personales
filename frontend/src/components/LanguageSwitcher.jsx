@@ -82,7 +82,7 @@ export function LanguageSwitcher({ variant = "default" }) {
                   <span>{l.label}</span>
                 </span>
                 {l.code === lang && (
-                  <Check className={`h-4 w-4 ${isLight ? "text-lime-400" : "text-neutral-900"}`} />
+                  <Check className={`h-4 w-4 ${isLight ? "text-white" : "text-neutral-900"}`} />
                 )}
               </motion.button>
             ))}

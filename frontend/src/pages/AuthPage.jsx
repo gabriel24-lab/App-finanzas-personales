@@ -45,12 +45,12 @@ function BrandPanel({ t }) {
   return (
     <div className="relative hidden h-full flex-col justify-between overflow-hidden bg-linear-to-b from-brand-950 via-brand-900 to-brand-800 p-10 text-white lg:flex">
       {/* Glow ambiental */}
-      <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-600/30 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-lime-400/10 blur-3xl" />
+      <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-brand-500/25 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-brand-300/10 blur-3xl" />
 
       <div data-gsap="auth-brand" className="relative flex items-center gap-2.5">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 backdrop-blur">
-          <img src="/isotipo.png" alt={t("common.appName")} className="h-8 w-8 object-contain" />
+        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/10 backdrop-blur">
+          <img src="/isotipo-light.png" alt={t("common.appName")} className="h-10 w-10 object-contain" />
         </div>
         <span className="text-sm font-semibold tracking-tight">
           {t("common.appName")}
@@ -82,14 +82,14 @@ function BrandPanel({ t }) {
             <p className="mt-3 text-2xl font-bold tracking-tight">
               $34,788<span className="text-white/65">.90</span>
             </p>
-            <p className="mt-1 text-[11px] font-medium text-lime-400">
+            <p className="mt-1 text-[11px] font-medium text-emerald-400">
               +4.88% este mes
             </p>
           </div>
 
           <div
             data-gsap="auth-card"
-            className="absolute left-10 top-32 w-72 rounded-3xl bg-linear-to-br from-blue-500 to-indigo-600 p-5 shadow-2xl"
+            className="absolute left-10 top-32 w-72 rounded-3xl bg-linear-to-br from-brand-700 to-brand-950 p-5 shadow-2xl"
           >
             <div className="flex items-center justify-between text-white">
               <span className="text-sm font-semibold tracking-wide">
@@ -101,7 +101,7 @@ function BrandPanel({ t }) {
 
           <div
             data-gsap="auth-card"
-            className="absolute left-20 top-46 w-72 rounded-3xl bg-linear-to-br from-pink-300 to-fuchsia-400 p-5 shadow-2xl"
+            className="absolute left-20 top-46 w-72 rounded-3xl bg-linear-to-br from-brand-200 to-brand-400 p-5 shadow-2xl"
           >
             <div className="flex items-center justify-between text-neutral-900">
               <span className="text-sm font-semibold tracking-wide">
@@ -114,7 +114,7 @@ function BrandPanel({ t }) {
       </div>
 
       <div className="relative flex items-center gap-2 text-xs font-medium text-white/75">
-        <ShieldCheck className="h-4 w-4 text-lime-400" />
+        <ShieldCheck className="h-4 w-4 text-emerald-400" />
         {t("auth.tagline.secure")}
       </div>
     </div>
@@ -211,12 +211,14 @@ export function AuthPage({ onBack, initialMode = "login" }) {
     }
 
     setSubmitting(true);
+    // Tiempo mínimo de carga: si la respuesta es instantánea (ej. en local),
+    // el spinner igual se ve un instante en vez de parpadear y desaparecer.
+    const minDelay = new Promise((resolve) => setTimeout(resolve, 400));
     try {
-      if (isLogin) {
-        await login(email.trim(), password);
-      } else {
-        await register(name.trim(), email.trim(), password, currencyCode);
-      }
+      const action = isLogin
+        ? login(email.trim(), password)
+        : register(name.trim(), email.trim(), password, currencyCode);
+      await Promise.all([action, minDelay]);
     } catch (err) {
       setError(err.message || t("auth.error.generic"));
     } finally {
@@ -250,8 +252,8 @@ export function AuthPage({ onBack, initialMode = "login" }) {
         <div data-gsap="auth-form" className="w-full max-w-sm">
           {/* Logo visible solo en mobile */}
           <div className="mb-8 flex items-center gap-2.5 lg:hidden">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-600 text-white">
-              <img src="/isotipo.png" alt={t("common.appName")} className="h-9 w-9 object-contain" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-brand-900 text-white">
+              <img src="/isotipo-light.png" alt={t("common.appName")} className="h-10 w-10 object-contain" />
             </div>
             <span className="text-sm font-semibold tracking-tight text-neutral-900">
               {t("common.appName")}
@@ -445,25 +447,41 @@ export function AuthPage({ onBack, initialMode = "login" }) {
               disabled={submitting}
               whileHover={{ scale: submitting ? 1 : 1.015 }}
               whileTap={{ scale: submitting ? 1 : 0.98 }}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-600 py-3.5 text-sm font-semibold text-white transition-shadow hover:bg-brand-800 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-800 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-brand-950 active:bg-brand-950 hover:shadow-lg disabled:cursor-not-allowed disabled:bg-brand-700"
             >
-              {submitting ? (
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 0.8,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
-                >
-                  <Loader2 className="h-4 w-4" />
-                </motion.div>
-              ) : (
-                <>
-                  {isLogin ? t("auth.submit.login") : t("auth.submit.register")}
-                  <ArrowRight className="h-4 w-4" />
-                </>
-              )}
+              {isLogin ? t("auth.submit.login") : t("auth.submit.register")}
+              <AnimatePresence mode="wait" initial={false}>
+                {submitting ? (
+                  <motion.div
+                    key="loading"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        duration: 0.8,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                    >
+                      <Loader2 className="h-4 w-4" />
+                    </motion.div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="arrow"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.button>
           </form>
 

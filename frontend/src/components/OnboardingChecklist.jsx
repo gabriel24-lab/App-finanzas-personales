@@ -92,7 +92,7 @@ export function OnboardingChecklist({
         transition={{ duration: 0.35, ease: easeOut }}
         className="relative overflow-hidden rounded-3xl border border-neutral-100 bg-linear-to-br from-white to-neutral-50 p-6 shadow-sm"
       >
-        <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-indigo-500/10 blur-3xl" />
+        <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-brand-500/10 blur-3xl" />
 
         <button
           type="button"
@@ -104,7 +104,7 @@ export function OnboardingChecklist({
         </button>
 
         <div className="relative flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-indigo-500" />
+          <Sparkles className="h-5 w-5 text-brand-800" />
           <h2 className="text-base font-bold text-neutral-800">
             Empecemos a organizar tu dinero
           </h2>
@@ -119,7 +119,7 @@ export function OnboardingChecklist({
             initial={false}
             animate={{ width: `${(completedCount / steps.length) * 100}%` }}
             transition={{ duration: 0.4, ease: easeOut }}
-            className="h-full rounded-full bg-linear-to-r from-indigo-400 to-indigo-600"
+            className="h-full rounded-full bg-linear-to-r from-brand-600 to-brand-900"
           />
         </div>
 

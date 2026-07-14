@@ -51,7 +51,7 @@ export function InfoTooltip({ text, label = "Más información" }) {
       {open && (
         <span
           role="tooltip"
-          className="absolute bottom-full left-1/2 z-20 mb-2 w-56 -translate-x-1/2 rounded-xl border border-neutral-100 bg-white p-3 text-left text-xs font-normal leading-relaxed text-neutral-600 shadow-lg"
+          className="absolute bottom-full left-1/2 z-50 mb-2 w-56 -translate-x-1/2 rounded-xl border border-neutral-100 bg-white p-3 text-left text-xs font-normal leading-relaxed text-neutral-600 shadow-lg"
         >
           {text}
           <span className="absolute left-1/2 top-full h-2 w-2 -translate-x-1/2 -translate-y-1/2 rotate-45 border-b border-r border-neutral-100 bg-white" />
