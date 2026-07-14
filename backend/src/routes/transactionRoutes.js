@@ -12,6 +12,8 @@ const {
   exportTransactions,
 } = require("../controllers/transactionController");
 const { protect } = require("../middleware/auth");
+const validate = require("../middleware/validate");
+const { createTransactionSchema, updateTransactionSchema } = require("../validation/schemas");
 
 const router = express.Router();
 
@@ -19,7 +21,7 @@ const router = express.Router();
 router.use(protect);
 
 // POST /api/transactions
-router.post("/", createTransaction);
+router.post("/", validate(createTransactionSchema), createTransaction);
 
 // Reportes y utilidades (rutas estáticas antes de /:userId)
 router.get("/report/comparative", getComparativeReport);
@@ -33,7 +35,7 @@ router.get("/export", exportTransactions);
 router.get("/:userId", getTransactions);
 
 // PUT /api/transactions/:id
-router.put("/:id", updateTransaction);
+router.put("/:id", validate(updateTransactionSchema), updateTransaction);
 
 // DELETE /api/transactions/:id
 router.delete("/:id", deleteTransaction);

@@ -6,6 +6,8 @@ const {
   deleteCategory,
 } = require("../controllers/categoryController");
 const { protect } = require("../middleware/auth");
+const validate = require("../middleware/validate");
+const { createCategorySchema, updateCategorySchema } = require("../validation/schemas");
 
 const router = express.Router();
 
@@ -16,10 +18,10 @@ router.use(protect);
 router.get("/:userId", getCategories);
 
 // POST /api/categories
-router.post("/", createCategory);
+router.post("/", validate(createCategorySchema), createCategory);
 
 // PUT /api/categories/:id
-router.put("/:id", updateCategory);
+router.put("/:id", validate(updateCategorySchema), updateCategory);
 
 // DELETE /api/categories/:id
 router.delete("/:id", deleteCategory);

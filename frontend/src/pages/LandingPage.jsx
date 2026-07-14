@@ -63,6 +63,70 @@ function FeatureCard({ Icon, titleKey, descKey, t }) {
   );
 }
 
+// Versión compacta del mockup, pensada para ir al lado del texto del CTA
+// final (no necesita todo el detalle de DashboardPreviewMock: solo dar la
+// sensación de "así se ve" en poco espacio).
+function MiniDashboardCard({ t }) {
+  return (
+    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-2xl shadow-black/30">
+      <div className="flex items-center gap-1.5 border-b border-neutral-100 bg-neutral-50 px-4 py-3">
+        <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
+        <span className="h-2.5 w-2.5 rounded-full bg-lime-300" />
+      </div>
+
+      <div className="space-y-4 p-5">
+        <div className="rounded-2xl bg-brand-700 p-4 text-white">
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-white/85">
+            <Wallet className="h-3.5 w-3.5" />
+            {t("landing.preview.balance")}
+          </div>
+          <p className="mt-2 text-xl font-bold tracking-tight">$12,480.50</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-2xl border border-neutral-200 p-3">
+            <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-600">
+              <TrendingUp className="h-3 w-3" />
+              {t("landing.preview.income")}
+            </div>
+            <p className="mt-1.5 text-sm font-bold text-neutral-900">$3,250.00</p>
+          </div>
+          <div className="rounded-2xl border border-neutral-200 p-3">
+            <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-rose-500">
+              <TrendingDown className="h-3 w-3" />
+              {t("landing.preview.expenses")}
+            </div>
+            <p className="mt-1.5 text-sm font-bold text-neutral-900">$1,180.35</p>
+          </div>
+        </div>
+
+        <div className="space-y-2.5 rounded-2xl border border-neutral-200 p-4">
+          {[
+            { label: "🍔 Comida", pct: 72, color: "bg-amber-400" },
+            { label: "🚗 Transporte", pct: 45, color: "bg-indigo-400" },
+          ].map((b) => (
+            <div key={b.label}>
+              <div className="mb-1 flex items-center justify-between text-[11px] font-medium text-neutral-600">
+                <span>{b.label}</span>
+                <span>
+                  {b.pct}% {t("landing.preview.budgetUsed")}
+                </span>
+              </div>
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
+                <div
+                  className={`h-full rounded-full ${b.color}`}
+                  style={{ width: `${b.pct}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Mini "maqueta" del dashboard real, construida con los mismos tokens
 // visuales (tarjetas redondeadas, KPIs, barra de presupuesto) para dar una
 // vista previa fiel sin depender de una captura de pantalla estática.
@@ -227,9 +291,12 @@ export function LandingPage({ onGetStarted, onLogin }) {
 
   return (
     <div ref={pageRef} className="min-h-screen bg-neutral-50 text-neutral-800 antialiased">
-      <div className="relative overflow-hidden bg-brand-950">
-        {/* Fondo atmosférico: capas de color difuminadas + textura sutil + viñeta,
-            emulando la profundidad de una fotografía sin usar una imagen real. */}
+      <div
+        className="relative overflow-hidden bg-brand-950 bg-cover bg-center"
+        style={{ backgroundImage: "url('/hero.jpg')" }}
+      >
+        {/* Fondo atmosférico: capas de color difuminadas + textura sutil + viñeta
+            sobre la foto de fondo, para mantener el contraste del texto blanco. */}
         <div className="pointer-events-none absolute inset-0">
           <div data-gsap="hero-blob" className="absolute -top-40 left-[8%] h-112 w-md rounded-full bg-indigo-600/30 blur-[110px]" />
           <div data-gsap="hero-blob" className="absolute -top-24 right-[10%] h-96 w-[24rem] rounded-full bg-fuchsia-600/15 blur-[110px]" />
@@ -246,7 +313,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
             className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(ellipse 70% 60% at 50% 30%, transparent 40%, rgba(0,0,0,0.55) 100%)",
+                "radial-gradient(ellipse 70% 60% at 50% 30%, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.8) 100%)",
             }}
           />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-brand-950 to-transparent" />
@@ -413,13 +480,24 @@ export function LandingPage({ onGetStarted, onLogin }) {
       </section>
 
       {/* Preview / cómo se ve la app */}
-      <section id="preview" className="bg-neutral-50 py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section
+        id="preview"
+        className="relative overflow-hidden bg-brand-950 bg-cover bg-center py-20"
+        style={{ backgroundImage: "url('/dentro.jpg')" }}
+      >
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 60% at 50% 30%, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.82) 100%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <Reveal className="mx-auto max-w-2xl text-center">
-            <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+            <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
               {t("landing.preview.title")}
             </h2>
-            <p className="mt-3 text-sm text-neutral-500 sm:text-base">
+            <p className="mt-3 text-sm text-white/75 sm:text-base">
               {t("landing.preview.subtitle")}
             </p>
           </Reveal>
@@ -435,7 +513,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
                 variants={revealItemVariants}
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.3, ease: easeOut }}
-                className="rounded-3xl border border-neutral-200 bg-white p-6 text-center shadow-sm"
+                className="rounded-3xl border border-white/10 bg-white/95 p-6 text-center shadow-lg backdrop-blur"
               >
                 <h3 className="text-sm font-bold text-neutral-900">
                   {t(`landing.preview.${key}.title`)}
@@ -452,28 +530,48 @@ export function LandingPage({ onGetStarted, onLogin }) {
       {/* CTA final */}
       <section
         id="empezar"
-        className="relative overflow-hidden bg-brand-700 py-20 text-white"
+        className="relative overflow-hidden bg-brand-950 py-20 text-white"
       >
-        <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-600/30 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-lime-400/10 blur-3xl" />
-        <Reveal className="relative mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            {t("landing.cta.title")}
-          </h2>
-          <p className="mt-3 text-sm text-white/85 sm:text-base">
-            {t("landing.cta.subtitle")}
-          </p>
-          <motion.button
-            type="button"
-            onClick={onGetStarted}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-semibold text-neutral-900 shadow-lg transition-shadow hover:shadow-xl cursor-pointer"
-          >
-            {t("landing.cta.button")}
-            <ArrowRight className="h-4 w-4" />
-          </motion.button>
-        </Reveal>
+        <div className="pointer-events-none absolute inset-0">
+          <div
+            className="absolute inset-0 opacity-[0.12]"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
+              backgroundSize: "56px 56px",
+            }}
+          />
+          <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-600/30 blur-3xl" />
+          <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-lime-400/10 blur-3xl" />
+        </div>
+
+        {/* Mismas monedas flotantes del hero, atenuadas para no competir con el contenido */}
+        <FloatingCoins className="opacity-40" />
+
+        <div className="relative mx-auto grid max-w-5xl grid-cols-1 items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+          <Reveal className="text-center lg:text-left">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              {t("landing.cta.title")}
+            </h2>
+            <p className="mt-3 text-sm text-white/85 sm:text-base">
+              {t("landing.cta.subtitle")}
+            </p>
+            <motion.button
+              type="button"
+              onClick={onGetStarted}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-semibold text-neutral-900 shadow-lg transition-shadow hover:shadow-xl cursor-pointer"
+            >
+              {t("landing.cta.button")}
+              <ArrowRight className="h-4 w-4" />
+            </motion.button>
+          </Reveal>
+
+          <Reveal delay={0.15} y={28}>
+            <MiniDashboardCard t={t} />
+          </Reveal>
+        </div>
       </section>
 
       <Footer />

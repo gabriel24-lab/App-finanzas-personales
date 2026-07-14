@@ -1,12 +1,21 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
 
-async function request(path, { token, ...options } = {}) {
+// La sesión viaja en una cookie httpOnly que pone el backend (ver
+// authController.js); el navegador la envía automáticamente en cada
+// petición gracias a `credentials: "include"`. El frontend nunca lee ni
+// guarda el JWT (no localStorage, no sessionStorage), así un ataque XSS no
+// puede robar la sesión leyendo el almacenamiento del navegador.
+//
+// El parámetro `token` que aún reciben algunas funciones de este archivo se
+// mantiene solo por compatibilidad de firma con los componentes que las
+// llaman; ya no se usa para autenticar (queda ignorado).
+async function request(path, { token: _token, ...options } = {}) {
   const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
-  if (token) headers.Authorization = `Bearer ${token}`;
 
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
     headers,
+    credentials: "include",
   });
 
   const data = await res.json().catch(() => ({}));
@@ -18,11 +27,10 @@ async function request(path, { token, ...options } = {}) {
   return data;
 }
 
-async function downloadFile(path, { token, filename, ...options } = {}) {
+async function downloadFile(path, { token: _token, filename, ...options } = {}) {
   const headers = { ...(options.headers || {}) };
-  if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await fetch(`${API_URL}${path}`, { ...options, headers });
+  const res = await fetch(`${API_URL}${path}`, { ...options, headers, credentials: "include" });
 
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
@@ -43,24 +51,28 @@ async function downloadFile(path, { token, filename, ...options } = {}) {
 // --- Autenticación ---
 
 export async function registerApi(name, email, password, currencyCode) {
-  const { token, user } = await request("/auth/register", {
+  const { user } = await request("/auth/register", {
     method: "POST",
     body: JSON.stringify({ name, email, password, currency_code: currencyCode }),
   });
-  return { token, user };
+  return { user };
 }
 
 export async function loginApi(email, password) {
-  const { token, user } = await request("/auth/login", {
+  const { user } = await request("/auth/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
   });
-  return { token, user };
+  return { user };
 }
 
-export async function fetchMe(token) {
-  const { user } = await request("/auth/me", { token });
+export async function fetchMe() {
+  const { user } = await request("/auth/me");
   return user;
+}
+
+export async function logoutApi() {
+  await request("/auth/logout", { method: "POST" });
 }
 
 // --- Transacciones ---

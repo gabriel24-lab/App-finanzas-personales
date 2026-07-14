@@ -4,36 +4,20 @@ const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 
 /**
- * POST /api/users
- * Registra un usuario. Puede incluir billeteras iniciales en el body.
- */
-const createUser = asyncHandler(async (req, res) => {
-  const { name, email, password, wallets = [] } = req.body;
-
-  if (!name || !email || !password) {
-    throw new ApiError(400, "name, email y password son obligatorios.");
-  }
-
-  const existing = await User.findOne({ email: email.toLowerCase() });
-  if (existing) {
-    throw new ApiError(409, "Ya existe un usuario registrado con ese email.");
-  }
-
-  const user = await User.create({ name, email, password, wallets });
-
-  const { password: _omit, ...safeUser } = user.toObject();
-  res.status(201).json({ message: "Usuario creado correctamente.", user: safeUser });
-});
-
-/**
  * GET /api/users/:id
  * Devuelve el usuario (sin password) junto con sus billeteras y balances.
+ * Requiere sesión (`protect`) y solo permite que el usuario consulte su
+ * propia cuenta, para evitar enumeración/fuga de datos de otras cuentas.
  */
 const getUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new ApiError(400, "id no es un ObjectId válido.");
+  }
+
+  if (id !== req.userId) {
+    throw new ApiError(403, "No tienes permiso para ver esta cuenta.");
   }
 
   const user = await User.findById(id).select("-password");
@@ -47,20 +31,18 @@ const getUser = asyncHandler(async (req, res) => {
 /**
  * POST /api/users/:id/wallets
  * Agrega una nueva billetera (moneda) a un usuario existente.
+ * Requiere sesión y solo permite modificar la propia cuenta.
  */
 const addWallet = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { wallet_id, currency_code, currency_symbol, account_name, current_balance = 0 } = req.body;
+  const { wallet_id, currency_code, currency_symbol, account_name, current_balance } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new ApiError(400, "id no es un ObjectId válido.");
   }
 
-  if (!wallet_id || !currency_code || !currency_symbol || !account_name) {
-    throw new ApiError(
-      400,
-      "wallet_id, currency_code, currency_symbol y account_name son obligatorios."
-    );
+  if (id !== req.userId) {
+    throw new ApiError(403, "No tienes permiso para modificar esta cuenta.");
   }
 
   const user = await User.findById(id);
@@ -85,4 +67,4 @@ const addWallet = asyncHandler(async (req, res) => {
   res.status(201).json({ message: "Billetera agregada correctamente.", wallets: user.wallets });
 });
 
-module.exports = { createUser, getUser, addWallet };
+module.exports = { getUser, addWallet };

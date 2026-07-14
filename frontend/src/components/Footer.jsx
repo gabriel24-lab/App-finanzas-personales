@@ -43,7 +43,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-brand-950" aria-labelledby="footer-heading">
+    <footer className="border-t border-neutral-200 bg-white" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         {t("landing.footer.heading")}
       </h2>
@@ -55,10 +55,10 @@ export function Footer() {
               alt={t("common.appName")}
               className="h-9 w-auto"
             />
-            <p className="max-w-xs text-sm leading-relaxed text-white/75">
+            <p className="max-w-xs text-sm leading-relaxed text-neutral-500">
               {t("landing.footer.tagline")}
             </p>
-            <p className="text-xs text-white/60">
+            <p className="text-xs text-neutral-400">
               © {year} {t("common.appName")}. {t("landing.footer.rights")}
             </p>
           </div>
@@ -66,7 +66,7 @@ export function Footer() {
           <div className="mt-16 grid grid-cols-2 gap-8 sm:grid-cols-4 xl:col-span-2 xl:mt-0">
             {FOOTER_COLUMNS.map((column) => (
               <div key={column.titleKey}>
-                <h3 className="text-sm font-semibold text-white">
+                <h3 className="text-sm font-semibold text-neutral-900">
                   {t(column.titleKey)}
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
@@ -74,7 +74,7 @@ export function Footer() {
                     <li key={link.labelKey}>
                       <a
                         href={link.href}
-                        className="text-sm text-white/75 transition-colors hover:text-white"
+                        className="text-sm text-neutral-500 transition-colors hover:text-neutral-900"
                       >
                         {t(link.labelKey)}
                       </a>

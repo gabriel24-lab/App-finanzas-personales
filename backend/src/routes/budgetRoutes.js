@@ -1,6 +1,8 @@
 const express = require("express");
 const { getBudgets, upsertBudget } = require("../controllers/budgetController");
 const { protect } = require("../middleware/auth");
+const validate = require("../middleware/validate");
+const { upsertBudgetSchema } = require("../validation/schemas");
 
 const router = express.Router();
 
@@ -11,6 +13,6 @@ router.use(protect);
 router.get("/:userId", getBudgets);
 
 // PUT /api/budgets/:userId
-router.put("/:userId", upsertBudget);
+router.put("/:userId", validate(upsertBudgetSchema), upsertBudget);
 
 module.exports = router;

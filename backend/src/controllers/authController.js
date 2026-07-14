@@ -5,6 +5,7 @@ const asyncHandler = require("../utils/asyncHandler");
 const generateToken = require("../utils/generateToken");
 const DEFAULT_CATEGORIES = require("../utils/defaultCategories");
 const { CURRENCY_BY_CODE, DEFAULT_CURRENCY_CODE } = require("../utils/currencies");
+const { AUTH_COOKIE_NAME, authCookieOptions } = require("../utils/cookieOptions");
 
 // Nunca devolvemos el hash de la contraseña al cliente.
 function toSafeUser(user) {
@@ -71,9 +72,13 @@ const register = asyncHandler(async (req, res) => {
 
   const token = generateToken(user._id);
 
+  // El JWT viaja en una cookie httpOnly (no accesible desde JS del navegador),
+  // nunca en el cuerpo de la respuesta: así el frontend no puede -ni debe-
+  // guardarlo en localStorage/sessionStorage.
+  res.cookie(AUTH_COOKIE_NAME, token, authCookieOptions);
+
   res.status(201).json({
     message: "Cuenta creada correctamente.",
-    token,
     user: toSafeUser(user),
   });
 });
@@ -100,12 +105,23 @@ const login = asyncHandler(async (req, res) => {
 
   const token = generateToken(user._id);
 
+  res.cookie(AUTH_COOKIE_NAME, token, authCookieOptions);
+
   res.status(200).json({
     message: "Sesión iniciada correctamente.",
-    token,
     user: toSafeUser(user),
   });
 });
+
+/**
+ * POST /api/auth/logout
+ * Limpia la cookie de sesión. No requiere `protect`: si el token ya venció
+ * o es inválido igual queremos poder borrar la cookie del navegador.
+ */
+const logout = (req, res) => {
+  res.clearCookie(AUTH_COOKIE_NAME, { ...authCookieOptions, maxAge: undefined });
+  res.status(200).json({ message: "Sesión cerrada correctamente." });
+};
 
 /**
  * GET /api/auth/me
@@ -120,4 +136,4 @@ const me = asyncHandler(async (req, res) => {
   res.status(200).json({ user });
 });
 
-module.exports = { register, login, me };
+module.exports = { register, login, me, logout };
