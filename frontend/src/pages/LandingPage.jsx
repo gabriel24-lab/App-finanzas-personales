@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight,
   Zap,
@@ -22,8 +21,6 @@ import { Reveal, RevealGroup, revealItemVariants } from "../components/Reveal";
 import { Footer } from "../components/Footer";
 
 const easeOut = [0.22, 1, 0.36, 1];
-
-gsap.registerPlugin(ScrollTrigger);
 
 const FEATURE_ICONS = [
   Zap,
@@ -202,29 +199,26 @@ export function LandingPage({ onGetStarted, onLogin }) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
-      gsap.from("[data-gsap='preview-mock']", {
-        scrollTrigger: {
-          trigger: "[data-gsap='preview-mock']",
-          start: "top 78%",
-        },
-        y: 36,
-        opacity: 0,
-        rotateX: 4,
-        transformOrigin: "50% 100%",
-        ease: "power3.out",
-        duration: 0.9,
-      });
-
-      gsap.from("[data-gsap='cta-final'] > *", {
-        scrollTrigger: {
-          trigger: "[data-gsap='cta-final']",
-          start: "top 80%",
-        },
-        y: 24,
-        opacity: 0,
-        stagger: 0.1,
-        ease: "power3.out",
-        duration: 0.75,
+      // Nota: "preview-mock" y "cta-final" ya están envueltos en <Reveal>,
+      // que anima opacity/y con Framer Motion al entrar en el viewport.
+      // Tener también un gsap.from() con ScrollTrigger sobre esos mismos
+      // elementos hacía que dos motores de animación distintos controlaran
+      // el mismo opacity al mismo tiempo con umbrales de disparo distintos:
+      // si uno de los dos no se disparaba en el momento esperado, el
+      // contenido se quedaba en opacity 0 (por eso "desaparecía"). Se quita
+      // de aquí y se deja que Reveal maneje esa parte, como en el resto de
+      // la página.
+      //
+      // GSAP se queda con una animación propia que no pisa a Framer: el
+      // flotado ambiental y continuo de los blobs de fondo del hero.
+      gsap.to("[data-gsap='hero-blob']", {
+        y: (i) => (i % 2 === 0 ? -22 : 18),
+        x: (i) => (i % 2 === 0 ? 14 : -10),
+        duration: 7,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        stagger: 0.6,
       });
     }, pageRef);
 
@@ -237,9 +231,9 @@ export function LandingPage({ onGetStarted, onLogin }) {
         {/* Fondo atmosférico: capas de color difuminadas + textura sutil + viñeta,
             emulando la profundidad de una fotografía sin usar una imagen real. */}
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-40 left-[8%] h-112 w-md rounded-full bg-indigo-600/30 blur-[110px]" />
-          <div className="absolute -top-24 right-[10%] h-96 w-[24rem] rounded-full bg-fuchsia-600/15 blur-[110px]" />
-          <div className="absolute -bottom-32 left-1/3 h-104 w-104 rounded-full bg-blue-700/20 blur-[120px]" />
+          <div data-gsap="hero-blob" className="absolute -top-40 left-[8%] h-112 w-md rounded-full bg-indigo-600/30 blur-[110px]" />
+          <div data-gsap="hero-blob" className="absolute -top-24 right-[10%] h-96 w-[24rem] rounded-full bg-fuchsia-600/15 blur-[110px]" />
+          <div data-gsap="hero-blob" className="absolute -bottom-32 left-1/3 h-104 w-104 rounded-full bg-blue-700/20 blur-[120px]" />
           <div
             className="absolute inset-0 opacity-[0.15]"
             style={{
@@ -431,9 +425,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
           </Reveal>
 
           <Reveal delay={0.1} y={36} className="mt-12">
-            <div data-gsap="preview-mock">
             <DashboardPreviewMock t={t} />
-            </div>
           </Reveal>
 
           <RevealGroup className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -464,7 +456,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
       >
         <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-600/30 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-lime-400/10 blur-3xl" />
-        <Reveal data-gsap="cta-final" className="relative mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
+        <Reveal className="relative mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
             {t("landing.cta.title")}
           </h2>

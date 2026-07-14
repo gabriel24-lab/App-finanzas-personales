@@ -135,6 +135,7 @@ export function AuthPage({ onBack, initialMode = "login" }) {
 
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [currencyFieldSettled, setCurrencyFieldSettled] = useState(false);
   const authRef = useRef(null);
 
   const isLogin = mode === "login";
@@ -143,6 +144,15 @@ export function AuthPage({ onBack, initialMode = "login" }) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
+      // El formulario (el que de verdad usa la persona para iniciar sesión
+      // o registrarse) tiene su propia línea de tiempo, corta e inmediata,
+      // para que el texto y los campos aparezcan sin demora.
+      gsap
+        .timeline({ defaults: { ease: "power3.out", duration: 0.45 } })
+        .from("[data-gsap='auth-form'] > *", { y: 14, opacity: 0, stagger: 0.05 });
+
+      // El panel decorativo (solo visible en pantallas grandes) anima en
+      // paralelo, no antes: ya no bloquea la aparición del formulario.
       gsap
         .timeline({ defaults: { ease: "power3.out", duration: 0.75 } })
         .from("[data-gsap='auth-brand']", { x: -18, opacity: 0 })
@@ -151,11 +161,6 @@ export function AuthPage({ onBack, initialMode = "login" }) {
           "[data-gsap='auth-card']",
           { y: 28, opacity: 0, rotate: -2, stagger: 0.12 },
           "-=0.35"
-        )
-        .from(
-          "[data-gsap='auth-form'] > *",
-          { y: 18, opacity: 0, stagger: 0.06 },
-          "-=0.55"
         );
 
       gsap.to("[data-gsap='auth-card']", {
@@ -178,6 +183,7 @@ export function AuthPage({ onBack, initialMode = "login" }) {
     setError("");
     setPassword("");
     setConfirmPassword("");
+    setCurrencyFieldSettled(false);
   };
 
   const handleSubmit = async (e) => {
@@ -341,7 +347,8 @@ export function AuthPage({ onBack, initialMode = "login" }) {
                   animate={{ opacity: 1, height: "auto", marginBottom: 16 }}
                   exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  className="overflow-hidden"
+                  onAnimationComplete={() => setCurrencyFieldSettled(true)}
+                  className={currencyFieldSettled ? "overflow-visible" : "overflow-hidden"}
                 >
                   <label className="mb-1.5 block px-1 text-xs font-semibold text-neutral-500">
                     {t("auth.field.currency")}

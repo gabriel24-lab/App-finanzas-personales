@@ -23,15 +23,13 @@ export function KPICards({ transactions = [], wallet }) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
-      gsap.from("[data-gsap='kpi-card']", {
-        y: 24,
-        opacity: 0,
-        scale: 0.98,
-        stagger: 0.08,
-        ease: "power3.out",
-        duration: 0.65,
-      });
-
+      // Nota: la animación de ENTRADA de las tarjetas ya la maneja Framer
+      // Motion (ver `cardVariants` / `containerVariants` abajo). Añadir
+      // aquí un gsap.from() sobre los mismos elementos hacía que las dos
+      // librerías pelearan por controlar el mismo opacity/transform,
+      // dejando las tarjetas "trabadas" en opacity 0 en algunos casos.
+      // GSAP se deja solo para el detalle ambiental (el glow), que no
+      // tiene ninguna animación de Framer encima.
       gsap.to("[data-gsap='kpi-glow']", {
         x: 18,
         y: -12,
