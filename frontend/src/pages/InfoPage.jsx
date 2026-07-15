@@ -7,7 +7,9 @@ import { INFO_PAGE_CONFIG } from "./infoPageConfig";
 function SectionBlock({ title, body }) {
   return (
     <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-      <h2 className="text-lg font-bold tracking-tight text-neutral-900">{title}</h2>
+      <h2 className="text-lg font-bold tracking-tight text-neutral-900">
+        {title}
+      </h2>
       <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-neutral-600">
         {body}
       </p>
@@ -26,10 +28,14 @@ function FaqList({ items }) {
           <summary className="cursor-pointer list-none text-sm font-semibold text-neutral-900 marker:content-none">
             <span className="flex items-center justify-between gap-4">
               {item.q}
-              <span className="text-neutral-400 transition-transform group-open:rotate-45">+</span>
+              <span className="text-neutral-400 transition-transform group-open:rotate-45">
+                +
+              </span>
             </span>
           </summary>
-          <p className="mt-3 text-sm leading-relaxed text-neutral-600">{item.a}</p>
+          <p className="mt-3 text-sm leading-relaxed text-neutral-600">
+            {item.a}
+          </p>
         </details>
       ))}
     </div>
@@ -47,8 +53,12 @@ function GuideCards({ guides }) {
           <p className="text-xs font-bold uppercase tracking-wider text-brand-700">
             {guide.step}
           </p>
-          <h2 className="mt-2 text-base font-bold text-neutral-900">{guide.title}</h2>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-600">{guide.body}</p>
+          <h2 className="mt-2 text-base font-bold text-neutral-900">
+            {guide.title}
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            {guide.body}
+          </p>
         </article>
       ))}
     </div>
@@ -64,8 +74,12 @@ function BlogPosts({ posts }) {
           className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm"
         >
           <p className="text-xs font-medium text-neutral-400">{post.date}</p>
-          <h2 className="mt-2 text-lg font-bold text-neutral-900">{post.title}</h2>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-600">{post.excerpt}</p>
+          <h2 className="mt-2 text-lg font-bold text-neutral-900">
+            {post.title}
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            {post.excerpt}
+          </p>
           <span className="mt-4 inline-block text-xs font-semibold text-neutral-400">
             {post.tag}
           </span>
@@ -90,7 +104,9 @@ function ContactPanel({ t, contactEmail }) {
           <div className="flex items-start gap-3">
             <Mail className="mt-0.5 h-5 w-5 text-neutral-400" />
             <div>
-              <p className="text-sm font-semibold text-neutral-900">{t("info.contact.emailLabel")}</p>
+              <p className="text-sm font-semibold text-neutral-900">
+                {t("info.contact.emailLabel")}
+              </p>
               <a
                 href={`mailto:${contactEmail}`}
                 className="mt-1 block text-sm text-brand-800 hover:text-brand-950"
@@ -105,8 +121,12 @@ function ContactPanel({ t, contactEmail }) {
           <div className="flex items-start gap-3">
             <Clock className="mt-0.5 h-5 w-5 text-neutral-400" />
             <div>
-              <p className="text-sm font-semibold text-neutral-900">{t("info.contact.hoursLabel")}</p>
-              <p className="mt-1 text-sm text-neutral-600">{t("info.contact.hoursValue")}</p>
+              <p className="text-sm font-semibold text-neutral-900">
+                {t("info.contact.hoursLabel")}
+              </p>
+              <p className="mt-1 text-sm text-neutral-600">
+                {t("info.contact.hoursValue")}
+              </p>
             </div>
           </div>
         </div>
@@ -115,8 +135,12 @@ function ContactPanel({ t, contactEmail }) {
           <div className="flex items-start gap-3">
             <MessageSquare className="mt-0.5 h-5 w-5 text-neutral-400" />
             <div>
-              <p className="text-sm font-semibold text-neutral-900">{t("info.contact.responseLabel")}</p>
-              <p className="mt-1 text-sm text-neutral-600">{t("info.contact.responseValue")}</p>
+              <p className="text-sm font-semibold text-neutral-900">
+                {t("info.contact.responseLabel")}
+              </p>
+              <p className="mt-1 text-sm text-neutral-600">
+                {t("info.contact.responseValue")}
+              </p>
             </div>
           </div>
         </div>
@@ -127,7 +151,10 @@ function ContactPanel({ t, contactEmail }) {
         className="space-y-4 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-3"
       >
         <div>
-          <label htmlFor="contact-name" className="text-sm font-semibold text-neutral-800">
+          <label
+            htmlFor="contact-name"
+            className="text-sm font-semibold text-neutral-800"
+          >
             {t("info.contact.form.name")}
           </label>
           <input
@@ -138,7 +165,10 @@ function ContactPanel({ t, contactEmail }) {
           />
         </div>
         <div>
-          <label htmlFor="contact-email" className="text-sm font-semibold text-neutral-800">
+          <label
+            htmlFor="contact-email"
+            className="text-sm font-semibold text-neutral-800"
+          >
             {t("info.contact.form.email")}
           </label>
           <input
@@ -150,7 +180,10 @@ function ContactPanel({ t, contactEmail }) {
           />
         </div>
         <div>
-          <label htmlFor="contact-subject" className="text-sm font-semibold text-neutral-800">
+          <label
+            htmlFor="contact-subject"
+            className="text-sm font-semibold text-neutral-800"
+          >
             {t("info.contact.form.subject")}
           </label>
           <input
@@ -161,7 +194,10 @@ function ContactPanel({ t, contactEmail }) {
           />
         </div>
         <div>
-          <label htmlFor="contact-message" className="text-sm font-semibold text-neutral-800">
+          <label
+            htmlFor="contact-message"
+            className="text-sm font-semibold text-neutral-800"
+          >
             {t("info.contact.form.message")}
           </label>
           <textarea
@@ -186,7 +222,9 @@ function ContactPanel({ t, contactEmail }) {
           </button>
         )}
 
-        <p className="text-xs text-neutral-400">{t("info.contact.form.note")}</p>
+        <p className="text-xs text-neutral-400">
+          {t("info.contact.form.note")}
+        </p>
       </form>
     </div>
   );
@@ -284,7 +322,10 @@ export function InfoPage({ slug, onBack }) {
       body: t(`info.${slug}.${key}.body`),
     }));
     content = (
-      <LegalSections sections={sections} updatedAt={t(`info.${slug}.updatedAt`)} />
+      <LegalSections
+        sections={sections}
+        updatedAt={t(`info.${slug}.updatedAt`)}
+      />
     );
   }
 

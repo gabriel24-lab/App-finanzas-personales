@@ -434,7 +434,7 @@ const contactEs = {
   "info.contact.subtitle":
     "¿Tienes dudas, sugerencias o necesitas ayuda con tu cuenta? Escríbenos.",
   "info.contact.emailLabel": "Correo de soporte",
-  "info.contact.emailValue": "soporte@finanzaspersonales.app",
+  "info.contact.emailValue": "gabrielmejiasilva5@gmail.com",
   "info.contact.hoursLabel": "Horario de atención",
   "info.contact.hoursValue": "Lunes a viernes, 9:00 – 18:00 (hora de Colombia)",
   "info.contact.responseLabel": "Tiempo de respuesta",
@@ -455,7 +455,7 @@ const contactEn = {
   "info.contact.subtitle":
     "Questions, suggestions, or need help with your account? Reach out.",
   "info.contact.emailLabel": "Support email",
-  "info.contact.emailValue": "support@finanzaspersonales.app",
+  "info.contact.emailValue": "gabrielmejiasilva5@gmail.com",
   "info.contact.hoursLabel": "Support hours",
   "info.contact.hoursValue": "Monday to Friday, 9:00 AM – 6:00 PM (Colombia time)",
   "info.contact.responseLabel": "Response time",
@@ -476,7 +476,7 @@ const contactPt = {
   "info.contact.subtitle":
     "Dúvidas, sugestões ou precisa de ajuda com sua conta? Fale conosco.",
   "info.contact.emailLabel": "E-mail de suporte",
-  "info.contact.emailValue": "suporte@finanzaspersonales.app",
+  "info.contact.emailValue": "gabrielmejiasilva5@gmail.com",
   "info.contact.hoursLabel": "Horário de atendimento",
   "info.contact.hoursValue": "Segunda a sexta, 9h – 18h (horário da Colômbia)",
   "info.contact.responseLabel": "Tempo de resposta",
@@ -497,7 +497,7 @@ const contactFr = {
   "info.contact.subtitle":
     "Des questions, des suggestions ou besoin d'aide avec votre compte ? Écrivez-nous.",
   "info.contact.emailLabel": "E-mail support",
-  "info.contact.emailValue": "support@finanzaspersonales.app",
+  "info.contact.emailValue": "gabrielmejiasilva5@gmail.com",
   "info.contact.hoursLabel": "Heures d'assistance",
   "info.contact.hoursValue": "Lundi au vendredi, 9h – 18h (heure de Colombie)",
   "info.contact.responseLabel": "Délai de réponse",
