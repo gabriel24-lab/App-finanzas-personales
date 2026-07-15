@@ -8,7 +8,6 @@ const FOOTER_COLUMNS = [
     links: [
       { labelKey: "landing.footer.product.features", href: landingSectionPath("#features") },
       { labelKey: "landing.footer.product.preview", href: landingSectionPath("#preview") },
-      { labelKey: "landing.footer.product.budgets", href: landingSectionPath("#features") },
       { labelKey: "landing.footer.product.categories", href: landingSectionPath("#features") },
     ],
   },
@@ -16,7 +15,6 @@ const FOOTER_COLUMNS = [
     titleKey: "landing.footer.support.title",
     links: [
       { labelKey: "landing.footer.support.help", href: infoPath("help") },
-      { labelKey: "landing.footer.support.docs", href: infoPath("docs") },
       { labelKey: "landing.footer.support.guides", href: infoPath("guides") },
     ],
   },
@@ -33,7 +31,6 @@ const FOOTER_COLUMNS = [
     links: [
       { labelKey: "landing.footer.legal.terms", href: infoPath("terms") },
       { labelKey: "landing.footer.legal.privacy", href: infoPath("privacy") },
-      { labelKey: "landing.footer.legal.license", href: infoPath("license") },
     ],
   },
 ];
