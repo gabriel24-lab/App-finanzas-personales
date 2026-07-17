@@ -661,9 +661,25 @@ function App() {
     }
   }, [user]);
 
+  // Recuerda el último hash de "landing" (top, #features, #site-footer...)
+  // en el que estaba el usuario justo antes de entrar a Info o Recursos,
+  // para que el botón "Volver" lo regrese ahí y no siempre al tope.
+  const lastLandingHashRef = useRef("");
+
   useEffect(() => {
-    function applyRouteFromHash() {
+    function applyRouteFromHash(event) {
       const route = parseAppHash();
+
+      // event.oldURL solo existe cuando esto se dispara por un hashchange
+      // real (no en la llamada inicial). Ahí es donde capturamos "de dónde
+      // veníamos" justo antes de saltar a una página de Info/Recursos.
+      if (event) {
+        const oldHash = new URL(event.oldURL).hash;
+        const cameFromLanding = parseAppHash(oldHash).kind === "landing";
+        if (cameFromLanding && route.kind !== "landing") {
+          lastLandingHashRef.current = oldHash;
+        }
+      }
 
       if (route.kind === "resource-detail") {
         setPublicView("resource-detail");
@@ -697,11 +713,17 @@ function App() {
   }, []);
 
   const goHome = () => {
-    window.location.hash = "";
+    // Si veníamos de alguna sección de landing (footer incluido), volvemos
+    // exactamente ahí. Si no hay nada guardado (ej. se entró directo por
+    // URL a /help), caemos al comportamiento anterior: ir al tope.
+    const targetHash = lastLandingHashRef.current || "";
+    const targetSection = parseAppHash(targetHash).section ?? null;
+
+    window.location.hash = targetHash;
     setPublicView("landing");
     setInfoSlug(null);
     setResourceSlug(null);
-    scrollToLandingSection(null);
+    scrollToLandingSection(targetSection);
   };
 
   const goToResources = () => {

@@ -23,7 +23,12 @@ export const RESOURCE_SLUGS = [
   "glosario-financiero",
 ];
 
-export const LANDING_SECTION_HASHES = ["#features", "#preview", "#empezar"];
+export const LANDING_SECTION_HASHES = [
+  "#features",
+  "#preview",
+  "#empezar",
+  "#site-footer",
+];
 
 export function infoPath(slug) {
   return `#/${slug}`;

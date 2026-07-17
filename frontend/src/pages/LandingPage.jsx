@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import {
@@ -47,19 +47,48 @@ function ResourceCarousel() {
   const scrollRef = useRef(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (scrollRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-        // Si llegamos al final (con un margen de error), volvemos al inicio
-        if (scrollLeft + clientWidth >= scrollWidth - 20) {
-          scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
-        } else {
-          // Aproximadamente el ancho de una tarjeta + gap
-          scrollRef.current.scrollBy({ left: 374, behavior: "smooth" });
+    const el = scrollRef.current;
+    if (!el) return;
+
+    // Esta función arranca el auto-scroll; la aislamos para poder
+    // llamarla/pararla desde el observer de abajo.
+    const startAutoScroll = () => {
+      return setInterval(() => {
+        if (scrollRef.current) {
+          const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+          // Si llegamos al final (con un margen de error), volvemos al inicio
+          if (scrollLeft + clientWidth >= scrollWidth - 20) {
+            scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
+          } else {
+            // Aproximadamente el ancho de una tarjeta + gap
+            scrollRef.current.scrollBy({ left: 374, behavior: "smooth" });
+          }
         }
-      }
-    }, 4500); // Cambia cada 4.5s
-    return () => clearInterval(interval);
+      }, 4500); // Cambia cada 4.5s
+    };
+
+    let intervalId = null;
+
+    // Solo corre el auto-scroll mientras el carrusel esté realmente
+    // visible en pantalla (al menos un 30% de él).
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!intervalId) intervalId = startAutoScroll();
+        } else if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      },
+      { threshold: 0.3 },
+    );
+
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+      if (intervalId) clearInterval(intervalId);
+    };
   }, []);
 
   const scroll = (direction) => {
@@ -343,6 +372,44 @@ function DashboardPreviewMock({ t }) {
 export function LandingPage({ onGetStarted, onLogin }) {
   const { t } = useLanguage();
   const pageRef = useRef(null);
+  const headerRef = useRef(null);
+
+  // Alto real del header, medido en vivo. Lo usamos como padding-top del
+  // hero para que el navbar (ahora fixed, fuera del flujo normal) no tape
+  // el contenido de arriba. ResizeObserver lo mantiene correcto en
+  // cualquier dispositivo/ancho, sin necesitar un valor fijo "a ojo".
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const updateHeight = () => setHeaderHeight(el.offsetHeight);
+    updateHeight();
+    const resizeObserver = new ResizeObserver(updateHeight);
+    resizeObserver.observe(el);
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  // true en cuanto el usuario baja un poco: ahí cambiamos el navbar de
+  // "transparente con texto blanco" (para leerse sobre la foto del hero) a
+  // "fondo blanco con texto oscuro" (para leerse sobre el resto de la
+  // página, que es clara).
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setIsScrolled(window.scrollY > 80);
+        ticking = false;
+      });
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -379,9 +446,100 @@ export function LandingPage({ onGetStarted, onLogin }) {
       ref={pageRef}
       className="min-h-screen bg-neutral-50 text-neutral-800 antialiased"
     >
+      {/* Nav centrado — fixed para quedar visible durante todo el scroll,
+          en cualquier dispositivo. Cambia de transparente/texto blanco
+          (sobre la foto del hero) a blanco/texto oscuro (sobre el resto
+          de la página) según isScrolled. */}
+      <motion.header
+        ref={headerRef}
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: easeOut }}
+        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+          isScrolled
+            ? "bg-white/90 shadow-sm backdrop-blur-md"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="mx-auto grid max-w-6xl grid-cols-2 items-center px-4 py-6 sm:px-6 lg:grid-cols-3 lg:px-8">
+          <div className="flex items-center gap-2.5">
+            <div
+              className={`flex h-12 w-12 items-center justify-center rounded-xl backdrop-blur transition-colors duration-300 ${
+                isScrolled ? "bg-neutral-100" : "bg-white/10"
+              }`}
+            >
+              <img
+                src={isScrolled ? "/isotipo-dark.png" : "/isotipo-light.png"}
+                alt={t("common.appName")}
+                className="h-9 w-9 object-contain"
+              />
+            </div>
+            <span
+              className={`hidden text-sm font-bold tracking-tight sm:inline transition-colors duration-300 ${
+                isScrolled ? "text-neutral-900" : "text-white"
+              }`}
+            >
+              {t("common.appName")}
+            </span>
+          </div>
+
+          <nav className="hidden items-center justify-center gap-8 lg:flex">
+            <a
+              href="#features"
+              className={`text-xs font-semibold transition-colors duration-300 ${
+                isScrolled
+                  ? "text-neutral-600 hover:text-neutral-900"
+                  : "text-white/80 hover:text-white"
+              }`}
+            >
+              {t("landing.nav.features")}
+            </a>
+            <a
+              href="#preview"
+              className={`text-xs font-semibold transition-colors duration-300 ${
+                isScrolled
+                  ? "text-neutral-600 hover:text-neutral-900"
+                  : "text-white/80 hover:text-white"
+              }`}
+            >
+              {t("landing.nav.preview")}
+            </a>
+            <a
+              href="#empezar"
+              className={`text-xs font-semibold transition-colors duration-300 ${
+                isScrolled
+                  ? "text-neutral-600 hover:text-neutral-900"
+                  : "text-white/80 hover:text-white"
+              }`}
+            >
+              {t("landing.nav.start")}
+            </a>
+          </nav>
+
+          <div className="flex items-center justify-end gap-2 sm:gap-3">
+            <div>
+              <LanguageSwitcher variant={isScrolled ? "default" : "light"} />
+            </div>
+            <button
+              type="button"
+              onClick={onLogin}
+              className={`flex items-center gap-1 text-xs font-semibold transition-colors duration-300 hover:opacity-80 cursor-pointer ${
+                isScrolled ? "text-neutral-900" : "text-white"
+              }`}
+            >
+              {t("landing.nav.login")}
+              <ArrowRight className="h-3 w-3" />
+            </button>
+          </div>
+        </div>
+      </motion.header>
+
       <div
         className="relative overflow-hidden bg-brand-950 bg-cover bg-center"
-        style={{ backgroundImage: "url('/hero.jpg')" }}
+        style={{
+          backgroundImage: "url('/hero.jpg')",
+          paddingTop: headerHeight,
+        }}
       >
         {/* Fondo atmosférico: capas de color difuminadas + textura sutil + viñeta
             sobre la foto de fondo, para mantener el contraste del texto blanco. */}
@@ -418,64 +576,6 @@ export function LandingPage({ onGetStarted, onLogin }) {
 
         {/* Monedas flotando de fondo: suben y bajan suavemente, nunca caen */}
         <FloatingCoins className="z-1" />
-
-        {/* Nav centrado */}
-        <motion.header
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: easeOut }}
-          className="relative z-20"
-        >
-          <div className="mx-auto grid max-w-6xl grid-cols-2 items-center px-4 py-6 sm:px-6 lg:grid-cols-3 lg:px-8">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 backdrop-blur">
-                <img
-                  src="/isotipo-light.png"
-                  alt={t("common.appName")}
-                  className="h-9 w-9 object-contain"
-                />
-              </div>
-              <span className="hidden text-sm font-bold tracking-tight text-white sm:inline">
-                {t("common.appName")}
-              </span>
-            </div>
-
-            <nav className="hidden items-center justify-center gap-8 lg:flex">
-              <a
-                href="#features"
-                className="text-xs font-semibold text-white/80 transition-colors hover:text-white"
-              >
-                {t("landing.nav.features")}
-              </a>
-              <a
-                href="#preview"
-                className="text-xs font-semibold text-white/80 transition-colors hover:text-white"
-              >
-                {t("landing.nav.preview")}
-              </a>
-              <a
-                href="#empezar"
-                className="text-xs font-semibold text-white/80 transition-colors hover:text-white"
-              >
-                {t("landing.nav.start")}
-              </a>
-            </nav>
-
-            <div className="flex items-center justify-end gap-2 sm:gap-3">
-              <div>
-                <LanguageSwitcher variant="light" />
-              </div>
-              <button
-                type="button"
-                onClick={onLogin}
-                className="flex items-center gap-1 text-xs font-semibold text-white transition-opacity hover:opacity-80 cursor-pointer"
-              >
-                {t("landing.nav.login")}
-                <ArrowRight className="h-3 w-3" />
-              </button>
-            </div>
-          </div>
-        </motion.header>
 
         {/* Hero centrado */}
         <section className="relative z-10 mx-auto max-w-3xl px-4 pb-24 pt-14 text-center sm:px-6 sm:pb-32 sm:pt-16 lg:px-8">

@@ -43,14 +43,31 @@ function FieldInput({ icon: Icon, error, ...props }) {
 // de tarjetas oscuras + acentos en degradado que pediste como referencia.
 function BrandPanel({ t }) {
   return (
-    <div className="relative hidden h-full flex-col justify-between overflow-hidden bg-linear-to-b from-brand-950 via-brand-900 to-brand-800 p-10 text-white lg:flex">
+    <div
+      className="relative hidden h-full flex-col justify-between overflow-hidden bg-linear-to-b from-brand-950 via-brand-900 to-brand-800 bg-cover bg-center p-10 text-white lg:flex"
+      style={{ backgroundImage: "url('/auth-panel-bg.jpg')" }}
+    >
+      {/* Capa oscura sobre la foto: sin esto, el texto blanco pierde
+          contraste dependiendo de qué tan clara sea la imagen que uses.
+          Ajusta la opacidad (los números tras la "/") según qué tan
+          visible quieras la foto de fondo vs. qué tan legible necesitas
+          el texto. */}
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-brand-950/90 via-brand-900/85 to-brand-800/90" />
+
       {/* Glow ambiental */}
       <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-brand-500/25 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-brand-300/10 blur-3xl" />
 
-      <div data-gsap="auth-brand" className="relative flex items-center gap-2.5">
+      <div
+        data-gsap="auth-brand"
+        className="relative flex items-center gap-2.5"
+      >
         <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/10 backdrop-blur">
-          <img src="/isotipo-light.png" alt={t("common.appName")} className="h-10 w-10 object-contain" />
+          <img
+            src="/isotipo-light.png"
+            alt={t("common.appName")}
+            className="h-10 w-10 object-contain"
+          />
         </div>
         <span className="text-sm font-semibold tracking-tight">
           {t("common.appName")}
@@ -171,7 +188,7 @@ export function AuthPage({ onBack, initialMode = "login" }) {
         .from(
           "[data-gsap='auth-card']",
           { y: 28, opacity: 0, rotate: -2, stagger: 0.12 },
-          "-=0.35"
+          "-=0.35",
         );
 
       gsap.to("[data-gsap='auth-card']", {
@@ -238,7 +255,10 @@ export function AuthPage({ onBack, initialMode = "login" }) {
   };
 
   return (
-    <div ref={authRef} className="grid min-h-screen grid-cols-1 bg-neutral-50 lg:grid-cols-2">
+    <div
+      ref={authRef}
+      className="grid min-h-screen grid-cols-1 bg-neutral-50 lg:grid-cols-2"
+    >
       <BrandPanel t={t} />
 
       {/* Panel del formulario */}
@@ -264,7 +284,11 @@ export function AuthPage({ onBack, initialMode = "login" }) {
           {/* Logo visible solo en mobile */}
           <div className="mb-8 flex items-center gap-2.5 lg:hidden">
             <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-brand-900 text-white">
-              <img src="/isotipo-light.png" alt={t("common.appName")} className="h-10 w-10 object-contain" />
+              <img
+                src="/isotipo-light.png"
+                alt={t("common.appName")}
+                className="h-10 w-10 object-contain"
+              />
             </div>
             <span className="text-sm font-semibold tracking-tight text-neutral-900">
               {t("common.appName")}
@@ -362,13 +386,18 @@ export function AuthPage({ onBack, initialMode = "login" }) {
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   onAnimationComplete={() => setCurrencyFieldSettled(true)}
                   className={`relative z-20 ${
-                    currencyFieldSettled ? "overflow-visible" : "overflow-hidden"
+                    currencyFieldSettled
+                      ? "overflow-visible"
+                      : "overflow-hidden"
                   }`}
                 >
                   <label className="mb-1.5 block px-1 text-xs font-semibold text-neutral-500">
                     {t("auth.field.currency")}
                   </label>
-                  <CurrencySelector value={currencyCode} onChange={setCurrencyCode} />
+                  <CurrencySelector
+                    value={currencyCode}
+                    onChange={setCurrencyCode}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
