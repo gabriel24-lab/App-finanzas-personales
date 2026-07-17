@@ -488,8 +488,18 @@ function Dashboard() {
 
         {/* Dashboard Layout */}
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
-          {/* Left Column: Form */}
-          <div className="space-y-6 lg:sticky lg:top-8 lg:col-span-4">
+          {/* Left Column: Form.
+              En móvil este panel solo tiene sentido dentro de la vista de
+              transacciones: si se deja siempre visible, al cambiar de
+              pestaña (presupuesto, categorías, etc.) el contenido nuevo
+              queda oculto debajo de este formulario y parece que el botón
+              no hizo nada. En pantallas lg+ (desktop) se mantiene visible
+              siempre, como panel fijo junto al contenido. */}
+          <div
+            className={`space-y-6 lg:sticky lg:top-8 lg:col-span-4 ${
+              activeView === "dashboard" ? "" : "hidden lg:block"
+            }`}
+          >
             <TransactionForm
               categories={categories}
               onAddTransaction={handleAddTransaction}
