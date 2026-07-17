@@ -134,7 +134,7 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
     date !== "";
 
   return (
-    <div className="rounded-2xl border border-neutral-100 bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-neutral-100 bg-white p-4 shadow-sm sm:p-6">
       <h2 className="text-lg font-semibold text-neutral-800 flex items-center gap-2">
         <PlusCircle className="h-5 w-5 text-neutral-900" />
         Agregar movimiento

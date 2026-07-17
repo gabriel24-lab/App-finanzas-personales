@@ -61,7 +61,74 @@ export function TransactionList({
 
   return (
     <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm overflow-hidden">
-      <div className="overflow-x-auto">
+      {/* Móvil (<sm): lista de tarjetas apiladas, más fácil de leer y tocar
+          en pantallas angostas que una tabla con scroll horizontal. */}
+      <div className="divide-y divide-neutral-100 sm:hidden">
+        <AnimatePresence initial={false}>
+          {transactions.map((transaction) => {
+            const { IconComponent, color } = getCategoryDetails(
+              transaction.category,
+              categories,
+            );
+            const isIncome = transaction.type === "income";
+
+            return (
+              <motion.div
+                key={transaction.id}
+                layout
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, x: 24, transition: { duration: 0.2 } }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="flex items-center gap-3 p-4"
+              >
+                <div
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border"
+                  style={{
+                    backgroundColor: `${color}14`,
+                    borderColor: `${color}33`,
+                    color,
+                  }}
+                >
+                  <IconComponent className="h-5 w-5" />
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-semibold text-neutral-800 text-sm leading-tight">
+                    {transaction.description}
+                  </p>
+                  <p className="mt-0.5 truncate text-xs text-neutral-500 font-medium">
+                    {transaction.category} · {formatDate(transaction.date)}
+                  </p>
+                </div>
+
+                <div className="flex shrink-0 flex-col items-end gap-1.5">
+                  {isIncome ? (
+                    <span className="text-emerald-600 font-bold text-sm">
+                      +{formatCurrency(transaction.amount)}
+                    </span>
+                  ) : (
+                    <span className="text-rose-600 font-bold text-sm">
+                      -{formatCurrency(transaction.amount)}
+                    </span>
+                  )}
+                  <button
+                    onClick={() => onDeleteTransaction(transaction.id)}
+                    className="inline-flex items-center justify-center h-7 w-7 text-neutral-400 active:text-rose-600 active:bg-rose-50 rounded-xl border border-transparent transition-all cursor-pointer"
+                    title="Eliminar transacción"
+                    aria-label="Eliminar transacción"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </div>
+
+      {/* Tablet/desktop (sm+): tabla completa. */}
+      <div className="hidden overflow-x-auto sm:block">
         <table className="w-full min-w-125 border-collapse text-left">
           <thead>
             <tr className="border-b border-neutral-100 bg-neutral-50/50 text-xs font-semibold uppercase tracking-wider text-neutral-500">

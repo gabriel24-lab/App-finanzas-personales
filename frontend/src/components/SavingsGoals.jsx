@@ -204,7 +204,7 @@ function GoalCard({ goal, formatCurrency, onAddFunds, onDelete }) {
         />
       </div>
 
-      <div className="mt-2 flex items-center justify-between">
+      <div className="mt-2 flex flex-wrap items-center justify-between gap-y-1">
         <span className="text-[11px] font-semibold text-neutral-500">
           {completed
             ? "¡Meta completada! 🎉"
@@ -310,7 +310,7 @@ export function SavingsGoals({ userId, wallet }) {
   };
 
   return (
-    <div className="rounded-2xl border border-neutral-100 bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-neutral-100 bg-white p-4 shadow-sm sm:p-6">
       <div className="mb-1 flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-800">
           <Target className="h-5 w-5 text-neutral-900" />

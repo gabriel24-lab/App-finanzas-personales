@@ -19,7 +19,7 @@ const easeOut = [0.22, 1, 0.36, 1];
 
 function IconPicker({ value, onChange }) {
   return (
-    <div className="grid grid-cols-8 gap-1.5 max-h-36 overflow-y-auto rounded-2xl border border-neutral-200 bg-neutral-50 p-2 sm:grid-cols-10">
+    <div className="grid grid-cols-6 gap-1.5 max-h-36 overflow-y-auto rounded-2xl border border-neutral-200 bg-neutral-50 p-2 sm:grid-cols-10">
       {ICON_OPTIONS.map(({ name, label }) => {
         const IconComp = getCategoryIcon(name);
         const selected = value === name;
@@ -29,7 +29,7 @@ function IconPicker({ value, onChange }) {
             type="button"
             title={label}
             onClick={() => onChange(name)}
-            className={`flex h-8 w-8 items-center justify-center rounded-xl border transition-all cursor-pointer ${
+            className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border transition-all cursor-pointer sm:h-8 sm:w-8 ${
               selected
                 ? "border-brand-600 bg-brand-600 text-white"
                 : "border-transparent bg-white text-neutral-500 hover:border-neutral-200 hover:text-neutral-800"
@@ -186,7 +186,7 @@ function CategoryRow({ category, onUpdate, onDelete }) {
         </span>
       </div>
 
-      <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+      <div className="flex shrink-0 items-center gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
         <button
           type="button"
           onClick={() => setEditing(true)}
@@ -309,7 +309,7 @@ export function CategoryManager({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-neutral-100 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-neutral-100 bg-white p-4 sm:p-6 shadow-sm">
         <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-800">
           <Tags className="h-5 w-5 text-neutral-900" />
           Categorías

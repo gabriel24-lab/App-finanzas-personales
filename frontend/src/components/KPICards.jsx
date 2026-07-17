@@ -90,7 +90,7 @@ export function KPICards({ transactions = [], wallet }) {
         variants={cardVariants}
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3, ease: easeOut }}
-        className="relative rounded-3xl bg-linear-to-br from-brand-700 to-brand-950 p-6 text-white shadow-xl shadow-brand-900/20"
+        className="relative rounded-3xl bg-linear-to-br from-brand-700 to-brand-950 p-4 sm:p-6 text-white shadow-xl shadow-brand-900/20"
       >
         <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
           <div
@@ -140,7 +140,7 @@ export function KPICards({ transactions = [], wallet }) {
         variants={cardVariants}
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3, ease: easeOut }}
-        className="relative rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
+        className="relative rounded-3xl border border-neutral-100 bg-white p-4 sm:p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
       >
         <div className="relative">
           <div className="flex items-start justify-between">
@@ -179,7 +179,7 @@ export function KPICards({ transactions = [], wallet }) {
         variants={cardVariants}
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3, ease: easeOut }}
-        className="relative rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
+        className="relative rounded-3xl border border-neutral-100 bg-white p-4 sm:p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
       >
         <div className="relative">
           <div className="flex items-start justify-between">

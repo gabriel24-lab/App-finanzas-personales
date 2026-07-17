@@ -16,7 +16,7 @@ export function BudgetManager({
   };
 
   return (
-    <div className="rounded-2xl border border-neutral-100 bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-neutral-100 bg-white p-4 sm:p-6 shadow-sm">
       <h2 className="text-lg font-semibold text-neutral-800 mb-1 flex items-center gap-2">
         <Settings2 className="h-5 w-5 text-neutral-900" />
         Presupuestos

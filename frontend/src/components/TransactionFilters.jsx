@@ -29,7 +29,7 @@ export function TransactionFilters({
   }, [typeFilter, displayedCategories, categoryFilter, setCategoryFilter]);
 
   return (
-    <div className="rounded-2xl border border-neutral-100 bg-white p-5 shadow-sm space-y-4">
+    <div className="rounded-2xl border border-neutral-100 bg-white p-4 shadow-sm space-y-4 sm:p-5">
       {/* Search and Filters Bar */}
       <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
         {/* Search Input */}

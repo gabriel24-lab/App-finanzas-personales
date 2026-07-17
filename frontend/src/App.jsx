@@ -298,7 +298,7 @@ function Dashboard() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, ease: easeOut }}
-      className="min-h-screen bg-neutral-50 px-4 py-6 text-neutral-800 antialiased sm:px-6 lg:px-8"
+      className="min-h-screen bg-neutral-50 px-3 py-4 text-neutral-800 antialiased sm:px-6 sm:py-6 lg:px-8"
     >
       <div className="mx-auto max-w-6xl space-y-6">
         {/* Header */}
@@ -306,33 +306,51 @@ function Dashboard() {
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOut }}
-          className="flex flex-col gap-4 pb-6 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-col gap-4 pb-6"
         >
-          <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-900 text-white shadow-lg shadow-black/20">
-              <img
-                src="/isotipo-light.png"
-                alt={t("common.appName")}
-                className="h-10 w-10 object-contain"
-              />
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-brand-900 text-white shadow-lg shadow-black/20 sm:h-14 sm:w-14">
+                <img
+                  src="/isotipo-light.png"
+                  alt={t("common.appName")}
+                  className="h-7 w-7 object-contain sm:h-10 sm:w-10"
+                />
+              </div>
+              <div className="min-w-0">
+                <h1 className="truncate text-base font-bold tracking-tight text-neutral-900 sm:text-xl lg:text-2xl">
+                  {t(greetingKey, { name: firstName })}
+                </h1>
+                <p className="hidden text-sm font-medium text-neutral-500 sm:block">
+                  {t("dashboard.subtitle")}
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl">
-                {t(greetingKey, { name: firstName })}
-              </h1>
-              <p className="text-sm font-medium text-neutral-500">
-                {t("dashboard.subtitle")}
-              </p>
+
+            {/* En móvil, idioma y salir viven junto al logo; el selector de
+                vistas baja a su propia fila con scroll horizontal. */}
+            <div className="flex shrink-0 items-center gap-2 sm:hidden">
+              <LanguageSwitcher variant="default" />
+              <button
+                type="button"
+                onClick={logout}
+                title={t("common.logoutTitle")}
+                aria-label={t("common.logout")}
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 bg-white text-neutral-500 shadow-sm transition-all active:bg-rose-50 active:text-rose-600 cursor-pointer"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* View Switcher */}
-            <div className="relative flex items-center gap-1.5 rounded-2xl border border-neutral-200 bg-white p-1 shadow-sm">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            {/* View Switcher: en pantallas angostas se desliza horizontal en
+                vez de encimarse o desbordar la pantalla. */}
+            <div className="scrollbar-hide -mx-3 flex items-center gap-1.5 overflow-x-auto rounded-2xl border border-neutral-200 bg-white p-1 px-3 shadow-sm sm:mx-0 sm:px-1">
               <button
                 type="button"
                 onClick={() => setActiveView("dashboard")}
-                className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                className={`relative z-10 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
                   activeView === "dashboard"
                     ? "text-white"
                     : "text-neutral-500 hover:text-neutral-900"
@@ -351,7 +369,7 @@ function Dashboard() {
               <button
                 type="button"
                 onClick={() => setActiveView("budgets")}
-                className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                className={`relative z-10 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
                   activeView === "budgets"
                     ? "text-white"
                     : "text-neutral-500 hover:text-neutral-900"
@@ -370,7 +388,7 @@ function Dashboard() {
               <button
                 type="button"
                 onClick={() => setActiveView("categories")}
-                className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                className={`relative z-10 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
                   activeView === "categories"
                     ? "text-white"
                     : "text-neutral-500 hover:text-neutral-900"
@@ -389,7 +407,7 @@ function Dashboard() {
               <button
                 type="button"
                 onClick={() => setActiveView("goals")}
-                className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                className={`relative z-10 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
                   activeView === "goals"
                     ? "text-white"
                     : "text-neutral-500 hover:text-neutral-900"
@@ -408,7 +426,7 @@ function Dashboard() {
               <button
                 type="button"
                 onClick={() => setActiveView("explore")}
-                className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                className={`relative z-10 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
                   activeView === "explore"
                     ? "text-white"
                     : "text-neutral-500 hover:text-neutral-900"
@@ -426,17 +444,21 @@ function Dashboard() {
               </button>
             </div>
 
-            <LanguageSwitcher variant="default" />
+            {/* En sm+ (tablet/desktop), idioma y salir vuelven a vivir al
+                lado del selector de vistas, en vez de junto al logo. */}
+            <div className="hidden shrink-0 items-center gap-3 sm:flex">
+              <LanguageSwitcher variant="default" />
 
-            <button
-              type="button"
-              onClick={logout}
-              title={t("common.logoutTitle")}
-              className="flex items-center gap-1.5 rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-neutral-500 shadow-sm transition-all hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 cursor-pointer"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">{t("common.logout")}</span>
-            </button>
+              <button
+                type="button"
+                onClick={logout}
+                title={t("common.logoutTitle")}
+                className="flex items-center gap-1.5 rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-neutral-500 shadow-sm transition-all hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 cursor-pointer"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">{t("common.logout")}</span>
+              </button>
+            </div>
           </div>
         </motion.header>
 

@@ -87,7 +87,7 @@ export function BudgetOverview({
   });
 
   return (
-    <div className="rounded-2xl border border-neutral-100 bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-neutral-100 bg-white p-4 sm:p-6 shadow-sm">
       <div className="flex items-center justify-between mb-1">
         <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-800">
           <PiggyBank className="h-5 w-5 text-neutral-900" />
@@ -117,29 +117,29 @@ export function BudgetOverview({
       ) : (
         <>
           {/* Overall totals */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className="rounded-2xl bg-neutral-50 border border-neutral-100 p-3">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+          <div className="grid grid-cols-3 gap-2 mb-6 sm:gap-3">
+            <div className="rounded-2xl bg-neutral-50 border border-neutral-100 p-2.5 sm:p-3">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-neutral-500 sm:text-[11px]">
                 Presupuestado
               </p>
-              <p className="text-sm font-bold text-neutral-800 mt-1">
+              <p className="text-xs font-bold text-neutral-800 mt-1 sm:text-sm">
                 {formatCurrency(summary.totalBudgeted, currencyCode)}
               </p>
             </div>
-            <div className="rounded-2xl bg-neutral-50 border border-neutral-100 p-3">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+            <div className="rounded-2xl bg-neutral-50 border border-neutral-100 p-2.5 sm:p-3">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-neutral-500 sm:text-[11px]">
                 Gastado
               </p>
-              <p className="text-sm font-bold text-neutral-800 mt-1">
+              <p className="text-xs font-bold text-neutral-800 mt-1 sm:text-sm">
                 {formatCurrency(summary.totalSpent, currencyCode)}
               </p>
             </div>
-            <div className="rounded-2xl bg-neutral-50 border border-neutral-100 p-3">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+            <div className="rounded-2xl bg-neutral-50 border border-neutral-100 p-2.5 sm:p-3">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-neutral-500 sm:text-[11px]">
                 Restante
               </p>
               <p
-                className={`text-sm font-bold mt-1 ${
+                className={`text-xs font-bold mt-1 sm:text-sm ${
                   summary.totalBudgeted - summary.totalSpent < 0
                     ? "text-rose-600"
                     : "text-emerald-600"

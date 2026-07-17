@@ -88,7 +88,7 @@ function ChartCard({
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: easeOut }}
-      className="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm"
+      className="rounded-3xl border border-neutral-100 bg-white p-4 sm:p-6 shadow-sm"
     >
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>

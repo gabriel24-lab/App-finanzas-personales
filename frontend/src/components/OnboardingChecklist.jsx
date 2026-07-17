@@ -89,7 +89,7 @@ export function OnboardingChecklist({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, height: 0, marginBottom: 0 }}
         transition={{ duration: 0.35, ease: easeOut }}
-        className="relative overflow-hidden rounded-3xl border border-neutral-100 bg-linear-to-br from-white to-neutral-50 p-6 shadow-sm"
+        className="relative overflow-hidden rounded-3xl border border-neutral-100 bg-linear-to-br from-white to-neutral-50 p-4 shadow-sm sm:p-6"
       >
         <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-brand-500/10 blur-3xl" />
 
@@ -97,13 +97,13 @@ export function OnboardingChecklist({
           type="button"
           onClick={handleDismiss}
           aria-label="Ocultar guía de bienvenida"
-          className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 cursor-pointer"
+          className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 cursor-pointer sm:right-4 sm:top-4"
         >
           <X className="h-4 w-4" />
         </button>
 
-        <div className="relative flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-brand-800" />
+        <div className="relative flex items-center gap-2 pr-9">
+          <Sparkles className="h-5 w-5 shrink-0 text-brand-800" />
           <h2 className="text-base font-bold text-neutral-800">
             Empecemos a organizar tu dinero
           </h2>

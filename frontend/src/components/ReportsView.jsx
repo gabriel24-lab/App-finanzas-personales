@@ -220,7 +220,7 @@ export function ReportsView({ token, wallet }) {
 
       {/* Resumen comparativo mes vs mes */}
       {comparative && (
-        <div className="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-neutral-100 bg-white p-4 sm:p-6 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-neutral-500" />
             <h3 className="text-sm font-bold text-neutral-800">
@@ -314,7 +314,7 @@ export function ReportsView({ token, wallet }) {
 
       {/* Gastos por categoría comparativo */}
       {comparisonChartData.length > 0 && (
-        <div className="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-neutral-100 bg-white p-4 sm:p-6 shadow-sm">
           <h3 className="mb-4 text-sm font-bold text-neutral-800">
             Gastos por categoría
           </h3>
@@ -364,7 +364,7 @@ export function ReportsView({ token, wallet }) {
 
       {/* Proyección de flujo de caja */}
       {projection && (
-        <div className="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-neutral-100 bg-white p-4 sm:p-6 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-neutral-500" />
             <h3 className="text-sm font-bold text-neutral-800">

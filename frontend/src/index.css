@@ -137,3 +137,16 @@ body {
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+/* Oculta la barra de scroll mientras conserva el desplazamiento funcional.
+   Se usa en elementos con overflow-x-auto en móvil (ej: el selector de
+   vistas del dashboard), donde queremos que se pueda arrastrar/deslizar
+   sin que una barra de scroll visible rompa el diseño. */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge viejos */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, navegadores basados en WebKit/Blink */
+}
