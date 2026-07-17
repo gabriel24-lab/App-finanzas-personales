@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
-const cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
 const rateLimit = require("express-rate-limit");
 
@@ -27,8 +26,7 @@ app.use(helmet());
 
 // Lista blanca de orígenes permitidos. En producción, CORS_ORIGIN debe ser
 // la URL exacta del frontend desplegado (puede ser una lista separada por
-// comas para soportar staging + producción). `credentials: true` es
-// obligatorio para que el navegador envíe/reciba la cookie httpOnly de sesión.
+// comas para soportar staging + producción).
 const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:5173")
   .split(",")
   .map((origin) => origin.trim())
@@ -43,12 +41,15 @@ app.use(
       }
       return callback(new Error("No permitido por la política de CORS."));
     },
+    // La sesión ahora viaja en el header Authorization (JWT en localStorage
+    // del frontend), no en una cookie, así que `credentials: true` ya no es
+    // estrictamente necesario. Se deja en true de todas formas por si en el
+    // futuro se agrega algún flujo que sí dependa de cookies/credenciales.
     credentials: true,
   })
 );
 
 app.use(express.json());
-app.use(cookieParser());
 
 // Elimina claves con `$` o `.` de body/query/params para prevenir inyección
 // de operadores NoSQL (ej: { "email": { "$ne": null } }).

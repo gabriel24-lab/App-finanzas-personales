@@ -5,7 +5,6 @@ const asyncHandler = require("../utils/asyncHandler");
 const generateToken = require("../utils/generateToken");
 const DEFAULT_CATEGORIES = require("../utils/defaultCategories");
 const { CURRENCY_BY_CODE, DEFAULT_CURRENCY_CODE } = require("../utils/currencies");
-const { AUTH_COOKIE_NAME, authCookieOptions } = require("../utils/cookieOptions");
 
 // Nunca devolvemos el hash de la contraseña al cliente.
 function toSafeUser(user) {
@@ -72,14 +71,14 @@ const register = asyncHandler(async (req, res) => {
 
   const token = generateToken(user._id);
 
-  // El JWT viaja en una cookie httpOnly (no accesible desde JS del navegador),
-  // nunca en el cuerpo de la respuesta: así el frontend no puede -ni debe-
-  // guardarlo en localStorage/sessionStorage.
-  res.cookie(AUTH_COOKIE_NAME, token, authCookieOptions);
-
+  // El JWT viaja en el cuerpo de la respuesta (no en una cookie): el
+  // frontend y el backend están en dominios distintos (Vercel/Render), y
+  // varios navegadores bloquean cookies cross-site por defecto. El frontend
+  // guarda este token y lo reenvía en el header `Authorization: Bearer`.
   res.status(201).json({
     message: "Cuenta creada correctamente.",
     user: toSafeUser(user),
+    token,
   });
 });
 
@@ -105,28 +104,29 @@ const login = asyncHandler(async (req, res) => {
 
   const token = generateToken(user._id);
 
-  res.cookie(AUTH_COOKIE_NAME, token, authCookieOptions);
-
   res.status(200).json({
     message: "Sesión iniciada correctamente.",
     user: toSafeUser(user),
+    token,
   });
 });
 
 /**
  * POST /api/auth/logout
- * Limpia la cookie de sesión. No requiere `protect`: si el token ya venció
- * o es inválido igual queremos poder borrar la cookie del navegador.
+ * Con el token viajando en localStorage (no en cookie), cerrar sesión es
+ * responsabilidad del frontend (borrar el token guardado). Este endpoint
+ * se mantiene por compatibilidad y para futuras extensiones (ej. invalidar
+ * el token en una lista negra), pero no requiere `protect`.
  */
 const logout = (req, res) => {
-  res.clearCookie(AUTH_COOKIE_NAME, { ...authCookieOptions, maxAge: undefined });
   res.status(200).json({ message: "Sesión cerrada correctamente." });
 };
 
 /**
  * GET /api/auth/me
- * Requiere el middleware `protect`. Permite a la app recuperar la sesión
- * (usuario + billeteras) al recargar la página usando el token guardado.
+ * Requiere el middleware `protect` (header Authorization: Bearer <token>).
+ * Permite a la app recuperar la sesión (usuario + billeteras) al recargar
+ * la página usando el token guardado en localStorage.
  */
 const me = asyncHandler(async (req, res) => {
   const user = await User.findById(req.userId).select("-password");

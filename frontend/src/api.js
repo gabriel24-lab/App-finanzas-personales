@@ -1,24 +1,26 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
 
-// La sesión viaja en una cookie httpOnly que pone el backend (ver
-// authController.js); el navegador la envía automáticamente en cada
-// petición gracias a `credentials: "include"`. El frontend nunca lee ni
-// guarda el JWT (no localStorage, no sessionStorage), así un ataque XSS no
-// puede robar la sesión leyendo el almacenamiento del navegador.
+// La sesión viaja como un JWT que el backend devuelve en el body de
+// login/register. El frontend lo guarda (ver AuthContext) y lo reenvía en
+// cada petición autenticada vía el header `Authorization: Bearer <token>`.
 //
-// El parámetro `token` que aún reciben algunas funciones de este archivo se
-// mantiene solo por compatibilidad de firma con los componentes que las
-// llaman; ya no se usa para autenticar (queda ignorado).
-async function request(path, { token: _token, ...options } = {}) {
+// Nota: NO usamos cookies para esto. El frontend (Vercel) y el backend
+// (Render) viven en dominios distintos, y varios navegadores (Safari,
+// Brave, y cada vez más Chrome) bloquean cookies cross-site por defecto
+// como medida de privacidad, sin importar qué tan bien esté configurada la
+// cookie (SameSite=None; Secure). El header Authorization no tiene ese
+// problema porque no es un mecanismo de almacenamiento del navegador que
+// las políticas de "third-party cookies" puedan bloquear.
+async function request(path, { token, ...options } = {}) {
   const headers = {
     "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options.headers || {}),
   };
 
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
     headers,
-    credentials: "include",
   });
 
   const data = await res.json().catch(() => ({}));
@@ -30,16 +32,15 @@ async function request(path, { token: _token, ...options } = {}) {
   return data;
 }
 
-async function downloadFile(
-  path,
-  { token: _token, filename, ...options } = {},
-) {
-  const headers = { ...(options.headers || {}) };
+async function downloadFile(path, { token, filename, ...options } = {}) {
+  const headers = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers || {}),
+  };
 
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
     headers,
-    credentials: "include",
   });
 
   if (!res.ok) {
@@ -61,7 +62,7 @@ async function downloadFile(
 // --- Autenticación ---
 
 export async function registerApi(name, email, password, currencyCode) {
-  const { user } = await request("/auth/register", {
+  const { user, token } = await request("/auth/register", {
     method: "POST",
     body: JSON.stringify({
       name,
@@ -70,19 +71,19 @@ export async function registerApi(name, email, password, currencyCode) {
       currency_code: currencyCode,
     }),
   });
-  return { user };
+  return { user, token };
 }
 
 export async function loginApi(email, password) {
-  const { user } = await request("/auth/login", {
+  const { user, token } = await request("/auth/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
   });
-  return { user };
+  return { user, token };
 }
 
-export async function fetchMe() {
-  const { user } = await request("/auth/me");
+export async function fetchMe(token) {
+  const { user } = await request("/auth/me", { token });
   return user;
 }
 
