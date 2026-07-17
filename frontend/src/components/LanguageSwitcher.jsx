@@ -37,7 +37,10 @@ export function LanguageSwitcher({ variant = "default" }) {
             : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300 hover:text-neutral-900"
         }`}
       >
-        <motion.span animate={{ rotate: open ? 25 : 0 }} transition={{ duration: 0.25 }}>
+        <motion.span
+          animate={{ rotate: open ? 25 : 0 }}
+          transition={{ duration: 0.25 }}
+        >
           <Globe className="h-4 w-4" />
         </motion.span>
       </motion.button>
@@ -82,7 +85,9 @@ export function LanguageSwitcher({ variant = "default" }) {
                   <span>{l.label}</span>
                 </span>
                 {l.code === lang && (
-                  <Check className={`h-4 w-4 ${isLight ? "text-white" : "text-neutral-900"}`} />
+                  <Check
+                    className={`h-4 w-4 ${isLight ? "text-white" : "text-neutral-900"}`}
+                  />
                 )}
               </motion.button>
             ))}

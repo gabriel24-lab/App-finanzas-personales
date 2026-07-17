@@ -29,7 +29,12 @@ import { AuthPage } from "./pages/AuthPage";
 import { InfoPage } from "./pages/InfoPage";
 import { ResourcesPage } from "./pages/ResourcesPage";
 import { ResourceDetailPage } from "./pages/ResourceDetailPage";
-import { parseAppHash, scrollToLandingSection, resourcesPath, resourceDetailPath } from "./utils/hashRoute";
+import {
+  parseAppHash,
+  scrollToLandingSection,
+  resourcesPath,
+  resourceDetailPath,
+} from "./utils/hashRoute";
 import { useAuth } from "./context/AuthContext";
 import { useLanguage } from "./context/LanguageContext";
 import { ConfirmDialog } from "./components/ConfirmDialog";
@@ -48,7 +53,7 @@ import {
 const easeOut = [0.22, 1, 0.36, 1];
 
 function Dashboard() {
-  const { user, token, logout } = useAuth();
+  const { user, token, logout, setUser } = useAuth();
   const { t } = useLanguage();
 
   // Guard: al cerrar sesión, `user` pasa a null de inmediato, pero este
@@ -74,7 +79,8 @@ function Dashboard() {
   const [typeFilter, setTypeFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [activeView, setActiveView] = useState("dashboard");
-  const [pendingDeleteTransactionId, setPendingDeleteTransactionId] = useState(null);
+  const [pendingDeleteTransactionId, setPendingDeleteTransactionId] =
+    useState(null);
 
   // Carga inicial de transacciones, presupuestos y categorías del usuario autenticado.
   useEffect(() => {
@@ -119,26 +125,52 @@ function Dashboard() {
         setError(t("dashboard.error.budget", { detail: err.message }));
       }
     },
-    [token, user._id, t]
+    [token, user._id, t],
+  );
+
+  // El backend recalcula el balance de la billetera al crear/eliminar un
+  // movimiento y lo devuelve en la respuesta. Aquí lo escribimos de vuelta en
+  // `user.wallets` (el mismo objeto que usan KPICards y el resto del
+  // dashboard para pintar el "Balance total") para que se actualice al
+  // instante, igual que ya pasa con los totales de ingresos/gastos, que se
+  // calculan sobre el arreglo `transactions` local.
+  const applyWalletUpdate = useCallback(
+    (updatedWallet) => {
+      if (!updatedWallet) return;
+      setUser((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          wallets: prev.wallets.map((w) =>
+            w.wallet_id === updatedWallet.wallet_id
+              ? { ...w, ...updatedWallet }
+              : w,
+          ),
+        };
+      });
+    },
+    [setUser],
   );
 
   const handleAddTransaction = useCallback(
     async (newTransaction) => {
       if (!wallet) return;
       try {
-        const created = await createTransaction(
-          token,
-          user._id,
-          wallet.wallet_id,
-          wallet.currency_code,
-          newTransaction
-        );
+        const { transaction: created, wallet: updatedWallet } =
+          await createTransaction(
+            token,
+            user._id,
+            wallet.wallet_id,
+            wallet.currency_code,
+            newTransaction,
+          );
         setTransactions((prev) => [created, ...prev]);
+        applyWalletUpdate(updatedWallet);
       } catch (err) {
         setError(t("dashboard.error.transaction", { detail: err.message }));
       }
     },
-    [token, user._id, wallet, t]
+    [token, user._id, wallet, t, applyWalletUpdate],
   );
 
   const requestDeleteTransaction = useCallback((id) => {
@@ -152,14 +184,20 @@ function Dashboard() {
   const confirmDeleteTransaction = useCallback(async () => {
     if (!pendingDeleteTransactionId) return;
     try {
-      await deleteTransactionApi(token, pendingDeleteTransactionId);
-      setTransactions((prev) => prev.filter((tx) => tx.id !== pendingDeleteTransactionId));
+      const { wallet: updatedWallet } = await deleteTransactionApi(
+        token,
+        pendingDeleteTransactionId,
+      );
+      setTransactions((prev) =>
+        prev.filter((tx) => tx.id !== pendingDeleteTransactionId),
+      );
+      applyWalletUpdate(updatedWallet);
     } catch (err) {
       setError(t("dashboard.error.delete", { detail: err.message }));
     } finally {
       setPendingDeleteTransactionId(null);
     }
-  }, [pendingDeleteTransactionId, token, t]);
+  }, [pendingDeleteTransactionId, token, t, applyWalletUpdate]);
 
   const handleCreateCategory = useCallback(
     async (values) => {
@@ -170,14 +208,14 @@ function Dashboard() {
         setError(t("dashboard.error.category", { detail: err.message }));
       }
     },
-    [token, user._id, t]
+    [token, user._id, t],
   );
 
   const handleUpdateCategory = useCallback(
     async (categoryId, updates) => {
       const previous = categories;
       setCategories((prev) =>
-        prev.map((c) => (c.id === categoryId ? { ...c, ...updates } : c))
+        prev.map((c) => (c.id === categoryId ? { ...c, ...updates } : c)),
       );
       try {
         await updateCategoryApi(token, categoryId, updates);
@@ -186,7 +224,7 @@ function Dashboard() {
         setError(t("dashboard.error.category", { detail: err.message }));
       }
     },
-    [token, categories, t]
+    [token, categories, t],
   );
 
   const handleDeleteCategory = useCallback(
@@ -200,7 +238,7 @@ function Dashboard() {
         setError(t("dashboard.error.category", { detail: err.message }));
       }
     },
-    [token, categories, t]
+    [token, categories, t],
   );
 
   const handleResetFilters = () => {
@@ -211,9 +249,12 @@ function Dashboard() {
 
   const filteredTransactions = transactions
     .filter((t) => {
-      const matchesSearch = t.description.toLowerCase().includes(search.toLowerCase());
+      const matchesSearch = t.description
+        .toLowerCase()
+        .includes(search.toLowerCase());
       const matchesType = typeFilter === "all" || t.type === typeFilter;
-      const matchesCategory = categoryFilter === "" || t.category === categoryFilter;
+      const matchesCategory =
+        categoryFilter === "" || t.category === categoryFilter;
       return matchesSearch && matchesType && matchesCategory;
     })
     .sort((a, b) => {
@@ -269,13 +310,19 @@ function Dashboard() {
         >
           <div className="flex items-center gap-3">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-900 text-white shadow-lg shadow-black/20">
-              <img src="/isotipo-light.png" alt={t("common.appName")} className="h-10 w-10 object-contain" />
+              <img
+                src="/isotipo-light.png"
+                alt={t("common.appName")}
+                className="h-10 w-10 object-contain"
+              />
             </div>
             <div>
               <h1 className="text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl">
                 {t(greetingKey, { name: firstName })}
               </h1>
-              <p className="text-sm font-medium text-neutral-500">{t("dashboard.subtitle")}</p>
+              <p className="text-sm font-medium text-neutral-500">
+                {t("dashboard.subtitle")}
+              </p>
             </div>
           </div>
 
@@ -286,7 +333,9 @@ function Dashboard() {
                 type="button"
                 onClick={() => setActiveView("dashboard")}
                 className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
-                  activeView === "dashboard" ? "text-white" : "text-neutral-500 hover:text-neutral-900"
+                  activeView === "dashboard"
+                    ? "text-white"
+                    : "text-neutral-500 hover:text-neutral-900"
                 }`}
               >
                 <LayoutDashboard className="h-3.5 w-3.5" />
@@ -303,7 +352,9 @@ function Dashboard() {
                 type="button"
                 onClick={() => setActiveView("budgets")}
                 className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
-                  activeView === "budgets" ? "text-white" : "text-neutral-500 hover:text-neutral-900"
+                  activeView === "budgets"
+                    ? "text-white"
+                    : "text-neutral-500 hover:text-neutral-900"
                 }`}
               >
                 <PiggyBank className="h-3.5 w-3.5" />
@@ -320,7 +371,9 @@ function Dashboard() {
                 type="button"
                 onClick={() => setActiveView("categories")}
                 className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
-                  activeView === "categories" ? "text-white" : "text-neutral-500 hover:text-neutral-900"
+                  activeView === "categories"
+                    ? "text-white"
+                    : "text-neutral-500 hover:text-neutral-900"
                 }`}
               >
                 <Tags className="h-3.5 w-3.5" />
@@ -337,7 +390,9 @@ function Dashboard() {
                 type="button"
                 onClick={() => setActiveView("goals")}
                 className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
-                  activeView === "goals" ? "text-white" : "text-neutral-500 hover:text-neutral-900"
+                  activeView === "goals"
+                    ? "text-white"
+                    : "text-neutral-500 hover:text-neutral-900"
                 }`}
               >
                 <Target className="h-3.5 w-3.5" />
@@ -354,7 +409,9 @@ function Dashboard() {
                 type="button"
                 onClick={() => setActiveView("explore")}
                 className={`relative z-10 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
-                  activeView === "explore" ? "text-white" : "text-neutral-500 hover:text-neutral-900"
+                  activeView === "explore"
+                    ? "text-white"
+                    : "text-neutral-500 hover:text-neutral-900"
                 }`}
               >
                 <Compass className="h-3.5 w-3.5" />
@@ -411,75 +468,89 @@ function Dashboard() {
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
           {/* Left Column: Form */}
           <div className="space-y-6 lg:sticky lg:top-8 lg:col-span-4">
-            <TransactionForm categories={categories} onAddTransaction={handleAddTransaction} />
-            <UpcomingPayments transactions={transactions} categories={categories} wallet={wallet} />
+            <TransactionForm
+              categories={categories}
+              onAddTransaction={handleAddTransaction}
+            />
+            <UpcomingPayments
+              transactions={transactions}
+              categories={categories}
+              wallet={wallet}
+            />
           </div>
 
           {/* Right Column: Cards, Filters & List */}
           <div className="space-y-6 lg:col-span-8">
             <AnimatePresence mode="wait">
               {activeView === "dashboard" && (
-                    <>
-                      <motion.div
-                        key="dashboard-view"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.32, ease: easeOut }}
-                        className="space-y-6"
-                      >
-                        <KPICards transactions={transactions} wallet={wallet} />
+                <>
+                  <motion.div
+                    key="dashboard-view"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.32, ease: easeOut }}
+                    className="space-y-6"
+                  >
+                    <KPICards transactions={transactions} wallet={wallet} />
 
-                        {transactions.length > 0 && (
-                          <InsightsPanel token={token} walletId={wallet?.wallet_id} />
-                        )}
-
-                        <DashboardCharts transactions={transactions} categories={categories} wallet={wallet} />
-
-                        <TransactionFilters
-                          categories={categories}
-                          search={search}
-                          setSearch={setSearch}
-                          typeFilter={typeFilter}
-                          setTypeFilter={setTypeFilter}
-                          categoryFilter={categoryFilter}
-                          setCategoryFilter={setCategoryFilter}
-                          onResetFilters={handleResetFilters}
-                        />
-
-                        <div>
-                          <div className="mb-3 flex items-center justify-between px-1">
-                            <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-500">
-                              {t("dashboard.history.title")}
-                            </h3>
-                            <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-500">
-                              {filteredTransactions.length}{" "}
-                              {t(
-                                filteredTransactions.length === 1
-                                  ? "dashboard.history.count.one"
-                                  : "dashboard.history.count.other"
-                              )}
-                            </span>
-                          </div>
-                          <TransactionList
-                            transactions={filteredTransactions}
-                            categories={categories}
-                            onDeleteTransaction={requestDeleteTransaction}
-                            wallet={wallet}
-                          />
-                        </div>
-                      </motion.div>
-                      <ConfirmDialog
-                        open={Boolean(pendingDeleteTransactionId)}
-                        title={t("dashboard.confirm.deleteTitle")}
-                        message={t("dashboard.confirm.delete")}
-                        cancelLabel={t("common.dialog.cancel")}
-                        confirmLabel={t("common.dialog.confirm")}
-                        onCancel={cancelDeleteTransaction}
-                        onConfirm={confirmDeleteTransaction}
+                    {transactions.length > 0 && (
+                      <InsightsPanel
+                        token={token}
+                        walletId={wallet?.wallet_id}
                       />
-                    </>
-                  )}
+                    )}
+
+                    <DashboardCharts
+                      transactions={transactions}
+                      categories={categories}
+                      wallet={wallet}
+                    />
+
+                    <TransactionFilters
+                      categories={categories}
+                      search={search}
+                      setSearch={setSearch}
+                      typeFilter={typeFilter}
+                      setTypeFilter={setTypeFilter}
+                      categoryFilter={categoryFilter}
+                      setCategoryFilter={setCategoryFilter}
+                      onResetFilters={handleResetFilters}
+                    />
+
+                    <div>
+                      <div className="mb-3 flex items-center justify-between px-1">
+                        <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-500">
+                          {t("dashboard.history.title")}
+                        </h3>
+                        <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-500">
+                          {filteredTransactions.length}{" "}
+                          {t(
+                            filteredTransactions.length === 1
+                              ? "dashboard.history.count.one"
+                              : "dashboard.history.count.other",
+                          )}
+                        </span>
+                      </div>
+                      <TransactionList
+                        transactions={filteredTransactions}
+                        categories={categories}
+                        onDeleteTransaction={requestDeleteTransaction}
+                        wallet={wallet}
+                      />
+                    </div>
+                  </motion.div>
+                  <ConfirmDialog
+                    open={Boolean(pendingDeleteTransactionId)}
+                    title={t("dashboard.confirm.deleteTitle")}
+                    message={t("dashboard.confirm.delete")}
+                    cancelLabel={t("common.dialog.cancel")}
+                    confirmLabel={t("common.dialog.confirm")}
+                    onCancel={cancelDeleteTransaction}
+                    onConfirm={confirmDeleteTransaction}
+                  />
+                </>
+              )}
 
               {activeView === "budgets" && (
                 <motion.div
@@ -490,8 +561,17 @@ function Dashboard() {
                   transition={{ duration: 0.32, ease: easeOut }}
                   className="space-y-6"
                 >
-                  <BudgetOverview transactions={transactions} budgets={budgets} categories={categories} wallet={wallet} />
-                  <BudgetManager categories={categories} budgets={budgets} onUpdateBudget={handleUpdateBudget} />
+                  <BudgetOverview
+                    transactions={transactions}
+                    budgets={budgets}
+                    categories={categories}
+                    wallet={wallet}
+                  />
+                  <BudgetManager
+                    categories={categories}
+                    budgets={budgets}
+                    onUpdateBudget={handleUpdateBudget}
+                  />
                 </motion.div>
               )}
 
@@ -535,7 +615,10 @@ function Dashboard() {
                   transition={{ duration: 0.32, ease: easeOut }}
                   className="space-y-6"
                 >
-                  <InvestmentExplorer token={token} walletId={wallet?.wallet_id} />
+                  <InvestmentExplorer
+                    token={token}
+                    walletId={wallet?.wallet_id}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -658,7 +741,10 @@ function App() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.35, ease: easeOut }}
         >
-          <AuthPage initialMode={authMode} onBack={() => setPublicView("landing")} />
+          <AuthPage
+            initialMode={authMode}
+            onBack={() => setPublicView("landing")}
+          />
         </motion.div>
       )}
       {viewKey === "landing" && (

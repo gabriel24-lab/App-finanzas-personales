@@ -36,11 +36,12 @@ export function CurrencySelector({ value, onChange }) {
       <span className="flex items-center gap-2.5">
         <span className="text-base leading-none">{c.flag}</span>
         <span>
-          {t(c.nameKey)}{" "}
-          <span className="text-neutral-400">· {c.code}</span>
+          {t(c.nameKey)} <span className="text-neutral-400">· {c.code}</span>
         </span>
       </span>
-      {c.code === value && <Check className="h-4 w-4 shrink-0 text-brand-600" />}
+      {c.code === value && (
+        <Check className="h-4 w-4 shrink-0 text-brand-600" />
+      )}
     </motion.button>
   );
 
@@ -60,7 +61,10 @@ export function CurrencySelector({ value, onChange }) {
             {t(selected.nameKey)}{" "}
             <span className="text-neutral-400">· {selected.code}</span>
           </span>
-          <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
+          <motion.span
+            animate={{ rotate: open ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
             <ChevronDown className="h-4 w-4 text-neutral-400" />
           </motion.span>
         </button>
@@ -87,7 +91,9 @@ export function CurrencySelector({ value, onChange }) {
           )}
         </AnimatePresence>
       </div>
-      <p className="mt-1.5 px-1 text-xs text-neutral-400">{t("auth.currency.hint")}</p>
+      <p className="mt-1.5 px-1 text-xs text-neutral-400">
+        {t("auth.currency.hint")}
+      </p>
     </div>
   );
 }

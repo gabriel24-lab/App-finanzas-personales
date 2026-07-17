@@ -60,7 +60,8 @@ export const translations = {
     "landing.stats.tracked": "Registrado en la plataforma",
     "landing.stats.rating": "Calificación promedio",
 
-    "landing.features.title": "Todo lo que necesitas para tomar el control de tu dinero",
+    "landing.features.title":
+      "Todo lo que necesitas para tomar el control de tu dinero",
     "landing.features.subtitle":
       "Organiza tus ingresos, controla tus gastos y toma mejores decisiones financieras desde un solo lugar.",
     "landing.features.tracking.title": "Registra cada movimiento",
@@ -86,23 +87,28 @@ export const translations = {
     "landing.preview.subtitle":
       "Un panel limpio y directo apenas inicias sesión: tus números, tus movimientos y tus presupuestos, todo a la vista.",
     "landing.preview.card1.title": "Panel de movimientos",
-    "landing.preview.card1.desc": "Balance, ingresos y gastos del mes de un vistazo.",
+    "landing.preview.card1.desc":
+      "Balance, ingresos y gastos del mes de un vistazo.",
     "landing.preview.card2.title": "Presupuestos",
-    "landing.preview.card2.desc": "Controla cuánto llevas gastado por categoría.",
+    "landing.preview.card2.desc":
+      "Controla cuánto llevas gastado por categoría.",
     "landing.preview.card3.title": "Historial completo",
-    "landing.preview.card3.desc": "Busca, filtra y edita cualquier transacción.",
+    "landing.preview.card3.desc":
+      "Busca, filtra y edita cualquier transacción.",
     "landing.preview.balance": "Balance total",
     "landing.preview.income": "Ingresos",
     "landing.preview.expenses": "Gastos",
     "landing.preview.budgetUsed": "usado",
 
     "landing.cta.title": "Empieza a ordenar tus finanzas hoy",
-    "landing.cta.subtitle": "Crea tu cuenta gratis, no necesitas tarjeta de crédito.",
+    "landing.cta.subtitle":
+      "Crea tu cuenta gratis, no necesitas tarjeta de crédito.",
     "landing.cta.button": "Crear mi cuenta gratis",
 
     "landing.footer.heading": "Pie de página",
     "landing.footer.rights": "Todos los derechos reservados.",
-    "landing.footer.tagline": "Hecho para ayudarte a tomar mejores decisiones con tu dinero.",
+    "landing.footer.tagline":
+      "Hecho para ayudarte a tomar mejores decisiones con tu dinero.",
     "landing.footer.product.title": "Producto",
     "landing.footer.product.features": "Características",
     "landing.footer.product.preview": "Vista previa",
@@ -136,7 +142,8 @@ export const translations = {
     "auth.field.passwordNew": "Crea una contraseña (mín. 6 caracteres)",
     "auth.field.passwordConfirm": "Confirma tu contraseña",
     "auth.field.currency": "Moneda principal",
-    "auth.currency.hint": "En qué moneda vas a registrar tus ingresos y gastos.",
+    "auth.currency.hint":
+      "En qué moneda vas a registrar tus ingresos y gastos.",
     "auth.currency.main": "Principales",
     "auth.currency.other": "Otras monedas",
     "currency.USD": "Dólar estadounidense",
@@ -162,7 +169,8 @@ export const translations = {
       "Sin cuentas externas: tu email y contraseña se guardan de forma segura en nuestra base de datos.",
     "auth.error.required": "Completa tu email y contraseña.",
     "auth.error.name": "Cuéntanos cómo te llamas.",
-    "auth.error.passwordLength": "La contraseña debe tener al menos 6 caracteres.",
+    "auth.error.passwordLength":
+      "La contraseña debe tener al menos 6 caracteres.",
     "auth.error.passwordMatch": "Las contraseñas no coinciden.",
     "auth.error.generic": "Algo salió mal. Inténtalo de nuevo.",
 
@@ -180,15 +188,19 @@ export const translations = {
     "dashboard.history.title": "Historial de Movimientos",
     "dashboard.history.count.one": "transacción",
     "dashboard.history.count.other": "transacciones",
-    "dashboard.error.load": "No se pudo conectar con el servidor. Detalle: {detail}",
+    "dashboard.error.load":
+      "No se pudo conectar con el servidor. Detalle: {detail}",
     "dashboard.error.budget": "No se pudo guardar el presupuesto: {detail}",
-    "dashboard.error.transaction": "No se pudo guardar la transacción: {detail}",
+    "dashboard.error.transaction":
+      "No se pudo guardar la transacción: {detail}",
     "dashboard.error.delete": "No se pudo eliminar la transacción: {detail}",
     "dashboard.error.category": "No se pudo guardar la categoría: {detail}",
     "dashboard.confirm.deleteTitle": "Confirmar eliminación",
-    "dashboard.confirm.delete": "¿Estás seguro de que deseas eliminar este movimiento?",
+    "dashboard.confirm.delete":
+      "¿Estás seguro de que deseas eliminar este movimiento?",
     "category.confirm.deleteTitle": "Confirmar eliminación",
-    "category.confirm.delete": "¿Eliminar esta categoría? Las transacciones ya registradas no se verán afectadas.",
+    "category.confirm.delete":
+      "¿Eliminar esta categoría? Las transacciones ya registradas no se verán afectadas.",
     "goals.confirm.deleteTitle": "Confirmar eliminación",
     "goals.confirm.delete": "¿Eliminar esta meta de ahorro?",
     "common.dialog.cancel": "Cancelar",
@@ -234,7 +246,8 @@ export const translations = {
     "landing.stats.tracked": "Tracked on the platform",
     "landing.stats.rating": "Average rating",
 
-    "landing.features.title": "Everything you need to take control of your money",
+    "landing.features.title":
+      "Everything you need to take control of your money",
     "landing.features.subtitle":
       "Organize your income, control your expenses and make better financial decisions from one place.",
     "landing.features.tracking.title": "Record every transaction",
@@ -260,7 +273,8 @@ export const translations = {
     "landing.preview.subtitle":
       "A clean, straightforward dashboard right after you log in: your numbers, your transactions, and your budgets, all in view.",
     "landing.preview.card1.title": "Transactions panel",
-    "landing.preview.card1.desc": "Balance, income and expenses for the month at a glance.",
+    "landing.preview.card1.desc":
+      "Balance, income and expenses for the month at a glance.",
     "landing.preview.card2.title": "Budgets",
     "landing.preview.card2.desc": "Track how much you've spent per category.",
     "landing.preview.card3.title": "Full history",
@@ -276,7 +290,8 @@ export const translations = {
 
     "landing.footer.heading": "Footer",
     "landing.footer.rights": "All rights reserved.",
-    "landing.footer.tagline": "Built to help you make better decisions with your money.",
+    "landing.footer.tagline":
+      "Built to help you make better decisions with your money.",
     "landing.footer.product.title": "Product",
     "landing.footer.product.features": "Features",
     "landing.footer.product.preview": "Preview",
@@ -309,7 +324,8 @@ export const translations = {
     "auth.field.passwordNew": "Create a password (min. 6 characters)",
     "auth.field.passwordConfirm": "Confirm your password",
     "auth.field.currency": "Main currency",
-    "auth.currency.hint": "The currency you'll use to track your income and expenses.",
+    "auth.currency.hint":
+      "The currency you'll use to track your income and expenses.",
     "auth.currency.main": "Main currencies",
     "auth.currency.other": "Other currencies",
     "currency.USD": "US Dollar",
@@ -358,9 +374,11 @@ export const translations = {
     "dashboard.error.delete": "Couldn't delete the transaction: {detail}",
     "dashboard.error.category": "Couldn't save the category: {detail}",
     "dashboard.confirm.deleteTitle": "Confirm deletion",
-    "dashboard.confirm.delete": "Are you sure you want to delete this transaction?",
+    "dashboard.confirm.delete":
+      "Are you sure you want to delete this transaction?",
     "category.confirm.deleteTitle": "Confirm deletion",
-    "category.confirm.delete": "Delete this category? Existing transactions will not be affected.",
+    "category.confirm.delete":
+      "Delete this category? Existing transactions will not be affected.",
     "goals.confirm.deleteTitle": "Confirm deletion",
     "goals.confirm.delete": "Delete this savings goal?",
     "common.dialog.cancel": "Cancel",
@@ -406,7 +424,8 @@ export const translations = {
     "landing.stats.tracked": "Registrado na plataforma",
     "landing.stats.rating": "Avaliação média",
 
-    "landing.features.title": "Tudo o que você precisa para assumir o controle do seu dinheiro",
+    "landing.features.title":
+      "Tudo o que você precisa para assumir o controle do seu dinheiro",
     "landing.features.subtitle":
       "Organize suas receitas, controle suas despesas e tome melhores decisões financeiras em um só lugar.",
     "landing.features.tracking.title": "Registre cada movimento",
@@ -432,9 +451,11 @@ export const translations = {
     "landing.preview.subtitle":
       "Um painel limpo e direto assim que você entra: seus números, seus movimentos e seus orçamentos, tudo à vista.",
     "landing.preview.card1.title": "Painel de movimentos",
-    "landing.preview.card1.desc": "Saldo, receitas e despesas do mês em um relance.",
+    "landing.preview.card1.desc":
+      "Saldo, receitas e despesas do mês em um relance.",
     "landing.preview.card2.title": "Orçamentos",
-    "landing.preview.card2.desc": "Controle quanto você já gastou por categoria.",
+    "landing.preview.card2.desc":
+      "Controle quanto você já gastou por categoria.",
     "landing.preview.card3.title": "Histórico completo",
     "landing.preview.card3.desc": "Busque, filtre e edite qualquer transação.",
     "landing.preview.balance": "Saldo total",
@@ -443,12 +464,14 @@ export const translations = {
     "landing.preview.budgetUsed": "usado",
 
     "landing.cta.title": "Comece a organizar suas finanças hoje",
-    "landing.cta.subtitle": "Crie sua conta grátis, sem necessidade de cartão de crédito.",
+    "landing.cta.subtitle":
+      "Crie sua conta grátis, sem necessidade de cartão de crédito.",
     "landing.cta.button": "Criar minha conta grátis",
 
     "landing.footer.heading": "Rodapé",
     "landing.footer.rights": "Todos os direitos reservados.",
-    "landing.footer.tagline": "Feito para ajudar você a tomar melhores decisões com seu dinheiro.",
+    "landing.footer.tagline":
+      "Feito para ajudar você a tomar melhores decisões com seu dinheiro.",
     "landing.footer.product.title": "Produto",
     "landing.footer.product.features": "Recursos",
     "landing.footer.product.preview": "Prévia",
@@ -467,13 +490,15 @@ export const translations = {
     "auth.tagline.title": "Controle seu dinheiro com total clareza.",
     "auth.tagline.subtitle":
       "Um só lugar para suas receitas, despesas e orçamentos — sincronizado e sempre à mão.",
-    "auth.tagline.secure": "Seus dados são armazenados criptografados na sua própria conta.",
+    "auth.tagline.secure":
+      "Seus dados são armazenados criptografados na sua própria conta.",
     "auth.backToHome": "Voltar ao início",
     "auth.tab.login": "Entrar",
     "auth.tab.register": "Criar conta",
     "auth.title.login": "Bem-vindo de volta",
     "auth.title.register": "Crie sua conta",
-    "auth.subtitle.login": "Digite seus dados para continuar com suas finanças.",
+    "auth.subtitle.login":
+      "Digite seus dados para continuar com suas finanças.",
     "auth.subtitle.register": "É grátis e leva menos de um minuto.",
     "auth.field.name": "Nome completo",
     "auth.field.email": "seuemail@exemplo.com",
@@ -481,7 +506,8 @@ export const translations = {
     "auth.field.passwordNew": "Crie uma senha (mín. 6 caracteres)",
     "auth.field.passwordConfirm": "Confirme sua senha",
     "auth.field.currency": "Moeda principal",
-    "auth.currency.hint": "Em que moeda você vai registrar suas receitas e despesas.",
+    "auth.currency.hint":
+      "Em que moeda você vai registrar suas receitas e despesas.",
     "auth.currency.main": "Principais",
     "auth.currency.other": "Outras moedas",
     "currency.USD": "Dólar americano",
@@ -524,15 +550,19 @@ export const translations = {
     "dashboard.history.title": "Histórico de Movimentos",
     "dashboard.history.count.one": "transação",
     "dashboard.history.count.other": "transações",
-    "dashboard.error.load": "Não foi possível conectar ao servidor. Detalhe: {detail}",
+    "dashboard.error.load":
+      "Não foi possível conectar ao servidor. Detalhe: {detail}",
     "dashboard.error.budget": "Não foi possível salvar o orçamento: {detail}",
-    "dashboard.error.transaction": "Não foi possível salvar a transação: {detail}",
+    "dashboard.error.transaction":
+      "Não foi possível salvar a transação: {detail}",
     "dashboard.error.delete": "Não foi possível excluir a transação: {detail}",
     "dashboard.error.category": "Não foi possível salvar a categoria: {detail}",
     "dashboard.confirm.deleteTitle": "Confirmar exclusão",
-    "dashboard.confirm.delete": "Tem certeza de que deseja excluir este movimento?",
+    "dashboard.confirm.delete":
+      "Tem certeza de que deseja excluir este movimento?",
     "category.confirm.deleteTitle": "Confirmar exclusão",
-    "category.confirm.delete": "Excluir esta categoria? As transações existentes não serão afetadas.",
+    "category.confirm.delete":
+      "Excluir esta categoria? As transações existentes não serão afetadas.",
     "goals.confirm.deleteTitle": "Confirmar exclusão",
     "goals.confirm.delete": "Excluir esta meta de economia?",
     "common.dialog.cancel": "Cancelar",
@@ -578,7 +608,8 @@ export const translations = {
     "landing.stats.tracked": "Suivi sur la plateforme",
     "landing.stats.rating": "Note moyenne",
 
-    "landing.features.title": "Tout ce dont vous avez besoin pour prendre le contrôle de votre argent",
+    "landing.features.title":
+      "Tout ce dont vous avez besoin pour prendre le contrôle de votre argent",
     "landing.features.subtitle":
       "Organisez vos revenus, contrôlez vos dépenses et prenez de meilleures décisions financières depuis un seul endroit.",
     "landing.features.tracking.title": "Enregistrez chaque transaction",
@@ -604,23 +635,28 @@ export const translations = {
     "landing.preview.subtitle":
       "Un tableau de bord clair dès la connexion : vos chiffres, vos transactions et vos budgets, tout en un coup d'œil.",
     "landing.preview.card1.title": "Panneau des transactions",
-    "landing.preview.card1.desc": "Solde, revenus et dépenses du mois en un coup d'œil.",
+    "landing.preview.card1.desc":
+      "Solde, revenus et dépenses du mois en un coup d'œil.",
     "landing.preview.card2.title": "Budgets",
-    "landing.preview.card2.desc": "Suivez ce que vous avez dépensé par catégorie.",
+    "landing.preview.card2.desc":
+      "Suivez ce que vous avez dépensé par catégorie.",
     "landing.preview.card3.title": "Historique complet",
-    "landing.preview.card3.desc": "Recherchez, filtrez et modifiez n'importe quelle transaction.",
+    "landing.preview.card3.desc":
+      "Recherchez, filtrez et modifiez n'importe quelle transaction.",
     "landing.preview.balance": "Solde total",
     "landing.preview.income": "Revenus",
     "landing.preview.expenses": "Dépenses",
     "landing.preview.budgetUsed": "utilisé",
 
     "landing.cta.title": "Commencez à organiser vos finances dès aujourd'hui",
-    "landing.cta.subtitle": "Créez votre compte gratuit, sans carte bancaire nécessaire.",
+    "landing.cta.subtitle":
+      "Créez votre compte gratuit, sans carte bancaire nécessaire.",
     "landing.cta.button": "Créer mon compte gratuit",
 
     "landing.footer.heading": "Pied de page",
     "landing.footer.rights": "Tous droits réservés.",
-    "landing.footer.tagline": "Conçu pour vous aider à mieux gérer votre argent.",
+    "landing.footer.tagline":
+      "Conçu pour vous aider à mieux gérer votre argent.",
     "landing.footer.product.title": "Produit",
     "landing.footer.product.features": "Fonctionnalités",
     "landing.footer.product.preview": "Aperçu",
@@ -639,13 +675,15 @@ export const translations = {
     "auth.tagline.title": "Maîtrisez votre argent en toute clarté.",
     "auth.tagline.subtitle":
       "Un seul endroit pour vos revenus, dépenses et budgets — synchronisé et toujours à portée de main.",
-    "auth.tagline.secure": "Vos données sont stockées chiffrées dans votre propre compte.",
+    "auth.tagline.secure":
+      "Vos données sont stockées chiffrées dans votre propre compte.",
     "auth.backToHome": "Retour à l'accueil",
     "auth.tab.login": "Se connecter",
     "auth.tab.register": "Créer un compte",
     "auth.title.login": "Content de vous revoir",
     "auth.title.register": "Créez votre compte",
-    "auth.subtitle.login": "Entrez vos informations pour continuer avec vos finances.",
+    "auth.subtitle.login":
+      "Entrez vos informations pour continuer avec vos finances.",
     "auth.subtitle.register": "C'est gratuit et prend moins d'une minute.",
     "auth.field.name": "Nom complet",
     "auth.field.email": "vous@exemple.com",
@@ -653,7 +691,8 @@ export const translations = {
     "auth.field.passwordNew": "Créez un mot de passe (min. 6 caractères)",
     "auth.field.passwordConfirm": "Confirmez votre mot de passe",
     "auth.field.currency": "Devise principale",
-    "auth.currency.hint": "Devise dans laquelle vous suivrez vos revenus et dépenses.",
+    "auth.currency.hint":
+      "Devise dans laquelle vous suivrez vos revenus et dépenses.",
     "auth.currency.main": "Principales",
     "auth.currency.other": "Autres devises",
     "currency.USD": "Dollar américain",
@@ -679,7 +718,8 @@ export const translations = {
       "Pas de comptes externes : votre email et mot de passe sont stockés en toute sécurité dans notre base de données.",
     "auth.error.required": "Renseignez votre email et mot de passe.",
     "auth.error.name": "Dites-nous votre nom.",
-    "auth.error.passwordLength": "Le mot de passe doit contenir au moins 6 caractères.",
+    "auth.error.passwordLength":
+      "Le mot de passe doit contenir au moins 6 caractères.",
     "auth.error.passwordMatch": "Les mots de passe ne correspondent pas.",
     "auth.error.generic": "Une erreur s'est produite. Veuillez réessayer.",
 
@@ -696,15 +736,20 @@ export const translations = {
     "dashboard.history.title": "Historique des transactions",
     "dashboard.history.count.one": "transaction",
     "dashboard.history.count.other": "transactions",
-    "dashboard.error.load": "Impossible de se connecter au serveur. Détail : {detail}",
+    "dashboard.error.load":
+      "Impossible de se connecter au serveur. Détail : {detail}",
     "dashboard.error.budget": "Impossible d'enregistrer le budget : {detail}",
-    "dashboard.error.transaction": "Impossible d'enregistrer la transaction : {detail}",
-    "dashboard.error.delete": "Impossible de supprimer la transaction : {detail}",
-    "dashboard.error.category": "Impossible d'enregistrer la catégorie : {detail}",
+    "dashboard.error.transaction":
+      "Impossible d'enregistrer la transaction : {detail}",
+    "dashboard.error.delete":
+      "Impossible de supprimer la transaction : {detail}",
+    "dashboard.error.category":
+      "Impossible d'enregistrer la catégorie : {detail}",
     "dashboard.confirm.deleteTitle": "Confirmer la suppression",
     "dashboard.confirm.delete": "Voulez-vous vraiment supprimer ce mouvement ?",
     "category.confirm.deleteTitle": "Confirmer la suppression",
-    "category.confirm.delete": "Supprimer cette catégorie ? Les transactions existantes ne seront pas affectées.",
+    "category.confirm.delete":
+      "Supprimer cette catégorie ? Les transactions existantes ne seront pas affectées.",
     "goals.confirm.deleteTitle": "Confirmer la suppression",
     "goals.confirm.delete": "Supprimer cet objectif d'épargne ?",
     "common.dialog.cancel": "Annuler",

@@ -72,22 +72,33 @@ export const RESOURCE_TEXTS = {
       "fondo-de-emergencia": "Qué es un fondo de emergencia",
       "como-eliminar-deudas": "Cómo eliminar deudas",
       "errores-financieros": "Errores financieros comunes",
-      "educacion-financiera-estudiantes": "Educación financiera para estudiantes",
+      "educacion-financiera-estudiantes":
+        "Educación financiera para estudiantes",
       "gastos-hormiga": "Cómo controlar gastos hormiga",
       "metodos-de-ahorro": "Métodos de ahorro",
       "glosario-financiero": "Glosario financiero",
     },
     descriptions: {
-      "como-crear-presupuesto": "Aprende a diseñar y mantener un presupuesto personal paso a paso.",
-      "regla-50-30-20": "Distribuye tus ingresos de forma inteligente con esta regla probada.",
-      "como-ahorrar-dinero": "Estrategias prácticas para construir un hábito de ahorro sólido.",
-      "fondo-de-emergencia": "Descubre por qué es esencial y cómo empezar el tuyo hoy.",
-      "como-eliminar-deudas": "Métodos efectivos para salir de deudas y recuperar tu libertad financiera.",
-      "errores-financieros": "Identifica y evita los errores que más afectan tu economía personal.",
-      "educacion-financiera-estudiantes": "Conceptos básicos de finanzas pensados para jóvenes y estudiantes.",
-      "gastos-hormiga": "Detecta esos pequeños gastos diarios que drenan tu presupuesto sin que te des cuenta.",
-      "metodos-de-ahorro": "Conoce los métodos de ahorro más populares y elige el que mejor se adapte a ti.",
-      "glosario-financiero": "Domina el vocabulario financiero clave con definiciones claras y sencillas.",
+      "como-crear-presupuesto":
+        "Aprende a diseñar y mantener un presupuesto personal paso a paso.",
+      "regla-50-30-20":
+        "Distribuye tus ingresos de forma inteligente con esta regla probada.",
+      "como-ahorrar-dinero":
+        "Estrategias prácticas para construir un hábito de ahorro sólido.",
+      "fondo-de-emergencia":
+        "Descubre por qué es esencial y cómo empezar el tuyo hoy.",
+      "como-eliminar-deudas":
+        "Métodos efectivos para salir de deudas y recuperar tu libertad financiera.",
+      "errores-financieros":
+        "Identifica y evita los errores que más afectan tu economía personal.",
+      "educacion-financiera-estudiantes":
+        "Conceptos básicos de finanzas pensados para jóvenes y estudiantes.",
+      "gastos-hormiga":
+        "Detecta esos pequeños gastos diarios que drenan tu presupuesto sin que te des cuenta.",
+      "metodos-de-ahorro":
+        "Conoce los métodos de ahorro más populares y elige el que mejor se adapte a ti.",
+      "glosario-financiero":
+        "Domina el vocabulario financiero clave con definiciones claras y sencillas.",
     },
     detailTitles: {
       "como-crear-presupuesto": "Cómo crear un presupuesto",
@@ -96,7 +107,8 @@ export const RESOURCE_TEXTS = {
       "fondo-de-emergencia": "Qué es un fondo de emergencia",
       "como-eliminar-deudas": "Cómo eliminar deudas",
       "errores-financieros": "Errores financieros comunes",
-      "educacion-financiera-estudiantes": "Educación financiera para estudiantes",
+      "educacion-financiera-estudiantes":
+        "Educación financiera para estudiantes",
       "gastos-hormiga": "Cómo controlar gastos hormiga",
       "metodos-de-ahorro": "Métodos de ahorro",
       "glosario-financiero": "Glosario financiero",
@@ -139,7 +151,8 @@ export const RESOURCE_TEXTS = {
   en: {
     resourcePage: {
       title: "Financial resources",
-      subtitle: "Guides and articles to improve your money skills step by step.",
+      subtitle:
+        "Guides and articles to improve your money skills step by step.",
       readResource: "Read resource",
       backToResources: "View all resources",
       notFoundTitle: "Resource not found",
@@ -161,16 +174,26 @@ export const RESOURCE_TEXTS = {
       "glosario-financiero": "Financial glossary",
     },
     descriptions: {
-      "como-crear-presupuesto": "Learn how to design and maintain a personal budget step by step.",
-      "regla-50-30-20": "Distribute your income intelligently with this proven rule.",
-      "como-ahorrar-dinero": "Practical strategies to build a strong savings habit.",
-      "fondo-de-emergencia": "Discover why it is essential and how to start yours today.",
-      "como-eliminar-deudas": "Effective methods to get out of debt and regain financial freedom.",
-      "errores-financieros": "Identify and avoid the mistakes that most affect your personal finances.",
-      "educacion-financiera-estudiantes": "Basic finance concepts designed for young people and students.",
-      "gastos-hormiga": "Detect those small daily expenses that silently drain your budget.",
-      "metodos-de-ahorro": "Learn the most popular saving methods and choose the one that suits you best.",
-      "glosario-financiero": "Master key financial vocabulary with clear and simple definitions.",
+      "como-crear-presupuesto":
+        "Learn how to design and maintain a personal budget step by step.",
+      "regla-50-30-20":
+        "Distribute your income intelligently with this proven rule.",
+      "como-ahorrar-dinero":
+        "Practical strategies to build a strong savings habit.",
+      "fondo-de-emergencia":
+        "Discover why it is essential and how to start yours today.",
+      "como-eliminar-deudas":
+        "Effective methods to get out of debt and regain financial freedom.",
+      "errores-financieros":
+        "Identify and avoid the mistakes that most affect your personal finances.",
+      "educacion-financiera-estudiantes":
+        "Basic finance concepts designed for young people and students.",
+      "gastos-hormiga":
+        "Detect those small daily expenses that silently drain your budget.",
+      "metodos-de-ahorro":
+        "Learn the most popular saving methods and choose the one that suits you best.",
+      "glosario-financiero":
+        "Master key financial vocabulary with clear and simple definitions.",
     },
     detailTitles: {
       "como-crear-presupuesto": "How to create a budget",
@@ -222,7 +245,8 @@ export const RESOURCE_TEXTS = {
   pt: {
     resourcePage: {
       title: "Recursos financeiros",
-      subtitle: "Guias e artigos para melhorar sua relação com o dinheiro, passo a passo.",
+      subtitle:
+        "Guias e artigos para melhorar sua relação com o dinheiro, passo a passo.",
       readResource: "Ler recurso",
       backToResources: "Ver todos os recursos",
       notFoundTitle: "Recurso não encontrado",
@@ -244,16 +268,26 @@ export const RESOURCE_TEXTS = {
       "glosario-financiero": "Glossário financeiro",
     },
     descriptions: {
-      "como-crear-presupuesto": "Aprenda a projetar e manter um orçamento pessoal passo a passo.",
-      "regla-50-30-20": "Distribua sua renda de forma inteligente com esta regra comprovada.",
-      "como-ahorrar-dinero": "Estratégias práticas para construir um hábito sólido de poupança.",
-      "fondo-de-emergencia": "Descubra por que é essencial e como iniciar o seu hoje.",
-      "como-eliminar-deudas": "Métodos eficazes para sair das dívidas e recuperar sua liberdade financeira.",
-      "errores-financieros": "Identifique e evite os erros que mais afetam suas finanças pessoais.",
-      "educacion-financiera-estudiantes": "Conceitos financeiros básicos pensados para jovens e estudantes.",
-      "gastos-hormiga": "Detecte esses pequenos gastos diários que drenam seu orçamento sem que você perceba.",
-      "metodos-de-ahorro": "Conheça os métodos de poupança mais populares e escolha o que melhor se adapta a você.",
-      "glosario-financiero": "Domine o vocabulário financeiro chave com definições claras e simples.",
+      "como-crear-presupuesto":
+        "Aprenda a projetar e manter um orçamento pessoal passo a passo.",
+      "regla-50-30-20":
+        "Distribua sua renda de forma inteligente com esta regra comprovada.",
+      "como-ahorrar-dinero":
+        "Estratégias práticas para construir um hábito sólido de poupança.",
+      "fondo-de-emergencia":
+        "Descubra por que é essencial e como iniciar o seu hoje.",
+      "como-eliminar-deudas":
+        "Métodos eficazes para sair das dívidas e recuperar sua liberdade financeira.",
+      "errores-financieros":
+        "Identifique e evite os erros que mais afetam suas finanças pessoais.",
+      "educacion-financiera-estudiantes":
+        "Conceitos financeiros básicos pensados para jovens e estudantes.",
+      "gastos-hormiga":
+        "Detecte esses pequenos gastos diários que drenam seu orçamento sem que você perceba.",
+      "metodos-de-ahorro":
+        "Conheça os métodos de poupança mais populares e escolha o que melhor se adapta a você.",
+      "glosario-financiero":
+        "Domine o vocabulário financeiro chave com definições claras e simples.",
     },
     detailTitles: {
       "como-crear-presupuesto": "Como criar um orçamento",
@@ -305,7 +339,8 @@ export const RESOURCE_TEXTS = {
   fr: {
     resourcePage: {
       title: "Ressources financières",
-      subtitle: "Guides et articles pour améliorer votre relation avec l'argent, étape par étape.",
+      subtitle:
+        "Guides et articles pour améliorer votre relation avec l'argent, étape par étape.",
       readResource: "Lire la ressource",
       backToResources: "Voir toutes les ressources",
       notFoundTitle: "Ressource introuvable",
@@ -327,16 +362,26 @@ export const RESOURCE_TEXTS = {
       "glosario-financiero": "Glossaire financier",
     },
     descriptions: {
-      "como-crear-presupuesto": "Apprenez à concevoir et maintenir un budget personnel étape par étape.",
-      "regla-50-30-20": "Répartissez vos revenus intelligemment avec cette règle éprouvée.",
-      "como-ahorrar-dinero": "Stratégies pratiques pour construire une habitude d'épargne solide.",
-      "fondo-de-emergencia": "Découvrez pourquoi c'est essentiel et comment commencer le vôtre aujourd'hui.",
-      "como-eliminar-deudas": "Méthodes efficaces pour sortir des dettes et retrouver votre liberté financière.",
-      "errores-financieros": "Identifiez et évitez les erreurs qui affectent le plus vos finances personnelles.",
-      "educacion-financiera-estudiantes": "Concepts financiers de base pensés pour les jeunes et les étudiants.",
-      "gastos-hormiga": "Détectez ces petites dépenses quotidiennes qui grèvent votre budget sans que vous ne le remarquiez.",
-      "metodos-de-ahorro": "Découvrez les méthodes d'épargne les plus populaires et choisissez celle qui vous convient le mieux.",
-      "glosario-financiero": "Maîtrisez le vocabulaire financier clé avec des définitions claires et simples.",
+      "como-crear-presupuesto":
+        "Apprenez à concevoir et maintenir un budget personnel étape par étape.",
+      "regla-50-30-20":
+        "Répartissez vos revenus intelligemment avec cette règle éprouvée.",
+      "como-ahorrar-dinero":
+        "Stratégies pratiques pour construire une habitude d'épargne solide.",
+      "fondo-de-emergencia":
+        "Découvrez pourquoi c'est essentiel et comment commencer le vôtre aujourd'hui.",
+      "como-eliminar-deudas":
+        "Méthodes efficaces pour sortir des dettes et retrouver votre liberté financière.",
+      "errores-financieros":
+        "Identifiez et évitez les erreurs qui affectent le plus vos finances personnelles.",
+      "educacion-financiera-estudiantes":
+        "Concepts financiers de base pensés pour les jeunes et les étudiants.",
+      "gastos-hormiga":
+        "Détectez ces petites dépenses quotidiennes qui grèvent votre budget sans que vous ne le remarquiez.",
+      "metodos-de-ahorro":
+        "Découvrez les méthodes d'épargne les plus populaires et choisissez celle qui vous convient le mieux.",
+      "glosario-financiero":
+        "Maîtrisez le vocabulaire financier clé avec des définitions claires et simples.",
     },
     detailTitles: {
       "como-crear-presupuesto": "Comment créer un budget",

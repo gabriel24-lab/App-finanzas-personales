@@ -45,7 +45,9 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
     }
 
     const numericInteger = integerPart.replace(/[^0-9]/g, "") || "0";
-    const formattedInteger = new Intl.NumberFormat("es-CO").format(Number(numericInteger));
+    const formattedInteger = new Intl.NumberFormat("es-CO").format(
+      Number(numericInteger),
+    );
 
     if (decimalPart) {
       return `${formattedInteger},${decimalPart.slice(0, 2)}`;
@@ -60,7 +62,8 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
     return parseFloat(cleaned);
   };
 
-  const categoriesByType = (t) => categories.filter((c) => c.type === t).map((c) => c.name);
+  const categoriesByType = (t) =>
+    categories.filter((c) => c.type === t).map((c) => c.name);
 
   // Sync category options with the current type
   useEffect(() => {
@@ -261,8 +264,10 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
             </div>
           ) : (
             <p className="rounded-2xl border border-dashed border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-500">
-              Todavía no tienes categorías de {type === TRANSACTION_TYPES.income ? "ingreso" : "gasto"}.
-              Ve a la pestaña <strong>Categorías</strong> para crear la primera; solo toma unos segundos.
+              Todavía no tienes categorías de{" "}
+              {type === TRANSACTION_TYPES.income ? "ingreso" : "gasto"}. Ve a la
+              pestaña <strong>Categorías</strong> para crear la primera; solo
+              toma unos segundos.
             </p>
           )}
         </div>

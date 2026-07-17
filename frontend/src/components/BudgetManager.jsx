@@ -29,8 +29,8 @@ export function BudgetManager({
       <div className="space-y-3">
         {expenseCategories.length === 0 && (
           <p className="py-4 text-center text-xs text-neutral-400">
-            Todavía no tienes categorías de gasto. Crea alguna en la pestaña
-            de Categorías para poder asignarle un presupuesto.
+            Todavía no tienes categorías de gasto. Crea alguna en la pestaña de
+            Categorías para poder asignarle un presupuesto.
           </p>
         )}
         {expenseCategories.map((category) => (

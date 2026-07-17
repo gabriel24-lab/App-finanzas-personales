@@ -8,15 +8,15 @@ export const INITIAL_TRANSACTIONS = [
     amount: 2500,
     type: TRANSACTION_TYPES.income,
     category: "Salario",
-    date: "2026-07-01"
+    date: "2026-07-01",
   },
   {
     id: "mock-2",
     description: "Compra de Supermercado",
-    amount: 154.30,
+    amount: 154.3,
     type: TRANSACTION_TYPES.expense,
     category: "Comida",
-    date: "2026-07-05"
+    date: "2026-07-05",
   },
   {
     id: "mock-3",
@@ -24,13 +24,21 @@ export const INITIAL_TRANSACTIONS = [
     amount: 15.99,
     type: TRANSACTION_TYPES.expense,
     category: "Entretenimiento",
-    date: "2026-07-09"
-  }
+    date: "2026-07-09",
+  },
 ];
 
 export const CATEGORIES = {
   income: ["Salario", "Freelance", "Inversiones", "Otros Ingresos"],
-  expense: ["Comida", "Transporte", "Educación", "Salud", "Hogar", "Entretenimiento", "Otros Gastos"]
+  expense: [
+    "Comida",
+    "Transporte",
+    "Educación",
+    "Salud",
+    "Hogar",
+    "Entretenimiento",
+    "Otros Gastos",
+  ],
 };
 
 /** @type {import("./types").BudgetMap} */

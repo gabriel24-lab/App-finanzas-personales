@@ -51,7 +51,9 @@ export function ConfirmDialog({
                 <h2 className="text-base font-semibold text-neutral-900">
                   {title || t("common.dialog.title")}
                 </h2>
-                <p className="mt-3 text-sm leading-6 text-neutral-600">{message}</p>
+                <p className="mt-3 text-sm leading-6 text-neutral-600">
+                  {message}
+                </p>
               </div>
               <div className="flex items-center gap-3 border-t border-neutral-100 bg-neutral-50 px-4 py-4">
                 <button

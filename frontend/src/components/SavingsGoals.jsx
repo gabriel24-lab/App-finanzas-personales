@@ -8,12 +8,6 @@ import { useLanguage } from "../context/LanguageContext";
 const easeOut = [0.22, 1, 0.36, 1];
 const STORAGE_PREFIX = "app_finanzas_goals_";
 
-// NOTA PARA EL EQUIPO: hoy las metas se guardan en localStorage porque el
-// backend todavía no tiene un modelo "Goal". Funciona bien para un solo
-// dispositivo/navegador, pero no sincroniza entre dispositivos. Cuando se
-// quiera llevar a producción de verdad, lo ideal es migrar esto a un
-// endpoint /api/goals igual que budgets o categories.
-
 function loadGoals(userId) {
   try {
     const raw = localStorage.getItem(`${STORAGE_PREFIX}${userId}`);
@@ -142,7 +136,10 @@ function GoalForm({ onCancel, onSubmit }) {
 function GoalCard({ goal, formatCurrency, onAddFunds, onDelete }) {
   const [addingFunds, setAddingFunds] = useState(false);
   const [amount, setAmount] = useState("");
-  const percentage = Math.min((goal.currentAmount / goal.targetAmount) * 100, 100);
+  const percentage = Math.min(
+    (goal.currentAmount / goal.targetAmount) * 100,
+    100,
+  );
   const completed = goal.currentAmount >= goal.targetAmount;
 
   const handleAdd = (e) => {
@@ -176,10 +173,14 @@ function GoalCard({ goal, formatCurrency, onAddFunds, onDelete }) {
             )}
           </div>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-neutral-800">{goal.name}</p>
+            <p className="truncate text-sm font-semibold text-neutral-800">
+              {goal.name}
+            </p>
             <p className="text-xs text-neutral-500">
               {formatCurrency(goal.currentAmount)}{" "}
-              <span className="text-neutral-400">/ {formatCurrency(goal.targetAmount)}</span>
+              <span className="text-neutral-400">
+                / {formatCurrency(goal.targetAmount)}
+              </span>
             </p>
           </div>
         </div>
@@ -205,7 +206,9 @@ function GoalCard({ goal, formatCurrency, onAddFunds, onDelete }) {
 
       <div className="mt-2 flex items-center justify-between">
         <span className="text-[11px] font-semibold text-neutral-500">
-          {completed ? "¡Meta completada! 🎉" : `${percentage.toFixed(0)}% completado`}
+          {completed
+            ? "¡Meta completada! 🎉"
+            : `${percentage.toFixed(0)}% completado`}
         </span>
         {!completed &&
           (addingFunds ? (
@@ -280,7 +283,10 @@ export function SavingsGoals({ userId, wallet }) {
     setGoals((prev) =>
       prev.map((g) =>
         g.id === id
-          ? { ...g, currentAmount: Math.min(g.currentAmount + amount, g.targetAmount) }
+          ? {
+              ...g,
+              currentAmount: Math.min(g.currentAmount + amount, g.targetAmount),
+            }
           : g,
       ),
     );
@@ -322,12 +328,14 @@ export function SavingsGoals({ userId, wallet }) {
         )}
       </div>
       <p className="mb-4 text-xs text-neutral-500">
-        Ponle nombre y monto a lo que quieres lograr — unas vacaciones, un
-        fondo de emergencia, un computador nuevo — y ve tu progreso.
+        Ponle nombre y monto a lo que quieres lograr — unas vacaciones, un fondo
+        de emergencia, un computador nuevo — y ve tu progreso.
       </p>
 
       <AnimatePresence>
-        {adding && <GoalForm onCancel={() => setAdding(false)} onSubmit={handleCreate} />}
+        {adding && (
+          <GoalForm onCancel={() => setAdding(false)} onSubmit={handleCreate} />
+        )}
       </AnimatePresence>
 
       <div className="mt-3 space-y-3">
@@ -349,8 +357,8 @@ export function SavingsGoals({ userId, wallet }) {
               Todavía no tienes metas de ahorro
             </p>
             <p className="mx-auto mt-1 max-w-xs text-xs text-neutral-500">
-              Por ejemplo: "Vacaciones — $2.000.000". Usa el botón "Nueva
-              meta" para crear la primera.
+              Por ejemplo: "Vacaciones — $2.000.000". Usa el botón "Nueva meta"
+              para crear la primera.
             </p>
           </div>
         )}

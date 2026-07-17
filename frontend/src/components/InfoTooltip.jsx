@@ -1,20 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { HelpCircle } from "lucide-react";
 
-/**
- * Pequeño ícono de ayuda contextual ("?") que muestra una explicación breve
- * al pasar el mouse, al enfocar con teclado (Tab) o al tocar en móvil.
- *
- * Por qué existe:
- * Personas que ya usan apps de finanzas no necesitan explicaciones, pero
- * quienes recién empiezan sí. En vez de agregar texto largo permanente
- * (que estorba a los usuarios avanzados) o esconder el significado por
- * completo (que confunde a los principiantes), este componente aplica
- * "divulgación progresiva": la ayuda está siempre disponible a un toque
- * de distancia, pero nunca se impone.
- *
- * Accesible: funciona con teclado, tiene aria-label y role="tooltip".
- */
 export function InfoTooltip({ text, label = "Más información" }) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);

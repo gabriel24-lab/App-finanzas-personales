@@ -49,11 +49,17 @@ function TrendBadge({ value, label }) {
   const isUp = value > 0;
   const isDown = value < 0;
   const Icon = isUp ? ArrowUpRight : isDown ? ArrowDownRight : Minus;
-  const color = isUp ? "text-rose-600 bg-rose-50" : isDown ? "text-emerald-600 bg-emerald-50" : "text-neutral-500 bg-neutral-100";
+  const color = isUp
+    ? "text-rose-600 bg-rose-50"
+    : isDown
+      ? "text-emerald-600 bg-emerald-50"
+      : "text-neutral-500 bg-neutral-100";
 
   return (
     <div className="flex items-center gap-2">
-      <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${color}`}>
+      <span
+        className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${color}`}
+      >
         <Icon className="h-3 w-3" />
         {value > 0 ? "+" : ""}
         {value}%
@@ -134,7 +140,12 @@ export function ReportsView({ token, wallet }) {
       try {
         if (format === "pdf") {
           const now = new Date();
-          await downloadPDFReport(token, now.getMonth() + 1, now.getFullYear(), walletId);
+          await downloadPDFReport(
+            token,
+            now.getMonth() + 1,
+            now.getFullYear(),
+            walletId,
+          );
         } else {
           await exportTransactions(token, format, { walletId });
         }
@@ -144,20 +155,33 @@ export function ReportsView({ token, wallet }) {
         setExporting(null);
       }
     },
-    [token, walletId]
+    [token, walletId],
   );
 
-  const comparisonChartData = comparative?.categoryComparison?.slice(0, 8).map((c) => ({
-    name: c.category.length > 12 ? `${c.category.slice(0, 12)}…` : c.category,
-    actual: c.current,
-    anterior: c.previous,
-  })) || [];
+  const comparisonChartData =
+    comparative?.categoryComparison?.slice(0, 8).map((c) => ({
+      name: c.category.length > 12 ? `${c.category.slice(0, 12)}…` : c.category,
+      actual: c.current,
+      anterior: c.previous,
+    })) || [];
 
   const summaryChartData = comparative
     ? [
-        { name: "Ingresos", actual: comparative.currentMonth.income, anterior: comparative.previousMonth.income },
-        { name: "Gastos", actual: comparative.currentMonth.expense, anterior: comparative.previousMonth.expense },
-        { name: "Neto", actual: comparative.currentMonth.net, anterior: comparative.previousMonth.net },
+        {
+          name: "Ingresos",
+          actual: comparative.currentMonth.income,
+          anterior: comparative.previousMonth.income,
+        },
+        {
+          name: "Gastos",
+          actual: comparative.currentMonth.expense,
+          anterior: comparative.previousMonth.expense,
+        },
+        {
+          name: "Neto",
+          actual: comparative.currentMonth.net,
+          anterior: comparative.previousMonth.net,
+        },
       ]
     : [];
 
@@ -185,7 +209,9 @@ export function ReportsView({ token, wallet }) {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-lg font-bold text-neutral-900">Reportes</h2>
-          <p className="text-sm text-neutral-500">Comparativos, proyecciones y exportación</p>
+          <p className="text-sm text-neutral-500">
+            Comparativos, proyecciones y exportación
+          </p>
         </div>
         <ExportButtons onExport={handleExport} exporting={exporting} />
       </div>
@@ -197,17 +223,39 @@ export function ReportsView({ token, wallet }) {
         <div className="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-neutral-500" />
-            <h3 className="text-sm font-bold text-neutral-800">Mes actual vs anterior</h3>
+            <h3 className="text-sm font-bold text-neutral-800">
+              Mes actual vs anterior
+            </h3>
           </div>
 
           <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
             {[
-              { label: "Ingresos", curr: comparative.currentMonth.income, trend: comparative.trends.incomeChangePercent, color: "text-emerald-600" },
-              { label: "Gastos", curr: comparative.currentMonth.expense, trend: comparative.trends.expenseChangePercent, color: "text-rose-600" },
-              { label: "Balance neto", curr: comparative.currentMonth.net, trend: comparative.trends.netChangePercent, color: "text-brand-800" },
+              {
+                label: "Ingresos",
+                curr: comparative.currentMonth.income,
+                trend: comparative.trends.incomeChangePercent,
+                color: "text-emerald-600",
+              },
+              {
+                label: "Gastos",
+                curr: comparative.currentMonth.expense,
+                trend: comparative.trends.expenseChangePercent,
+                color: "text-rose-600",
+              },
+              {
+                label: "Balance neto",
+                curr: comparative.currentMonth.net,
+                trend: comparative.trends.netChangePercent,
+                color: "text-brand-800",
+              },
             ].map((item) => (
-              <div key={item.label} className="rounded-2xl border border-neutral-100 bg-neutral-50 p-4">
-                <p className="text-xs font-medium text-neutral-500">{item.label}</p>
+              <div
+                key={item.label}
+                className="rounded-2xl border border-neutral-100 bg-neutral-50 p-4"
+              >
+                <p className="text-xs font-medium text-neutral-500">
+                  {item.label}
+                </p>
                 <p className={`mt-1 text-xl font-bold ${item.color}`}>
                   {formatCurrency(item.curr, currency)}
                 </p>
@@ -223,12 +271,40 @@ export function ReportsView({ token, wallet }) {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={summaryChartData} barGap={6}>
                   <CartesianGrid vertical={false} stroke="#f0f0f0" />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#a3a3a3" }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#a3a3a3" }} tickFormatter={(v) => (v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v)} />
+                  <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 11, fill: "#a3a3a3" }}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 11, fill: "#a3a3a3" }}
+                    tickFormatter={(v) =>
+                      v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v
+                    }
+                  />
                   <Tooltip formatter={(v) => formatCurrency(v, currency)} />
-                  <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
-                  <Bar dataKey="actual" name="Mes actual" fill="#6366f1" radius={[6, 6, 0, 0]} maxBarSize={28} />
-                  <Bar dataKey="anterior" name="Mes anterior" fill="#d4d4d4" radius={[6, 6, 0, 0]} maxBarSize={28} />
+                  <Legend
+                    iconType="circle"
+                    iconSize={8}
+                    wrapperStyle={{ fontSize: 11 }}
+                  />
+                  <Bar
+                    dataKey="actual"
+                    name="Mes actual"
+                    fill="#6366f1"
+                    radius={[6, 6, 0, 0]}
+                    maxBarSize={28}
+                  />
+                  <Bar
+                    dataKey="anterior"
+                    name="Mes anterior"
+                    fill="#d4d4d4"
+                    radius={[6, 6, 0, 0]}
+                    maxBarSize={28}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -239,7 +315,9 @@ export function ReportsView({ token, wallet }) {
       {/* Gastos por categoría comparativo */}
       {comparisonChartData.length > 0 && (
         <div className="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm">
-          <h3 className="mb-4 text-sm font-bold text-neutral-800">Gastos por categoría</h3>
+          <h3 className="mb-4 text-sm font-bold text-neutral-800">
+            Gastos por categoría
+          </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -253,9 +331,15 @@ export function ReportsView({ token, wallet }) {
               <tbody>
                 {comparative.categoryComparison.slice(0, 10).map((row) => (
                   <tr key={row.category} className="border-b border-neutral-50">
-                    <td className="py-2.5 font-medium text-neutral-800">{row.category}</td>
-                    <td className="py-2.5 text-neutral-600">{formatCurrency(row.current, currency)}</td>
-                    <td className="py-2.5 text-neutral-400">{formatCurrency(row.previous, currency)}</td>
+                    <td className="py-2.5 font-medium text-neutral-800">
+                      {row.category}
+                    </td>
+                    <td className="py-2.5 text-neutral-600">
+                      {formatCurrency(row.current, currency)}
+                    </td>
+                    <td className="py-2.5 text-neutral-400">
+                      {formatCurrency(row.previous, currency)}
+                    </td>
                     <td className="py-2.5">
                       <span
                         className={`text-xs font-semibold ${
@@ -283,7 +367,9 @@ export function ReportsView({ token, wallet }) {
         <div className="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-neutral-500" />
-            <h3 className="text-sm font-bold text-neutral-800">Flujo de caja proyectado</h3>
+            <h3 className="text-sm font-bold text-neutral-800">
+              Flujo de caja proyectado
+            </h3>
           </div>
 
           <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -296,19 +382,28 @@ export function ReportsView({ token, wallet }) {
             <div className="rounded-2xl border border-neutral-100 bg-emerald-50 p-4">
               <p className="text-xs text-emerald-600">Ingresos proyectados</p>
               <p className="mt-1 text-lg font-bold text-emerald-700">
-                {formatCurrency(projection.projection.projectedIncome, currency)}
+                {formatCurrency(
+                  projection.projection.projectedIncome,
+                  currency,
+                )}
               </p>
             </div>
             <div className="rounded-2xl border border-neutral-100 bg-rose-50 p-4">
               <p className="text-xs text-rose-600">Gastos proyectados</p>
               <p className="mt-1 text-lg font-bold text-rose-700">
-                {formatCurrency(projection.projection.projectedExpense, currency)}
+                {formatCurrency(
+                  projection.projection.projectedExpense,
+                  currency,
+                )}
               </p>
             </div>
             <div className="rounded-2xl border border-brand-200 bg-brand-100 p-4">
               <p className="text-xs text-brand-700">Balance fin de mes</p>
               <p className="mt-1 text-lg font-bold text-brand-900">
-                {formatCurrency(projection.projection.projectedEndBalance, currency)}
+                {formatCurrency(
+                  projection.projection.projectedEndBalance,
+                  currency,
+                )}
               </p>
             </div>
           </div>
@@ -318,20 +413,59 @@ export function ReportsView({ token, wallet }) {
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={projection.dailyProjection}>
                   <CartesianGrid vertical={false} stroke="#f0f0f0" />
-                  <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#a3a3a3" }} tickFormatter={(d) => `Día ${d}`} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#a3a3a3" }} tickFormatter={(v) => (v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v)} />
+                  <XAxis
+                    dataKey="day"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 11, fill: "#a3a3a3" }}
+                    tickFormatter={(d) => `Día ${d}`}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 11, fill: "#a3a3a3" }}
+                    tickFormatter={(v) =>
+                      v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v
+                    }
+                  />
                   <Tooltip formatter={(v) => formatCurrency(v, currency)} />
-                  <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
-                  <Area type="monotone" dataKey="optimistic" name="Optimista" fill="#d1fae5" stroke="#10b981" fillOpacity={0.3} />
-                  <Area type="monotone" dataKey="pessimistic" name="Pesimista" fill="#ffe4e6" stroke="#f43f5e" fillOpacity={0.3} />
-                  <Line type="monotone" dataKey="projectedBalance" name="Proyección" stroke="#6366f1" strokeWidth={2} dot={false} />
+                  <Legend
+                    iconType="circle"
+                    iconSize={8}
+                    wrapperStyle={{ fontSize: 11 }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="optimistic"
+                    name="Optimista"
+                    fill="#d1fae5"
+                    stroke="#10b981"
+                    fillOpacity={0.3}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="pessimistic"
+                    name="Pesimista"
+                    fill="#ffe4e6"
+                    stroke="#f43f5e"
+                    fillOpacity={0.3}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="projectedBalance"
+                    name="Proyección"
+                    stroke="#6366f1"
+                    strokeWidth={2}
+                    dot={false}
+                  />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
           )}
 
           <p className="mt-3 text-xs text-neutral-400">
-            Basado en el promedio de los últimos 3 meses. Quedan {projection.projection.daysRemaining} días del mes.
+            Basado en el promedio de los últimos 3 meses. Quedan{" "}
+            {projection.projection.daysRemaining} días del mes.
           </p>
         </div>
       )}

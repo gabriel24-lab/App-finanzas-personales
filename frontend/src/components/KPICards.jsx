@@ -8,7 +8,12 @@ const easeOut = [0.22, 1, 0.36, 1];
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20, scale: 0.98 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: easeOut } },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.5, ease: easeOut },
+  },
 };
 
 const containerVariants = {
@@ -85,10 +90,13 @@ export function KPICards({ transactions = [], wallet }) {
         variants={cardVariants}
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3, ease: easeOut }}
-        className="relative rounded-3xl bg-gradient-to-br from-brand-700 to-brand-950 p-6 text-white shadow-xl shadow-brand-900/20"
+        className="relative rounded-3xl bg-linear-to-br from-brand-700 to-brand-950 p-6 text-white shadow-xl shadow-brand-900/20"
       >
         <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
-          <div data-gsap="kpi-glow" className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-500/20 blur-3xl" />
+          <div
+            data-gsap="kpi-glow"
+            className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-500/20 blur-3xl"
+          />
         </div>
         <div className="relative">
           <div className="flex items-start justify-between">
@@ -160,7 +168,7 @@ export function KPICards({ transactions = [], wallet }) {
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.8, ease: easeOut, delay: 0.15 }}
             style={{ transformOrigin: "left" }}
-            className="h-full w-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600"
+            className="h-full w-full rounded-full bg-linear-to-r from-emerald-400 to-emerald-600"
           />
         </div>
       </motion.div>

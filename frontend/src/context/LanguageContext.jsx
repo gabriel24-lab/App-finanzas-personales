@@ -1,5 +1,16 @@
-import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from "react";
-import { translations, DEFAULT_LANGUAGE, LANGUAGES } from "../i18n/translations";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+} from "react";
+import {
+  translations,
+  DEFAULT_LANGUAGE,
+  LANGUAGES,
+} from "../i18n/translations";
 
 const LANG_KEY = "app_finanzas_lang";
 const LanguageContext = createContext(null);
@@ -37,19 +48,24 @@ export function LanguageProvider({ children }) {
       }
       return str;
     },
-    [lang]
+    [lang],
   );
 
   const value = useMemo(
     () => ({ lang, setLang, t, languages: LANGUAGES }),
-    [lang, setLang, t]
+    [lang, setLang, t],
   );
 
-  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
+  return (
+    <LanguageContext.Provider value={value}>
+      {children}
+    </LanguageContext.Provider>
+  );
 }
 
 export function useLanguage() {
   const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error("useLanguage debe usarse dentro de un <LanguageProvider>");
+  if (!ctx)
+    throw new Error("useLanguage debe usarse dentro de un <LanguageProvider>");
   return ctx;
 }

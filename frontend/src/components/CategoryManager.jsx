@@ -317,8 +317,8 @@ export function CategoryManager({
         </h2>
         <p className="mt-1 text-xs text-neutral-500">
           Crea, renombra o elimina las categorías que usas para clasificar tus
-          ingresos y gastos. Cada una tiene su propio color e ícono para que
-          las reconozcas rápido en tus movimientos.
+          ingresos y gastos. Cada una tiene su propio color e ícono para que las
+          reconozcas rápido en tus movimientos.
         </p>
       </div>
 

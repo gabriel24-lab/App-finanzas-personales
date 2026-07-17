@@ -59,7 +59,14 @@ function Coin({ size, symbol, tone }) {
         strokeWidth="1.5"
         strokeDasharray="2 3"
       />
-      <circle cx="50" cy="48" r="34" fill="none" stroke="rgba(0,0,0,0.12)" strokeWidth="1.5" />
+      <circle
+        cx="50"
+        cy="48"
+        r="34"
+        fill="none"
+        stroke="rgba(0,0,0,0.12)"
+        strokeWidth="1.5"
+      />
       <text
         x="50"
         y="60"
@@ -77,14 +84,86 @@ function Coin({ size, symbol, tone }) {
 }
 
 const COIN_LAYOUT = [
-  { top: "8%", left: "6%", size: 76, symbol: "$", tone: "gold", duration: 6.5, delay: 0, drift: 22 },
-  { top: "62%", left: "3%", size: 54, symbol: "¢", tone: "silver", duration: 5.2, delay: 0.6, drift: 16 },
-  { top: "18%", left: "88%", size: 64, symbol: "€", tone: "indigo", duration: 7, delay: 0.3, drift: 20 },
-  { top: "72%", left: "90%", size: 88, symbol: "$", tone: "gold", duration: 6, delay: 1, drift: 26 },
-  { top: "40%", left: "94%", size: 40, symbol: "¢", tone: "silver", duration: 4.6, delay: 0.2, drift: 14 },
-  { top: "4%", left: "45%", size: 42, symbol: "€", tone: "indigo", duration: 5.6, delay: 0.9, drift: 16 },
-  { top: "82%", left: "40%", size: 50, symbol: "$", tone: "silver", duration: 6.2, delay: 1.4, drift: 18 },
-  { top: "50%", left: "10%", size: 34, symbol: "$", tone: "indigo", duration: 4.8, delay: 1.7, drift: 12 },
+  {
+    top: "8%",
+    left: "6%",
+    size: 76,
+    symbol: "$",
+    tone: "gold",
+    duration: 6.5,
+    delay: 0,
+    drift: 22,
+  },
+  {
+    top: "62%",
+    left: "3%",
+    size: 54,
+    symbol: "¢",
+    tone: "silver",
+    duration: 5.2,
+    delay: 0.6,
+    drift: 16,
+  },
+  {
+    top: "18%",
+    left: "88%",
+    size: 64,
+    symbol: "€",
+    tone: "indigo",
+    duration: 7,
+    delay: 0.3,
+    drift: 20,
+  },
+  {
+    top: "72%",
+    left: "90%",
+    size: 88,
+    symbol: "$",
+    tone: "gold",
+    duration: 6,
+    delay: 1,
+    drift: 26,
+  },
+  {
+    top: "40%",
+    left: "94%",
+    size: 40,
+    symbol: "¢",
+    tone: "silver",
+    duration: 4.6,
+    delay: 0.2,
+    drift: 14,
+  },
+  {
+    top: "4%",
+    left: "45%",
+    size: 42,
+    symbol: "€",
+    tone: "indigo",
+    duration: 5.6,
+    delay: 0.9,
+    drift: 16,
+  },
+  {
+    top: "82%",
+    left: "40%",
+    size: 50,
+    symbol: "$",
+    tone: "silver",
+    duration: 6.2,
+    delay: 1.4,
+    drift: 18,
+  },
+  {
+    top: "50%",
+    left: "10%",
+    size: 34,
+    symbol: "$",
+    tone: "indigo",
+    duration: 4.8,
+    delay: 1.7,
+    drift: 12,
+  },
 ];
 
 // Fondo de monedas flotantes: cada una sube y baja suavemente (no cae),
@@ -95,7 +174,9 @@ export function FloatingCoins({ className = "" }) {
   const coins = useMemo(() => COIN_LAYOUT, []);
 
   return (
-    <div className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}>
+    <div
+      className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+    >
       {coins.map((coin, i) => (
         <motion.div
           key={i}

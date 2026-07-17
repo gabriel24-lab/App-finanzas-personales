@@ -52,8 +52,8 @@ export function TransactionList({
         </h3>
         <p className="mt-1 text-xs text-neutral-500 max-w-xs mx-auto">
           Si acabas de crear tu cuenta, usa el formulario "Agregar movimiento"
-          para registrar tu primer ingreso o gasto. Si esperabas ver algo
-          aquí, prueba a quitar los filtros de búsqueda.
+          para registrar tu primer ingreso o gasto. Si esperabas ver algo aquí,
+          prueba a quitar los filtros de búsqueda.
         </p>
       </div>
     );
@@ -94,62 +94,62 @@ export function TransactionList({
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                     className="group hover:bg-neutral-50/50 transition-colors duration-200"
                   >
-                  {/* Category Icon and Description */}
-                  <td className="py-4 px-4">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border"
-                        style={{
-                          backgroundColor: `${color}14`,
-                          borderColor: `${color}33`,
-                          color,
-                        }}
+                    {/* Category Icon and Description */}
+                    <td className="py-4 px-4">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border"
+                          style={{
+                            backgroundColor: `${color}14`,
+                            borderColor: `${color}33`,
+                            color,
+                          }}
+                        >
+                          <IconComponent className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-neutral-800 text-sm leading-tight">
+                            {transaction.description}
+                          </p>
+                          <span className="inline-flex items-center text-xs text-neutral-500 font-medium mt-0.5">
+                            {transaction.category}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Date */}
+                    <td className="py-4 px-4 align-middle">
+                      <span className="text-neutral-600 text-xs font-medium">
+                        {formatDate(transaction.date)}
+                      </span>
+                    </td>
+
+                    {/* Amount */}
+                    <td className="py-4 px-4 text-right align-middle">
+                      <div className="inline-flex items-center gap-1 font-bold text-sm">
+                        {isIncome ? (
+                          <span className="text-emerald-600 font-bold">
+                            +{formatCurrency(transaction.amount)}
+                          </span>
+                        ) : (
+                          <span className="text-rose-600 font-bold">
+                            -{formatCurrency(transaction.amount)}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+
+                    {/* Actions (Delete button) */}
+                    <td className="py-4 px-4 text-center align-middle">
+                      <button
+                        onClick={() => onDeleteTransaction(transaction.id)}
+                        className="inline-flex items-center justify-center h-8 w-8 text-neutral-400 hover:text-rose-600 rounded-2xl hover:bg-rose-50 border border-transparent hover:border-rose-100 transition-all cursor-pointer"
+                        title="Eliminar transacción"
                       >
-                        <IconComponent className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-neutral-800 text-sm leading-tight">
-                          {transaction.description}
-                        </p>
-                        <span className="inline-flex items-center text-xs text-neutral-500 font-medium mt-0.5">
-                          {transaction.category}
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-
-                  {/* Date */}
-                  <td className="py-4 px-4 align-middle">
-                    <span className="text-neutral-600 text-xs font-medium">
-                      {formatDate(transaction.date)}
-                    </span>
-                  </td>
-
-                  {/* Amount */}
-                  <td className="py-4 px-4 text-right align-middle">
-                    <div className="inline-flex items-center gap-1 font-bold text-sm">
-                      {isIncome ? (
-                        <span className="text-emerald-600 font-bold">
-                          +{formatCurrency(transaction.amount)}
-                        </span>
-                      ) : (
-                        <span className="text-rose-600 font-bold">
-                          -{formatCurrency(transaction.amount)}
-                        </span>
-                      )}
-                    </div>
-                  </td>
-
-                  {/* Actions (Delete button) */}
-                  <td className="py-4 px-4 text-center align-middle">
-                    <button
-                      onClick={() => onDeleteTransaction(transaction.id)}
-                      className="inline-flex items-center justify-center h-8 w-8 text-neutral-400 hover:text-rose-600 rounded-2xl hover:bg-rose-50 border border-transparent hover:border-rose-100 transition-all cursor-pointer"
-                      title="Eliminar transacción"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </td>
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
                   </motion.tr>
                 );
               })}

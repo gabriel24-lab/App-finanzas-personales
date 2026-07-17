@@ -89,7 +89,9 @@ export function TransactionFilters({
         {/* Category Selector */}
         <div className="flex items-center gap-2">
           <Filter className="h-4 w-4 text-neutral-400" />
-          <span className="text-xs text-neutral-500 font-medium">Categoría:</span>
+          <span className="text-xs text-neutral-500 font-medium">
+            Categoría:
+          </span>
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}

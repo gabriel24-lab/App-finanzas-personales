@@ -1,6 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Clock, Tag, CheckCircle2, AlertTriangle, BookOpen } from "lucide-react";
+import {
+  ArrowLeft,
+  Clock,
+  Tag,
+  CheckCircle2,
+  AlertTriangle,
+  BookOpen,
+} from "lucide-react";
 import { PublicPageLayout } from "../components/PublicPageLayout";
 import { RESOURCES } from "./ResourcesPage";
 
@@ -389,10 +396,11 @@ function HeroImage({ resource }) {
         aria-hidden="true"
       />
       <div className="relative flex h-full flex-col justify-end p-8">
-        <resource.Icon className="h-12 w-12 text-white mb-3 drop-shadow-lg" strokeWidth={1.5} />
-        <span
-          className="inline-flex w-fit items-center gap-1.5 rounded-full bg-white/20 backdrop-blur-sm px-3 py-1 text-xs font-bold uppercase tracking-widest text-white"
-        >
+        <resource.Icon
+          className="h-12 w-12 text-white mb-3 drop-shadow-lg"
+          strokeWidth={1.5}
+        />
+        <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-white/20 backdrop-blur-sm px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
           {RESOURCE_CONTENT[resource.slug]?.category}
         </span>
       </div>
@@ -413,7 +421,9 @@ function ContentSection({ section, index }) {
           <BookOpen className="h-3.5 w-3.5 text-neutral-500" />
         </span>
         <div className="flex-1 w-full min-w-0">
-          <h2 className="text-base font-bold text-neutral-900">{section.title}</h2>
+          <h2 className="text-base font-bold text-neutral-900">
+            {section.title}
+          </h2>
           <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-neutral-600">
             {section.body}
           </p>
@@ -440,7 +450,9 @@ function TipsBlock({ tips, color }) {
     >
       <div className="flex items-center gap-2 mb-4">
         <CheckCircle2 className="h-5 w-5" style={{ color }} />
-        <h2 className="text-base font-bold text-neutral-900">Consejos rápidos</h2>
+        <h2 className="text-base font-bold text-neutral-900">
+          Consejos rápidos
+        </h2>
       </div>
       <ul className="space-y-3">
         {tips.map((tip, i) => (
@@ -451,7 +463,9 @@ function TipsBlock({ tips, color }) {
             >
               {i + 1}
             </span>
-            <span className="text-sm leading-relaxed text-neutral-600">{tip}</span>
+            <span className="text-sm leading-relaxed text-neutral-600">
+              {tip}
+            </span>
           </li>
         ))}
       </ul>
@@ -473,7 +487,8 @@ function AlertBanner({ color }) {
     >
       <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" style={{ color }} />
       <p className="text-sm leading-relaxed" style={{ color }}>
-        Este recurso es informativo. Para decisiones financieras importantes, consulta con un profesional certificado.
+        Este recurso es informativo. Para decisiones financieras importantes,
+        consulta con un profesional certificado.
       </p>
     </motion.div>
   );

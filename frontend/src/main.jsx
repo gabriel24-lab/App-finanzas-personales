@@ -1,15 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import '@fontsource/ibm-plex-sans/400.css'
-import '@fontsource/ibm-plex-sans/500.css'
-import '@fontsource/ibm-plex-sans/600.css'
-import '@fontsource/ibm-plex-sans/700.css'
-import './index.css'
-import App from './App.jsx'
-import { AuthProvider } from './context/AuthContext.jsx'
-import { LanguageProvider } from './context/LanguageContext.jsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/ibm-plex-sans/700.css";
+import "./index.css";
+import App from "./App.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
+import { LanguageProvider } from "./context/LanguageContext.jsx";
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <LanguageProvider>
       <AuthProvider>
@@ -17,4 +17,4 @@ createRoot(document.getElementById('root')).render(
       </AuthProvider>
     </LanguageProvider>
   </StrictMode>,
-)
+);

@@ -1,16 +1,16 @@
 import React from "react";
-import { 
-  ArrowRight, 
-  ClipboardList, 
-  PieChart, 
-  PiggyBank, 
-  ShieldCheck, 
-  Scissors, 
-  AlertTriangle, 
-  GraduationCap, 
-  Coffee, 
-  Lightbulb, 
-  Library 
+import {
+  ArrowRight,
+  ClipboardList,
+  PieChart,
+  PiggyBank,
+  ShieldCheck,
+  Scissors,
+  AlertTriangle,
+  GraduationCap,
+  Coffee,
+  Lightbulb,
+  Library,
 } from "lucide-react";
 import { PublicPageLayout } from "../components/PublicPageLayout";
 
@@ -95,28 +95,47 @@ export const RESOURCE_LABELS = {
 };
 
 export const RESOURCE_DESCRIPTIONS = {
-  "como-crear-presupuesto": "Aprende a diseñar y mantener un presupuesto personal paso a paso.",
-  "regla-50-30-20": "Distribuye tus ingresos de forma inteligente con esta regla probada.",
-  "como-ahorrar-dinero": "Estrategias prácticas para construir un hábito de ahorro sólido.",
-  "fondo-de-emergencia": "Descubre por qué es esencial y cómo empezar el tuyo hoy.",
-  "como-eliminar-deudas": "Métodos efectivos para salir de deudas y recuperar tu libertad financiera.",
-  "errores-financieros": "Identifica y evita los errores que más afectan tu economía personal.",
-  "educacion-financiera-estudiantes": "Conceptos básicos de finanzas pensados para jóvenes y estudiantes.",
-  "gastos-hormiga": "Detecta esos pequeños gastos diarios que drenan tu presupuesto sin que te des cuenta.",
-  "metodos-de-ahorro": "Conoce los métodos de ahorro más populares y elige el que mejor se adapte a ti.",
-  "glosario-financiero": "Domina el vocabulario financiero clave con definiciones claras y sencillas.",
+  "como-crear-presupuesto":
+    "Aprende a diseñar y mantener un presupuesto personal paso a paso.",
+  "regla-50-30-20":
+    "Distribuye tus ingresos de forma inteligente con esta regla probada.",
+  "como-ahorrar-dinero":
+    "Estrategias prácticas para construir un hábito de ahorro sólido.",
+  "fondo-de-emergencia":
+    "Descubre por qué es esencial y cómo empezar el tuyo hoy.",
+  "como-eliminar-deudas":
+    "Métodos efectivos para salir de deudas y recuperar tu libertad financiera.",
+  "errores-financieros":
+    "Identifica y evita los errores que más afectan tu economía personal.",
+  "educacion-financiera-estudiantes":
+    "Conceptos básicos de finanzas pensados para jóvenes y estudiantes.",
+  "gastos-hormiga":
+    "Detecta esos pequeños gastos diarios que drenan tu presupuesto sin que te des cuenta.",
+  "metodos-de-ahorro":
+    "Conoce los métodos de ahorro más populares y elige el que mejor se adapte a ti.",
+  "glosario-financiero":
+    "Domina el vocabulario financiero clave con definiciones claras y sencillas.",
 };
 
-const cardBaseClass = "group relative overflow-hidden rounded-3xl shadow-md hover:shadow-2xl transition-all duration-200 hover:-translate-y-1 transform-gpu cursor-pointer";
+const cardBaseClass =
+  "group relative overflow-hidden rounded-3xl shadow-md hover:shadow-2xl transition-all duration-200 hover:-translate-y-1 transform-gpu cursor-pointer";
 
-const ResourceCardComponent = React.memo(function ResourceCard({ resource, onNavigate, className = "" }) {
+const ResourceCardComponent = React.memo(function ResourceCard({
+  resource,
+  onNavigate,
+  className = "",
+}) {
   const title = RESOURCE_LABELS[resource.slug];
   const description = RESOURCE_DESCRIPTIONS[resource.slug];
 
   return (
     <article
       className={`${cardBaseClass} ${className}`}
-      style={{ minHeight: "260px", contain: "layout paint style", contentVisibility: "auto" }}
+      style={{
+        minHeight: "260px",
+        contain: "layout paint style",
+        contentVisibility: "auto",
+      }}
       onClick={() => onNavigate(resource.slug)}
       id={`resource-card-${resource.slug}`}
     >
@@ -151,7 +170,10 @@ const ResourceCardComponent = React.memo(function ResourceCard({ resource, onNav
       <div className="relative flex h-full min-h-65 flex-col justify-end p-6">
         {/* Emoji / Icono en la esquina superior */}
         <div className="absolute top-5 right-5 text-white opacity-95 transition-transform duration-200 group-hover:scale-110">
-          <resource.Icon className="h-10 w-10 sm:h-11 sm:w-11" strokeWidth={1.6} />
+          <resource.Icon
+            className="h-10 w-10 sm:h-11 sm:w-11"
+            strokeWidth={1.6}
+          />
         </div>
 
         <h2 className="text-xl font-bold leading-tight text-white drop-shadow-sm">

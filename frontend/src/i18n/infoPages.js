@@ -4,25 +4,29 @@
 const commonEs = {
   "info.common.backHome": "Volver al inicio",
   "info.common.notFoundTitle": "Página no encontrada",
-  "info.common.notFoundSubtitle": "El enlace que seguiste no existe o fue movido.",
+  "info.common.notFoundSubtitle":
+    "El enlace que seguiste no existe o fue movido.",
 };
 
 const commonEn = {
   "info.common.backHome": "Back to home",
   "info.common.notFoundTitle": "Page not found",
-  "info.common.notFoundSubtitle": "The link you followed does not exist or was moved.",
+  "info.common.notFoundSubtitle":
+    "The link you followed does not exist or was moved.",
 };
 
 const commonPt = {
   "info.common.backHome": "Voltar ao início",
   "info.common.notFoundTitle": "Página não encontrada",
-  "info.common.notFoundSubtitle": "O link que você seguiu não existe ou foi movido.",
+  "info.common.notFoundSubtitle":
+    "O link que você seguiu não existe ou foi movido.",
 };
 
 const commonFr = {
   "info.common.backHome": "Retour à l'accueil",
   "info.common.notFoundTitle": "Page introuvable",
-  "info.common.notFoundSubtitle": "Le lien suivi n'existe pas ou a été déplacé.",
+  "info.common.notFoundSubtitle":
+    "Le lien suivi n'existe pas ou a été déplacé.",
 };
 
 const helpEs = {
@@ -207,7 +211,8 @@ const docsFr = {
 
 const guidesEs = {
   "info.guides.title": "Guías",
-  "info.guides.subtitle": "Pasos concretos para sacarle el máximo provecho a la app desde el primer día.",
+  "info.guides.subtitle":
+    "Pasos concretos para sacarle el máximo provecho a la app desde el primer día.",
   "info.guides.g1.step": "Paso 1",
   "info.guides.g1.title": "Crea tu cuenta",
   "info.guides.g1.body":
@@ -228,7 +233,8 @@ const guidesEs = {
 
 const guidesEn = {
   "info.guides.title": "Guides",
-  "info.guides.subtitle": "Concrete steps to get the most out of the app from day one.",
+  "info.guides.subtitle":
+    "Concrete steps to get the most out of the app from day one.",
   "info.guides.g1.step": "Step 1",
   "info.guides.g1.title": "Create your account",
   "info.guides.g1.body":
@@ -249,7 +255,8 @@ const guidesEn = {
 
 const guidesPt = {
   "info.guides.title": "Guias",
-  "info.guides.subtitle": "Passos práticos para aproveitar o app desde o primeiro dia.",
+  "info.guides.subtitle":
+    "Passos práticos para aproveitar o app desde o primeiro dia.",
   "info.guides.g1.step": "Passo 1",
   "info.guides.g1.title": "Crie sua conta",
   "info.guides.g1.body":
@@ -270,7 +277,8 @@ const guidesPt = {
 
 const guidesFr = {
   "info.guides.title": "Guides",
-  "info.guides.subtitle": "Étapes concrètes pour tirer le meilleur parti de l'app dès le premier jour.",
+  "info.guides.subtitle":
+    "Étapes concrètes pour tirer le meilleur parti de l'app dès le premier jour.",
   "info.guides.g1.step": "Étape 1",
   "info.guides.g1.title": "Créez votre compte",
   "info.guides.g1.body":
@@ -351,7 +359,8 @@ const aboutFr = {
 
 const blogEs = {
   "info.blog.title": "Blog",
-  "info.blog.subtitle": "Novedades del producto, consejos de organización y buenas prácticas financieras.",
+  "info.blog.subtitle":
+    "Novedades del producto, consejos de organización y buenas prácticas financieras.",
   "info.blog.p1.date": "Marzo 2026",
   "info.blog.p1.title": "Categorías personalizadas: tu dinero, a tu manera",
   "info.blog.p1.excerpt":
@@ -371,7 +380,8 @@ const blogEs = {
 
 const blogEn = {
   "info.blog.title": "Blog",
-  "info.blog.subtitle": "Product updates, organization tips, and financial best practices.",
+  "info.blog.subtitle":
+    "Product updates, organization tips, and financial best practices.",
   "info.blog.p1.date": "March 2026",
   "info.blog.p1.title": "Custom categories: your money, your way",
   "info.blog.p1.excerpt":
@@ -391,7 +401,8 @@ const blogEn = {
 
 const blogPt = {
   "info.blog.title": "Blog",
-  "info.blog.subtitle": "Novidades do produto, dicas de organização e boas práticas financeiras.",
+  "info.blog.subtitle":
+    "Novidades do produto, dicas de organização e boas práticas financeiras.",
   "info.blog.p1.date": "Março 2026",
   "info.blog.p1.title": "Categorias personalizadas: seu dinheiro, do seu jeito",
   "info.blog.p1.excerpt":
@@ -411,9 +422,11 @@ const blogPt = {
 
 const blogFr = {
   "info.blog.title": "Blog",
-  "info.blog.subtitle": "Nouveautés produit, conseils d'organisation et bonnes pratiques financières.",
+  "info.blog.subtitle":
+    "Nouveautés produit, conseils d'organisation et bonnes pratiques financières.",
   "info.blog.p1.date": "Mars 2026",
-  "info.blog.p1.title": "Catégories personnalisées : votre argent, à votre façon",
+  "info.blog.p1.title":
+    "Catégories personnalisées : votre argent, à votre façon",
   "info.blog.p1.excerpt":
     "Vous pouvez désormais créer des catégories avec votre propre icône et couleur. Organisez revenus et dépenses selon votre routine réelle.",
   "info.blog.p1.tag": "Produit",
@@ -423,7 +436,8 @@ const blogFr = {
     "Une courte routine hebdomadaire — enregistrer, filtrer, revoir les budgets — évite les surprises de fin de mois.",
   "info.blog.p2.tag": "Éducation",
   "info.blog.p3.date": "Janvier 2026",
-  "info.blog.p3.title": "Pourquoi nous avons commencé par des budgets par catégorie",
+  "info.blog.p3.title":
+    "Pourquoi nous avons commencé par des budgets par catégorie",
   "info.blog.p3.excerpt":
     "Les limites par catégorie transforment des chiffres abstraits en alertes actionnables. Voici la logique derrière ce module.",
   "info.blog.p3.tag": "Design",
@@ -457,7 +471,8 @@ const contactEn = {
   "info.contact.emailLabel": "Support email",
   "info.contact.emailValue": "gabrielmejiasilva5@gmail.com",
   "info.contact.hoursLabel": "Support hours",
-  "info.contact.hoursValue": "Monday to Friday, 9:00 AM – 6:00 PM (Colombia time)",
+  "info.contact.hoursValue":
+    "Monday to Friday, 9:00 AM – 6:00 PM (Colombia time)",
   "info.contact.responseLabel": "Response time",
   "info.contact.responseValue": "24–48 business hours",
   "info.contact.form.name": "Name",

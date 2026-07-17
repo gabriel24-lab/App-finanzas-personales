@@ -48,8 +48,18 @@ const formatCurrency = (value, currencyCode = "COP") =>
   }).format(value);
 
 const MONTH_LABELS = [
-  "Ene", "Feb", "Mar", "Abr", "May", "Jun",
-  "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",
+  "Ene",
+  "Feb",
+  "Mar",
+  "Abr",
+  "May",
+  "Jun",
+  "Jul",
+  "Ago",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dic",
 ];
 
 function filterByRange(transactions, rangeKey) {
@@ -64,7 +74,15 @@ function filterByRange(transactions, rangeKey) {
   return transactions.filter((t) => new Date(t.date) >= cutoff);
 }
 
-function ChartCard({ icon: Icon, title, subtitle, children, empty, emptyLabel, action }) {
+function ChartCard({
+  icon: Icon,
+  title,
+  subtitle,
+  children,
+  empty,
+  emptyLabel,
+  action,
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
@@ -78,14 +96,18 @@ function ChartCard({ icon: Icon, title, subtitle, children, empty, emptyLabel, a
             <Icon className="h-4 w-4 text-neutral-500" />
             {title}
           </h3>
-          {subtitle && <p className="mt-0.5 text-xs text-neutral-500">{subtitle}</p>}
+          {subtitle && (
+            <p className="mt-0.5 text-xs text-neutral-500">{subtitle}</p>
+          )}
         </div>
         {action}
       </div>
 
       {empty ? (
         <div className="flex h-55 flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-200 text-center">
-          <p className="text-sm font-semibold text-neutral-600">Sin datos suficientes</p>
+          <p className="text-sm font-semibold text-neutral-600">
+            Sin datos suficientes
+          </p>
           <p className="mt-1 max-w-55 text-xs text-neutral-400">{emptyLabel}</p>
         </div>
       ) : (
@@ -101,7 +123,9 @@ function CategoryTooltip({ active, payload, currencyCode }) {
   return (
     <div className="rounded-xl border border-neutral-100 bg-white px-3 py-2 text-xs shadow-lg">
       <p className="font-semibold text-neutral-800">{item.name}</p>
-      <p className="mt-0.5 text-neutral-500">{formatCurrency(item.value, currencyCode)}</p>
+      <p className="mt-0.5 text-neutral-500">
+        {formatCurrency(item.value, currencyCode)}
+      </p>
     </div>
   );
 }
@@ -112,8 +136,14 @@ function MonthlyTooltip({ active, payload, label, currencyCode }) {
     <div className="rounded-xl border border-neutral-100 bg-white px-3 py-2 text-xs shadow-lg">
       <p className="mb-1 font-semibold text-neutral-800">{label}</p>
       {payload.map((entry) => (
-        <p key={entry.dataKey} className="flex items-center gap-1.5 text-neutral-500">
-          <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: entry.color }} />
+        <p
+          key={entry.dataKey}
+          className="flex items-center gap-1.5 text-neutral-500"
+        >
+          <span
+            className="inline-block h-2 w-2 rounded-full"
+            style={{ backgroundColor: entry.color }}
+          />
           {entry.name}: {formatCurrency(entry.value, currencyCode)}
         </p>
       ))}
@@ -130,7 +160,9 @@ function RangeSelector({ value, onChange }) {
           type="button"
           onClick={() => onChange(opt.key)}
           className={`rounded-lg px-2.5 py-1 transition-colors cursor-pointer ${
-            value === opt.key ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-400"
+            value === opt.key
+              ? "bg-white text-neutral-900 shadow-sm"
+              : "text-neutral-400"
           }`}
         >
           {opt.label}
@@ -140,14 +172,18 @@ function RangeSelector({ value, onChange }) {
   );
 }
 
-export function DashboardCharts({ transactions = [], categories = [], wallet }) {
+export function DashboardCharts({
+  transactions = [],
+  categories = [],
+  wallet,
+}) {
   const [range, setRange] = useState("6M");
   const [pieScope, setPieScope] = useState("month");
   const currencyCode = wallet?.currency_code || "COP";
 
   const scopedTransactions = useMemo(
     () => filterByRange(transactions, range),
-    [transactions, range]
+    [transactions, range],
   );
 
   const categoryData = useMemo(() => {
@@ -169,11 +205,14 @@ export function DashboardCharts({ transactions = [], categories = [], wallet }) 
 
     return Object.entries(totals)
       .map(([name, value], index) => {
-        const match = categories.find((c) => c.name === name && c.type === "expense");
+        const match = categories.find(
+          (c) => c.name === name && c.type === "expense",
+        );
         return {
           name,
           value,
-          color: match?.color || CATEGORY_COLORS[index % CATEGORY_COLORS.length],
+          color:
+            match?.color || CATEGORY_COLORS[index % CATEGORY_COLORS.length],
         };
       })
       .sort((a, b) => b.value - a.value);
@@ -182,7 +221,16 @@ export function DashboardCharts({ transactions = [], categories = [], wallet }) 
   const totalCategorySpend = categoryData.reduce((sum, c) => sum + c.value, 0);
 
   const monthlyData = useMemo(() => {
-    const monthsBack = range === "1M" ? 1 : range === "3M" ? 3 : range === "6M" ? 6 : range === "1Y" ? 12 : 12;
+    const monthsBack =
+      range === "1M"
+        ? 1
+        : range === "3M"
+          ? 3
+          : range === "6M"
+            ? 6
+            : range === "1Y"
+              ? 12
+              : 12;
     const now = new Date();
     const buckets = [];
 
@@ -237,7 +285,9 @@ export function DashboardCharts({ transactions = [], categories = [], wallet }) 
           <ChartCard
             icon={PieIcon}
             title="Gastos por Categoría"
-            subtitle={pieScope === "month" ? "Mes actual" : "Periodo seleccionado"}
+            subtitle={
+              pieScope === "month" ? "Mes actual" : "Periodo seleccionado"
+            }
             empty={categoryData.length === 0}
             emptyLabel="Registra algunos gastos para ver la distribución por categoría."
             action={
@@ -277,7 +327,9 @@ export function DashboardCharts({ transactions = [], categories = [], wallet }) 
                       <Cell key={entry.name} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip content={<CategoryTooltip currencyCode={currencyCode} />} />
+                  <Tooltip
+                    content={<CategoryTooltip currencyCode={currencyCode} />}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -285,16 +337,27 @@ export function DashboardCharts({ transactions = [], categories = [], wallet }) 
             {categoryData.length > 0 && (
               <div className="mt-2 space-y-1.5 border-t border-neutral-100 pt-3">
                 {categoryData.slice(0, 5).map((entry) => {
-                  const pct = totalCategorySpend > 0 ? (entry.value / totalCategorySpend) * 100 : 0;
+                  const pct =
+                    totalCategorySpend > 0
+                      ? (entry.value / totalCategorySpend) * 100
+                      : 0;
                   return (
-                    <div key={entry.name} className="flex items-center justify-between text-xs">
+                    <div
+                      key={entry.name}
+                      className="flex items-center justify-between text-xs"
+                    >
                       <span className="flex items-center gap-1.5 font-medium text-neutral-700">
-                        <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: entry.color }} />
+                        <span
+                          className="inline-block h-2 w-2 rounded-full"
+                          style={{ backgroundColor: entry.color }}
+                        />
                         {entry.name}
                       </span>
                       <span className="text-neutral-400">
                         {formatCurrency(entry.value, currencyCode)}{" "}
-                        <span className="text-neutral-300">· {pct.toFixed(0)}%</span>
+                        <span className="text-neutral-300">
+                          · {pct.toFixed(0)}%
+                        </span>
                       </span>
                     </div>
                   );
@@ -314,19 +377,51 @@ export function DashboardCharts({ transactions = [], categories = [], wallet }) 
           >
             <div className="h-66">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyData} barGap={4} margin={{ top: 4, right: 4, left: -18, bottom: 0 }}>
+                <BarChart
+                  data={monthlyData}
+                  barGap={4}
+                  margin={{ top: 4, right: 4, left: -18, bottom: 0 }}
+                >
                   <CartesianGrid vertical={false} stroke="#f0f0f0" />
-                  <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#a3a3a3" }} />
+                  <XAxis
+                    dataKey="label"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 11, fill: "#a3a3a3" }}
+                  />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
                     tick={{ fontSize: 11, fill: "#a3a3a3" }}
-                    tickFormatter={(v) => (v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v)}
+                    tickFormatter={(v) =>
+                      v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v
+                    }
                   />
-                  <Tooltip cursor={{ fill: "#fafafa" }} content={<MonthlyTooltip currencyCode={currencyCode} />} />
-                  <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11, color: "#737373" }} />
-                  <Bar dataKey="income" name="Ingresos" fill="#10b981" radius={[6, 6, 0, 0]} maxBarSize={22} animationDuration={800} />
-                  <Bar dataKey="expense" name="Gastos" fill="#f43f5e" radius={[6, 6, 0, 0]} maxBarSize={22} animationDuration={800} />
+                  <Tooltip
+                    cursor={{ fill: "#fafafa" }}
+                    content={<MonthlyTooltip currencyCode={currencyCode} />}
+                  />
+                  <Legend
+                    iconType="circle"
+                    iconSize={8}
+                    wrapperStyle={{ fontSize: 11, color: "#737373" }}
+                  />
+                  <Bar
+                    dataKey="income"
+                    name="Ingresos"
+                    fill="#10b981"
+                    radius={[6, 6, 0, 0]}
+                    maxBarSize={22}
+                    animationDuration={800}
+                  />
+                  <Bar
+                    dataKey="expense"
+                    name="Gastos"
+                    fill="#f43f5e"
+                    radius={[6, 6, 0, 0]}
+                    maxBarSize={22}
+                    animationDuration={800}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -339,25 +434,65 @@ export function DashboardCharts({ transactions = [], categories = [], wallet }) 
           icon={TrendingUp}
           title="Tendencia: mes actual vs anterior"
           subtitle="Comparación directa de los dos últimos meses del periodo"
-          empty={trendComparison.every((d) => d.actual === 0 && d.anterior === 0)}
+          empty={trendComparison.every(
+            (d) => d.actual === 0 && d.anterior === 0,
+          )}
           emptyLabel="Necesitas al menos dos meses con movimientos."
         >
           <div className="h-52">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={monthlyData.slice(-2)}>
                 <CartesianGrid vertical={false} stroke="#f0f0f0" />
-                <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#a3a3a3" }} />
+                <XAxis
+                  dataKey="label"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 11, fill: "#a3a3a3" }}
+                />
                 <YAxis
                   axisLine={false}
                   tickLine={false}
                   tick={{ fontSize: 11, fill: "#a3a3a3" }}
-                  tickFormatter={(v) => (v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v)}
+                  tickFormatter={(v) =>
+                    v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v
+                  }
                 />
-                <Tooltip content={<MonthlyTooltip currencyCode={currencyCode} />} />
-                <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
-                <Line type="monotone" dataKey="income" name="Ingresos" stroke="#10b981" strokeWidth={2.5} dot={{ r: 4 }} animationDuration={800} />
-                <Line type="monotone" dataKey="expense" name="Gastos" stroke="#f43f5e" strokeWidth={2.5} dot={{ r: 4 }} animationDuration={800} />
-                <Line type="monotone" dataKey="net" name="Neto" stroke="#6366f1" strokeWidth={2} strokeDasharray="4 4" dot={{ r: 3 }} animationDuration={800} />
+                <Tooltip
+                  content={<MonthlyTooltip currencyCode={currencyCode} />}
+                />
+                <Legend
+                  iconType="circle"
+                  iconSize={8}
+                  wrapperStyle={{ fontSize: 11 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="income"
+                  name="Ingresos"
+                  stroke="#10b981"
+                  strokeWidth={2.5}
+                  dot={{ r: 4 }}
+                  animationDuration={800}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="expense"
+                  name="Gastos"
+                  stroke="#f43f5e"
+                  strokeWidth={2.5}
+                  dot={{ r: 4 }}
+                  animationDuration={800}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="net"
+                  name="Neto"
+                  stroke="#6366f1"
+                  strokeWidth={2}
+                  strokeDasharray="4 4"
+                  dot={{ r: 3 }}
+                  animationDuration={800}
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>

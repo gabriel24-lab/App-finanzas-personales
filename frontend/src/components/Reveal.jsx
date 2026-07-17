@@ -30,7 +30,13 @@ export function Reveal({
 }
 
 // Variante para animar listas de hijos en cascada (stagger).
-export function RevealGroup({ children, className = "", stagger = 0.09, once = true, amount = 0.2 }) {
+export function RevealGroup({
+  children,
+  className = "",
+  stagger = 0.09,
+  once = true,
+  amount = 0.2,
+}) {
   return (
     <motion.div
       className={className}
@@ -49,5 +55,9 @@ export function RevealGroup({ children, className = "", stagger = 0.09, once = t
 
 export const revealItemVariants = {
   hidden: { opacity: 0, y: 22 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
 };

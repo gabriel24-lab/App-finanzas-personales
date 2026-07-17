@@ -9,13 +9,20 @@ function highlightMatch(text, query) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark className="rounded bg-amber-100 px-0.5 text-amber-900">{text.slice(idx, idx + query.length)}</mark>
+      <mark className="rounded bg-amber-100 px-0.5 text-amber-900">
+        {text.slice(idx, idx + query.length)}
+      </mark>
       {text.slice(idx + query.length)}
     </>
   );
 }
 
-export function SearchBar({ token, walletId, onSelectResult, placeholder = "Buscar movimientos..." }) {
+export function SearchBar({
+  token,
+  walletId,
+  onSelectResult,
+  placeholder = "Buscar movimientos...",
+}) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,7 +38,10 @@ export function SearchBar({ token, walletId, onSelectResult, placeholder = "Busc
       }
       setLoading(true);
       try {
-        const data = await searchTransactions(token, q.trim(), { walletId, limit: 8 });
+        const data = await searchTransactions(token, q.trim(), {
+          walletId,
+          limit: 8,
+        });
         setResults(data);
         setOpen(true);
       } catch {
@@ -40,7 +50,7 @@ export function SearchBar({ token, walletId, onSelectResult, placeholder = "Busc
         setLoading(false);
       }
     },
-    [token, walletId]
+    [token, walletId],
   );
 
   useEffect(() => {
@@ -76,7 +86,11 @@ export function SearchBar({ token, walletId, onSelectResult, placeholder = "Busc
     <div ref={containerRef} className="relative w-full max-w-sm">
       <div className="relative">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-neutral-400">
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Search className="h-4 w-4" />
+          )}
         </div>
         <input
           type="text"
@@ -100,7 +114,9 @@ export function SearchBar({ token, walletId, onSelectResult, placeholder = "Busc
       {open && query.length >= 2 && (
         <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl border border-neutral-100 bg-white shadow-xl">
           {results.length === 0 && !loading ? (
-            <p className="px-4 py-3 text-xs text-neutral-500">Sin resultados para &ldquo;{query}&rdquo;</p>
+            <p className="px-4 py-3 text-xs text-neutral-500">
+              Sin resultados para &ldquo;{query}&rdquo;
+            </p>
           ) : (
             <ul className="max-h-64 overflow-y-auto py-1">
               {results.map((item) => (
@@ -120,7 +136,9 @@ export function SearchBar({ token, walletId, onSelectResult, placeholder = "Busc
                     </div>
                     <span
                       className={`shrink-0 text-xs font-semibold ${
-                        item.type === "income" ? "text-emerald-600" : "text-rose-600"
+                        item.type === "income"
+                          ? "text-emerald-600"
+                          : "text-rose-600"
                       }`}
                     >
                       {item.type === "income" ? "+" : "-"}

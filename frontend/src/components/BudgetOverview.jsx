@@ -110,8 +110,8 @@ export function BudgetOverview({
           </p>
           <p className="text-xs text-neutral-500 mt-1 max-w-xs mx-auto">
             Por ejemplo, puedes ponerle un límite de $300.000 al mes a la
-            categoría "Comida". Ve a la pestaña <strong>Presupuestos</strong>{" "}
-            y elige un monto para cada categoría que quieras controlar.
+            categoría "Comida". Ve a la pestaña <strong>Presupuestos</strong> y
+            elige un monto para cada categoría que quieras controlar.
           </p>
         </div>
       ) : (
@@ -145,7 +145,10 @@ export function BudgetOverview({
                     : "text-emerald-600"
                 }`}
               >
-                {formatCurrency(summary.totalBudgeted - summary.totalSpent, currencyCode)}
+                {formatCurrency(
+                  summary.totalBudgeted - summary.totalSpent,
+                  currencyCode,
+                )}
               </p>
             </div>
           </div>

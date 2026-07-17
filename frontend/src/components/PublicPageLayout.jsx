@@ -20,8 +20,19 @@ export function PublicPageLayout({ title, subtitle, children, onBack }) {
             {t("info.common.backHome")}
           </button>
 
-          <a href="#" onClick={(e) => { e.preventDefault(); onBack(); }} className="flex items-center gap-2">
-            <img src="/isotipo-dark.png" alt={t("common.appName")} className="h-10 w-auto" />
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              onBack();
+            }}
+            className="flex items-center gap-2"
+          >
+            <img
+              src="/isotipo-dark.png"
+              alt={t("common.appName")}
+              className="h-10 w-auto"
+            />
             <span className="hidden text-sm font-bold text-neutral-900 sm:inline">
               {t("common.appName")}
             </span>

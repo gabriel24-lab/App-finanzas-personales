@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  PlusCircle,
-  PiggyBank,
-  Tags,
-  Check,
-  X,
-  Sparkles,
-} from "lucide-react";
+import { PlusCircle, PiggyBank, Tags, Check, X, Sparkles } from "lucide-react";
 
 const easeOut = [0.22, 1, 0.36, 1];
 const STORAGE_PREFIX = "app_finanzas_onboarding_dismissed_";
@@ -62,7 +55,13 @@ export function OnboardingChecklist({
         onClick: onGoToCategories,
       },
     ],
-    [hasTransactions, hasBudget, hasCustomCategory, onGoToBudgets, onGoToCategories],
+    [
+      hasTransactions,
+      hasBudget,
+      hasCustomCategory,
+      onGoToBudgets,
+      onGoToCategories,
+    ],
   );
 
   const completedCount = steps.filter((s) => s.done).length;
@@ -110,8 +109,8 @@ export function OnboardingChecklist({
           </h2>
         </div>
         <p className="relative mt-1 text-xs text-neutral-500">
-          {completedCount} de {steps.length} pasos completados. Te toma menos
-          de 2 minutos.
+          {completedCount} de {steps.length} pasos completados. Te toma menos de
+          2 minutos.
         </p>
 
         <div className="relative mt-2 h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
@@ -154,7 +153,9 @@ export function OnboardingChecklist({
               <div className="min-w-0">
                 <p
                   className={`text-xs font-semibold leading-tight ${
-                    step.done ? "text-emerald-700 line-through" : "text-neutral-800"
+                    step.done
+                      ? "text-emerald-700 line-through"
+                      : "text-neutral-800"
                   }`}
                 >
                   {step.label}

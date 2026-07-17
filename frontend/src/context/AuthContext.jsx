@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { registerApi, loginApi, fetchMe, logoutApi } from "../api";
 
 const AuthContext = createContext(null);
@@ -37,7 +43,12 @@ export function AuthProvider({ children }) {
   }, []);
 
   const register = useCallback(async (name, email, password, currencyCode) => {
-    const { user: newUser } = await registerApi(name, email, password, currencyCode);
+    const { user: newUser } = await registerApi(
+      name,
+      email,
+      password,
+      currencyCode,
+    );
     setUser(newUser);
   }, []);
 

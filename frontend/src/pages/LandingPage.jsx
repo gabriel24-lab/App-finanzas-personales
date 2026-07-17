@@ -64,21 +64,24 @@ function ResourceCarousel() {
 
   const scroll = (direction) => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: direction === "left" ? -374 : 374, behavior: "smooth" });
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -374 : 374,
+        behavior: "smooth",
+      });
     }
   };
 
   return (
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 group">
       {/* Botones (se muestran al hacer hover en desktop) */}
-      <button 
+      <button
         onClick={() => scroll("left")}
         className="absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 z-10 hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg text-neutral-800 opacity-0 transition-opacity hover:bg-neutral-50 group-hover:opacity-100 ring-1 ring-black/5"
         aria-label="Anterior"
       >
         <ChevronLeft className="h-6 w-6" />
       </button>
-      <button 
+      <button
         onClick={() => scroll("right")}
         className="absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 z-10 hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg text-neutral-800 opacity-0 transition-opacity hover:bg-neutral-50 group-hover:opacity-100 ring-1 ring-black/5"
         aria-label="Siguiente"
@@ -86,26 +89,33 @@ function ResourceCarousel() {
         <ChevronRight className="h-6 w-6" />
       </button>
 
-      <div 
+      <div
         ref={scrollRef}
         className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-4 px-2"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {RESOURCES.map((resource) => (
-          <div key={resource.slug} className="snap-center shrink-0 w-[85vw] sm:w-87.5">
-            <ResourceCard 
-              resource={resource} 
-              index={0} 
+          <div
+            key={resource.slug}
+            className="snap-center shrink-0 w-[85vw] sm:w-87.5"
+          >
+            <ResourceCard
+              resource={resource}
+              index={0}
               onNavigate={(slug) => {
                 window.location.hash = resourceDetailPath(slug);
-              }} 
+              }}
             />
           </div>
         ))}
       </div>
-      <style dangerouslySetInnerHTML={{__html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .snap-x::-webkit-scrollbar { display: none; }
-      `}} />
+      `,
+        }}
+      />
     </div>
   );
 }
@@ -161,14 +171,18 @@ function MiniDashboardCard({ t }) {
               <TrendingUp className="h-3 w-3" />
               {t("landing.preview.income")}
             </div>
-            <p className="mt-1.5 text-sm font-bold text-neutral-900">$3,250.00</p>
+            <p className="mt-1.5 text-sm font-bold text-neutral-900">
+              $3,250.00
+            </p>
           </div>
           <div className="rounded-2xl border border-neutral-200 p-3">
             <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-rose-500">
               <TrendingDown className="h-3 w-3" />
               {t("landing.preview.expenses")}
             </div>
-            <p className="mt-1.5 text-sm font-bold text-neutral-900">$1,180.35</p>
+            <p className="mt-1.5 text-sm font-bold text-neutral-900">
+              $1,180.35
+            </p>
           </div>
         </div>
 
@@ -361,7 +375,10 @@ export function LandingPage({ onGetStarted, onLogin }) {
   }, []);
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-neutral-50 text-neutral-800 antialiased">
+    <div
+      ref={pageRef}
+      className="min-h-screen bg-neutral-50 text-neutral-800 antialiased"
+    >
       <div
         className="relative overflow-hidden bg-brand-950 bg-cover bg-center"
         style={{ backgroundImage: "url('/hero.jpg')" }}
@@ -369,9 +386,18 @@ export function LandingPage({ onGetStarted, onLogin }) {
         {/* Fondo atmosférico: capas de color difuminadas + textura sutil + viñeta
             sobre la foto de fondo, para mantener el contraste del texto blanco. */}
         <div className="pointer-events-none absolute inset-0">
-          <div data-gsap="hero-blob" className="absolute -top-40 left-[8%] h-112 w-md rounded-full bg-brand-500/20 blur-[110px]" />
-          <div data-gsap="hero-blob" className="absolute -top-24 right-[10%] h-96 w-[24rem] rounded-full bg-brand-300/15 blur-[110px]" />
-          <div data-gsap="hero-blob" className="absolute -bottom-32 left-1/3 h-104 w-104 rounded-full bg-brand-700/20 blur-[120px]" />
+          <div
+            data-gsap="hero-blob"
+            className="absolute -top-40 left-[8%] h-112 w-md rounded-full bg-brand-500/20 blur-[110px]"
+          />
+          <div
+            data-gsap="hero-blob"
+            className="absolute -top-24 right-[10%] h-96 w-[24rem] rounded-full bg-brand-300/15 blur-[110px]"
+          />
+          <div
+            data-gsap="hero-blob"
+            className="absolute -bottom-32 left-1/3 h-104 w-104 rounded-full bg-brand-700/20 blur-[120px]"
+          />
           <div
             className="absolute inset-0 opacity-[0.15]"
             style={{
@@ -403,7 +429,11 @@ export function LandingPage({ onGetStarted, onLogin }) {
           <div className="mx-auto grid max-w-6xl grid-cols-2 items-center px-4 py-6 sm:px-6 lg:grid-cols-3 lg:px-8">
             <div className="flex items-center gap-2.5">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 backdrop-blur">
-                <img src="/isotipo-light.png" alt={t("common.appName")} className="h-9 w-9 object-contain" />
+                <img
+                  src="/isotipo-light.png"
+                  alt={t("common.appName")}
+                  className="h-9 w-9 object-contain"
+                />
               </div>
               <span className="hidden text-sm font-bold tracking-tight text-white sm:inline">
                 {t("common.appName")}
@@ -609,7 +639,8 @@ export function LandingPage({ onGetStarted, onLogin }) {
               Domina tus finanzas personales
             </p>
             <p className="mt-4 text-lg text-neutral-500 max-w-2xl mx-auto">
-              Descubre guías, métodos de ahorro y consejos prácticos para mejorar tu relación con el dinero.
+              Descubre guías, métodos de ahorro y consejos prácticos para
+              mejorar tu relación con el dinero.
             </p>
           </Reveal>
         </div>

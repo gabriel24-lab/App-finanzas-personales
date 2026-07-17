@@ -10,7 +10,10 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
 // mantiene solo por compatibilidad de firma con los componentes que las
 // llaman; ya no se usa para autenticar (queda ignorado).
 async function request(path, { token: _token, ...options } = {}) {
-  const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+  };
 
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
@@ -27,10 +30,17 @@ async function request(path, { token: _token, ...options } = {}) {
   return data;
 }
 
-async function downloadFile(path, { token: _token, filename, ...options } = {}) {
+async function downloadFile(
+  path,
+  { token: _token, filename, ...options } = {},
+) {
   const headers = { ...(options.headers || {}) };
 
-  const res = await fetch(`${API_URL}${path}`, { ...options, headers, credentials: "include" });
+  const res = await fetch(`${API_URL}${path}`, {
+    ...options,
+    headers,
+    credentials: "include",
+  });
 
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
@@ -53,7 +63,12 @@ async function downloadFile(path, { token: _token, filename, ...options } = {}) 
 export async function registerApi(name, email, password, currencyCode) {
   const { user } = await request("/auth/register", {
     method: "POST",
-    body: JSON.stringify({ name, email, password, currency_code: currencyCode }),
+    body: JSON.stringify({
+      name,
+      email,
+      password,
+      currency_code: currencyCode,
+    }),
   });
   return { user };
 }
@@ -91,12 +106,24 @@ function toFrontendTransaction(t) {
 }
 
 export async function fetchTransactions(token, userId) {
-  const { data } = await request(`/transactions/${userId}?limit=100`, { token });
+  const { data } = await request(`/transactions/${userId}?limit=100`, {
+    token,
+  });
   return data.map(toFrontendTransaction);
 }
 
-export async function createTransaction(token, userId, walletId, currencyCode, transaction) {
-  const { transaction: created } = await request("/transactions", {
+export async function createTransaction(
+  token,
+  userId,
+  walletId,
+  currencyCode,
+  transaction,
+) {
+  // El backend recalcula el balance de la billetera dentro de la misma
+  // transacción atómica y lo devuelve junto al movimiento creado; lo
+  // propagamos para que el balance total se actualice al instante en la UI
+  // sin necesidad de recargar la página.
+  const { transaction: created, wallet } = await request("/transactions", {
     token,
     method: "POST",
     body: JSON.stringify({
@@ -110,20 +137,29 @@ export async function createTransaction(token, userId, walletId, currencyCode, t
       date: transaction.date,
     }),
   });
-  return toFrontendTransaction(created);
+  return { transaction: toFrontendTransaction(created), wallet };
 }
 
 export async function updateTransaction(token, transactionId, updates) {
-  const { transaction: updated } = await request(`/transactions/${transactionId}`, {
-    token,
-    method: "PUT",
-    body: JSON.stringify(updates),
-  });
+  const { transaction: updated } = await request(
+    `/transactions/${transactionId}`,
+    {
+      token,
+      method: "PUT",
+      body: JSON.stringify(updates),
+    },
+  );
   return toFrontendTransaction(updated);
 }
 
 export async function deleteTransactionApi(token, transactionId) {
-  await request(`/transactions/${transactionId}`, { token, method: "DELETE" });
+  // Igual que en createTransaction: el backend revierte el balance y lo
+  // devuelve en la respuesta, así que lo propagamos hacia arriba.
+  const { wallet } = await request(`/transactions/${transactionId}`, {
+    token,
+    method: "DELETE",
+  });
+  return { wallet };
 }
 
 // --- Categorías ---
@@ -140,7 +176,11 @@ export async function fetchCategories(token, userId) {
   }));
 }
 
-export async function createCategoryApi(token, userId, { name, type, color, icon }) {
+export async function createCategoryApi(
+  token,
+  userId,
+  { name, type, color, icon },
+) {
   const { category } = await request("/categories", {
     token,
     method: "POST",
@@ -197,28 +237,36 @@ export async function getComparativeReport(token, walletId) {
   const params = new URLSearchParams();
   if (walletId) params.set("wallet_id", walletId);
   const qs = params.toString();
-  return request(`/transactions/report/comparative${qs ? `?${qs}` : ""}`, { token });
+  return request(`/transactions/report/comparative${qs ? `?${qs}` : ""}`, {
+    token,
+  });
 }
 
 export async function getCashFlowProjection(token, walletId) {
   const params = new URLSearchParams();
   if (walletId) params.set("wallet_id", walletId);
   const qs = params.toString();
-  return request(`/transactions/report/projection${qs ? `?${qs}` : ""}`, { token });
+  return request(`/transactions/report/projection${qs ? `?${qs}` : ""}`, {
+    token,
+  });
 }
 
 export async function getInsights(token, walletId) {
   const params = new URLSearchParams();
   if (walletId) params.set("wallet_id", walletId);
   const qs = params.toString();
-  return request(`/transactions/report/insights${qs ? `?${qs}` : ""}`, { token });
+  return request(`/transactions/report/insights${qs ? `?${qs}` : ""}`, {
+    token,
+  });
 }
 
 export async function getOpportunities(token, walletId) {
   const params = new URLSearchParams();
   if (walletId) params.set("wallet_id", walletId);
   const qs = params.toString();
-  return request(`/transactions/report/opportunities${qs ? `?${qs}` : ""}`, { token });
+  return request(`/transactions/report/opportunities${qs ? `?${qs}` : ""}`, {
+    token,
+  });
 }
 
 export async function searchTransactions(token, query, options = {}) {

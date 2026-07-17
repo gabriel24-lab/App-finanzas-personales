@@ -70,7 +70,8 @@ export function InsightsPanel({ token, walletId }) {
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {insights.map((insight, i) => {
           const Icon = ICON_MAP[insight.icon] || Lightbulb;
-          const style = SEVERITY_STYLES[insight.severity] || SEVERITY_STYLES.neutral;
+          const style =
+            SEVERITY_STYLES[insight.severity] || SEVERITY_STYLES.neutral;
           return (
             <motion.div
               key={insight.id}
@@ -83,7 +84,9 @@ export function InsightsPanel({ token, walletId }) {
                 <Icon className="h-4 w-4" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium leading-snug">{insight.message}</p>
+                <p className="text-sm font-medium leading-snug">
+                  {insight.message}
+                </p>
                 {insight.changePercent != null && (
                   <p className="mt-1 text-xs opacity-70">
                     {insight.changePercent > 0 ? "+" : ""}

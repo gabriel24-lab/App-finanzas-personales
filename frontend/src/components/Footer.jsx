@@ -1,14 +1,27 @@
 import React from "react";
 import { useLanguage } from "../context/LanguageContext";
-import { infoPath, landingSectionPath, resourcesPath } from "../utils/hashRoute";
+import {
+  infoPath,
+  landingSectionPath,
+  resourcesPath,
+} from "../utils/hashRoute";
 
 const FOOTER_COLUMNS = [
   {
     titleKey: "landing.footer.product.title",
     links: [
-      { labelKey: "landing.footer.product.features", href: landingSectionPath("#features") },
-      { labelKey: "landing.footer.product.preview", href: landingSectionPath("#preview") },
-      { labelKey: "landing.footer.product.categories", href: landingSectionPath("#features") },
+      {
+        labelKey: "landing.footer.product.features",
+        href: landingSectionPath("#features"),
+      },
+      {
+        labelKey: "landing.footer.product.preview",
+        href: landingSectionPath("#preview"),
+      },
+      {
+        labelKey: "landing.footer.product.categories",
+        href: landingSectionPath("#features"),
+      },
     ],
   },
   {
@@ -40,7 +53,10 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-neutral-200 bg-white" aria-labelledby="footer-heading">
+    <footer
+      className="border-t border-neutral-200 bg-white"
+      aria-labelledby="footer-heading"
+    >
       <h2 id="footer-heading" className="sr-only">
         {t("landing.footer.heading")}
       </h2>

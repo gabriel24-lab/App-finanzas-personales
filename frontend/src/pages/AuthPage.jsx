@@ -149,7 +149,18 @@ export function AuthPage({ onBack, initialMode = "login" }) {
       // para que el texto y los campos aparezcan sin demora.
       gsap
         .timeline({ defaults: { ease: "power3.out", duration: 0.45 } })
-        .from("[data-gsap='auth-form'] > *", { y: 14, opacity: 0, stagger: 0.05 });
+        .from("[data-gsap='auth-form'] > *", {
+          y: 14,
+          opacity: 0,
+          stagger: 0.05,
+          // Importante: sin esto, GSAP deja un `transform` residual en cada
+          // hijo animado, y eso crea un stacking context nuevo por elemento.
+          // Como consecuencia, el z-index del desplegable de moneda (dentro
+          // del <form>) queda "atrapado" y pierde frente a hermanos
+          // posteriores en el DOM (p. ej. el texto "¿Ya tienes cuenta?"),
+          // que terminan pintándose por encima aunque tengan z-index menor.
+          clearProps: "transform,opacity",
+        });
 
       // El panel decorativo (solo visible en pantallas grandes) anima en
       // paralelo, no antes: ya no bloquea la aparición del formulario.
@@ -350,7 +361,9 @@ export function AuthPage({ onBack, initialMode = "login" }) {
                   exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   onAnimationComplete={() => setCurrencyFieldSettled(true)}
-                  className={currencyFieldSettled ? "overflow-visible" : "overflow-hidden"}
+                  className={`relative z-20 ${
+                    currencyFieldSettled ? "overflow-visible" : "overflow-hidden"
+                  }`}
                 >
                   <label className="mb-1.5 block px-1 text-xs font-semibold text-neutral-500">
                     {t("auth.field.currency")}

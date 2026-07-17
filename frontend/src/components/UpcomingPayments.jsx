@@ -2,15 +2,6 @@ import React, { useMemo } from "react";
 import { CalendarClock } from "lucide-react";
 import { getCategoryIcon } from "../iconMap";
 
-/**
- * Encuentra gastos que se repiten mes a mes (arriendo, suscripciones,
- * gimnasio...) mirando el historial: si la misma descripción + categoría
- * aparece en 2 o más meses distintos, se asume recurrente y se proyecta
- * cuándo tocaría el próximo pago, usando el día del mes más frecuente.
- *
- * No requiere cambios en el backend: todo se calcula en el navegador a
- * partir de las transacciones que ya se cargan para el dashboard.
- */
 function detectRecurring(transactions) {
   const groups = new Map();
 
@@ -41,7 +32,9 @@ function detectRecurring(transactions) {
     if (g.months.size < 2) return; // solo aparece en un mes: no es recurrente todavía
 
     const avgAmount = g.amounts.reduce((a, b) => a + b, 0) / g.amounts.length;
-    const avgDay = Math.round(g.days.reduce((a, b) => a + b, 0) / g.days.length);
+    const avgDay = Math.round(
+      g.days.reduce((a, b) => a + b, 0) / g.days.length,
+    );
 
     // Próxima fecha: este mes si el día todavía no pasó, si no, el mes siguiente.
     let nextDate = new Date(today.getFullYear(), today.getMonth(), avgDay);
@@ -65,7 +58,11 @@ function detectRecurring(transactions) {
   return recurring.sort((a, b) => a.daysUntil - b.daysUntil).slice(0, 4);
 }
 
-export function UpcomingPayments({ transactions = [], categories = [], wallet }) {
+export function UpcomingPayments({
+  transactions = [],
+  categories = [],
+  wallet,
+}) {
   const currencyCode = wallet?.currency_code || "COP";
 
   const formatCurrency = (value) =>
@@ -83,11 +80,13 @@ export function UpcomingPayments({ transactions = [], categories = [], wallet })
     <div className="rounded-2xl border border-neutral-100 bg-white p-5 shadow-sm">
       <div className="mb-1 flex items-center gap-2">
         <CalendarClock className="h-4 w-4 text-neutral-900" />
-        <h3 className="text-sm font-bold text-neutral-800">Próximos pagos esperados</h3>
+        <h3 className="text-sm font-bold text-neutral-800">
+          Próximos pagos esperados
+        </h3>
       </div>
       <p className="mb-3 text-[11px] text-neutral-500">
-        Calculado a partir de gastos que se repiten mes a mes en tu
-        historial. Son estimaciones, no montos confirmados.
+        Calculado a partir de gastos que se repiten mes a mes en tu historial.
+        Son estimaciones, no montos confirmados.
       </p>
 
       <div className="space-y-2">
