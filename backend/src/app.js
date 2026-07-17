@@ -15,6 +15,13 @@ const { notFoundHandler, errorHandler } = require("./middleware/errorHandler");
 
 const app = express();
 
+// Render (y la mayoría de PaaS) coloca la app detrás de un proxy inverso.
+// Sin esto, express-rate-limit y `req.ip` verían siempre la IP del proxy
+// en vez de la IP real del usuario, rompiendo el rate limiting por IP.
+// El valor 1 le dice a Express que confíe en un solo "hop" de proxy
+// (el de Render), tomando la IP real desde X-Forwarded-For.
+app.set("trust proxy", 1);
+
 // Cabeceras de seguridad (mitiga XSS, clickjacking, sniffing, etc).
 app.use(helmet());
 
