@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Target, Plus, Trash2, Check, X, PartyPopper } from "lucide-react";
 import { COLOR_OPTIONS } from "../iconMap";
+import { ConfirmDialog } from "./ConfirmDialog";
+import { useLanguage } from "../context/LanguageContext";
 
 const easeOut = [0.22, 1, 0.36, 1];
 const STORAGE_PREFIX = "app_finanzas_goals_";
@@ -284,10 +286,21 @@ export function SavingsGoals({ userId, wallet }) {
     );
   };
 
+  const { t } = useLanguage();
+  const [pendingDeleteGoalId, setPendingDeleteGoalId] = useState(null);
+
   const handleDelete = (id) => {
-    if (window.confirm("¿Eliminar esta meta de ahorro?")) {
-      setGoals((prev) => prev.filter((g) => g.id !== id));
-    }
+    setPendingDeleteGoalId(id);
+  };
+
+  const cancelDeleteGoal = () => {
+    setPendingDeleteGoalId(null);
+  };
+
+  const confirmDeleteGoal = () => {
+    if (!pendingDeleteGoalId) return;
+    setGoals((prev) => prev.filter((g) => g.id !== pendingDeleteGoalId));
+    setPendingDeleteGoalId(null);
   };
 
   return (
@@ -342,6 +355,15 @@ export function SavingsGoals({ userId, wallet }) {
           </div>
         )}
       </div>
+      <ConfirmDialog
+        open={Boolean(pendingDeleteGoalId)}
+        title={t("goals.confirm.deleteTitle")}
+        message={t("goals.confirm.delete")}
+        cancelLabel={t("common.dialog.cancel")}
+        confirmLabel={t("common.dialog.confirm")}
+        onCancel={cancelDeleteGoal}
+        onConfirm={confirmDeleteGoal}
+      />
     </div>
   );
 }

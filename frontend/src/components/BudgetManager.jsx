@@ -19,7 +19,7 @@ export function BudgetManager({
     <div className="rounded-2xl border border-neutral-100 bg-white p-6 shadow-sm">
       <h2 className="text-lg font-semibold text-neutral-800 mb-1 flex items-center gap-2">
         <Settings2 className="h-5 w-5 text-neutral-900" />
-        Definir presupuestos
+        Presupuestos
       </h2>
       <p className="text-xs text-neutral-500 mb-5">
         Escribe cuánto quieres gastar como máximo este mes en cada categoría.

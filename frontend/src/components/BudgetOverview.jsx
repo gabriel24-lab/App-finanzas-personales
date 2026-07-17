@@ -91,7 +91,7 @@ export function BudgetOverview({
       <div className="flex items-center justify-between mb-1">
         <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-800">
           <PiggyBank className="h-5 w-5 text-neutral-900" />
-          Presupuesto mensual
+          Presupuestos
           <InfoTooltip text="Un presupuesto es el límite de dinero que decides gastar en una categoría (por ejemplo, Comida) durante el mes. Aquí ves cuánto llevas gastado frente a ese límite." />
         </h2>
         <span className="text-xs font-medium text-neutral-500 capitalize bg-neutral-50 border border-neutral-100 px-2.5 py-1 rounded-full">

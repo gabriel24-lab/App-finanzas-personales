@@ -13,12 +13,16 @@ import {
   TrendingDown,
   Wallet,
   Search,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { FloatingCoins } from "../components/FloatingCoins";
 import { Reveal, RevealGroup, revealItemVariants } from "../components/Reveal";
 import { Footer } from "../components/Footer";
+import { RESOURCES, ResourceCard } from "./ResourcesPage";
+import { resourceDetailPath, resourcesPath } from "../utils/hashRoute";
 
 const easeOut = [0.22, 1, 0.36, 1];
 
@@ -38,6 +42,73 @@ const FEATURE_KEYS = [
   "filters",
   "multilang",
 ];
+
+function ResourceCarousel() {
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (scrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        // Si llegamos al final (con un margen de error), volvemos al inicio
+        if (scrollLeft + clientWidth >= scrollWidth - 20) {
+          scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
+        } else {
+          // Aproximadamente el ancho de una tarjeta + gap
+          scrollRef.current.scrollBy({ left: 374, behavior: "smooth" });
+        }
+      }
+    }, 4500); // Cambia cada 4.5s
+    return () => clearInterval(interval);
+  }, []);
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: direction === "left" ? -374 : 374, behavior: "smooth" });
+    }
+  };
+
+  return (
+    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 group">
+      {/* Botones (se muestran al hacer hover en desktop) */}
+      <button 
+        onClick={() => scroll("left")}
+        className="absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 z-10 hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg text-neutral-800 opacity-0 transition-opacity hover:bg-neutral-50 group-hover:opacity-100 ring-1 ring-black/5"
+        aria-label="Anterior"
+      >
+        <ChevronLeft className="h-6 w-6" />
+      </button>
+      <button 
+        onClick={() => scroll("right")}
+        className="absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 z-10 hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg text-neutral-800 opacity-0 transition-opacity hover:bg-neutral-50 group-hover:opacity-100 ring-1 ring-black/5"
+        aria-label="Siguiente"
+      >
+        <ChevronRight className="h-6 w-6" />
+      </button>
+
+      <div 
+        ref={scrollRef}
+        className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-4 px-2"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {RESOURCES.map((resource) => (
+          <div key={resource.slug} className="snap-center shrink-0 w-[85vw] sm:w-87.5">
+            <ResourceCard 
+              resource={resource} 
+              index={0} 
+              onNavigate={(slug) => {
+                window.location.hash = resourceDetailPath(slug);
+              }} 
+            />
+          </div>
+        ))}
+      </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        .snap-x::-webkit-scrollbar { display: none; }
+      `}} />
+    </div>
+  );
+}
 
 function FeatureCard({ Icon, titleKey, descKey, t }) {
   return (
@@ -524,6 +595,36 @@ export function LandingPage({ onGetStarted, onLogin }) {
               </motion.div>
             ))}
           </RevealGroup>
+        </div>
+      </section>
+
+      {/* Recursos Carrusel */}
+      <section className="overflow-hidden bg-neutral-50 py-24 sm:py-32 border-y border-neutral-200">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 mb-12 text-center">
+          <Reveal>
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-brand-600">
+              Aprende con nosotros
+            </h2>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+              Domina tus finanzas personales
+            </p>
+            <p className="mt-4 text-lg text-neutral-500 max-w-2xl mx-auto">
+              Descubre guías, métodos de ahorro y consejos prácticos para mejorar tu relación con el dinero.
+            </p>
+          </Reveal>
+        </div>
+
+        {/* Carrusel interactivo */}
+        <ResourceCarousel />
+
+        <div className="mt-8 flex justify-center">
+          <a
+            href={resourcesPath()}
+            className="inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-neutral-900 shadow-sm ring-1 ring-inset ring-neutral-300 transition-all hover:bg-neutral-50"
+          >
+            Ver todos los recursos
+            <ArrowRight className="h-4 w-4 text-neutral-400" />
+          </a>
         </div>
       </section>
 

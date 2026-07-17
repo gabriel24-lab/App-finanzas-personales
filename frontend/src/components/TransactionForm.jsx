@@ -5,7 +5,6 @@ import {
   ArrowDownRight,
   Tag,
   Calendar,
-  DollarSign,
   FileText,
 } from "lucide-react";
 import { TRANSACTION_TYPES } from "../types";
@@ -18,6 +17,48 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
   const [category, setCategory] = useState("");
   const [date, setDate] = useState("");
   const [error, setError] = useState("");
+
+  const formatAmountInput = (value) => {
+    const cleaned = value.replace(/[^0-9,\.]/g, "");
+    if (!cleaned) return "";
+
+    const dotCount = (cleaned.match(/\./g) || []).length;
+    const commaCount = (cleaned.match(/,/g) || []).length;
+    const lastComma = cleaned.lastIndexOf(",");
+    const lastDot = cleaned.lastIndexOf(".");
+    const separator = lastComma > lastDot ? "," : ".";
+
+    let integerPart = cleaned;
+    let decimalPart = "";
+
+    if (separator && (lastComma !== -1 || lastDot !== -1)) {
+      const index = separator === "," ? lastComma : lastDot;
+      const candidateDecimal = cleaned.slice(index + 1);
+      const candidateInteger = cleaned.slice(0, index);
+
+      if (candidateDecimal.length <= 2) {
+        integerPart = candidateInteger.replace(/[\.,]/g, "");
+        decimalPart = candidateDecimal.replace(/[^0-9]/g, "");
+      } else {
+        integerPart = cleaned.replace(/[\.,]/g, "");
+      }
+    }
+
+    const numericInteger = integerPart.replace(/[^0-9]/g, "") || "0";
+    const formattedInteger = new Intl.NumberFormat("es-CO").format(Number(numericInteger));
+
+    if (decimalPart) {
+      return `${formattedInteger},${decimalPart.slice(0, 2)}`;
+    }
+
+    return formattedInteger;
+  };
+
+  const parseAmountValue = (value) => {
+    if (!value) return NaN;
+    const cleaned = value.replace(/\./g, "").replace(/,/g, ".");
+    return parseFloat(cleaned);
+  };
 
   const categoriesByType = (t) => categories.filter((c) => c.type === t).map((c) => c.name);
 
@@ -42,7 +83,7 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const parsedAmount = parseFloat(amount);
+    const parsedAmount = parseAmountValue(amount);
     if (!description.trim()) {
       setError("Escribe una descripción para el movimiento.");
       return;
@@ -85,7 +126,7 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
   const isFormValid =
     description.trim() !== "" &&
     amount !== "" &&
-    parseFloat(amount) > 0 &&
+    parseAmountValue(amount) > 0 &&
     category !== "" &&
     date !== "";
 
@@ -165,19 +206,19 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-400">
-              <DollarSign className="h-4 w-4" />
+              <span className="text-sm font-semibold">$</span>
             </div>
             <input
-              type="number"
-              step="any"
-              min="0.01"
-              placeholder="0.00"
+              type="text"
+              inputMode="decimal"
+              placeholder="0,00"
               value={amount}
               onChange={(e) => {
-                setAmount(e.target.value);
+                setAmount(formatAmountInput(e.target.value));
                 setError("");
               }}
               className="w-full pl-10 pr-3 py-2 bg-neutral-50 border border-neutral-200 rounded-2xl text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-600/10 focus:border-brand-600 focus:bg-white transition-all"
+              pattern="[0-9.,]*"
               required
             />
           </div>

@@ -36,12 +36,12 @@ export const translations = {
     "landing.nav.start": "Comenzar",
     "landing.hero.badgeLink": "Conoce cómo funciona",
     "landing.hero.badge": "Tu dinero, en un solo lugar",
-    "landing.hero.title": "Controla tus finanzas con total claridad",
+    "landing.hero.title": "Todo tu dinero, organizado en un solo lugar",
     "landing.hero.subtitle":
-      "Registra tus ingresos y gastos, organiza presupuestos por categoría y descubre en segundos en qué se te va el dinero cada mes.",
-    "landing.hero.ctaPrimary": "Comenzar gratis",
-    "landing.hero.ctaSecondary": "Ya tengo una cuenta",
-    "landing.hero.note": "Gratis. Sin tarjeta de crédito. Configuración en 1 minuto.",
+      "Lleva el control de tus ingresos, gastos y presupuestos desde una sola aplicación. Visualiza tu progreso y toma mejores decisiones financieras.",
+    "landing.hero.ctaPrimary": "¿Ya tienes cuenta?",
+    "landing.hero.ctaSecondary": "Iniciar sesión",
+    "landing.hero.note": "",
     "landing.hero.panel.nav.summary": "Resumen",
     "landing.hero.panel.nav.transactions": "Movimientos",
     "landing.hero.panel.nav.budgets": "Presupuestos",
@@ -60,27 +60,27 @@ export const translations = {
     "landing.stats.tracked": "Registrado en la plataforma",
     "landing.stats.rating": "Calificación promedio",
 
-    "landing.features.title": "Todo lo que necesitas para ordenar tu dinero",
+    "landing.features.title": "Todo lo que necesitas para tomar el control de tu dinero",
     "landing.features.subtitle":
-      "Una herramienta simple, pensada para que entender tus finanzas te tome minutos, no horas.",
-    "landing.features.tracking.title": "Movimientos al instante",
+      "Organiza tus ingresos, controla tus gastos y toma mejores decisiones financieras desde un solo lugar.",
+    "landing.features.tracking.title": "Registra cada movimiento",
     "landing.features.tracking.desc":
-      "Registra cada ingreso y gasto en segundos y mira tu balance actualizarse en tiempo real.",
+      "Añade tus ingresos y gastos en segundos y mantén tu balance siempre actualizado, sin cálculos manuales.",
     "landing.features.budgets.title": "Presupuestos por categoría",
     "landing.features.budgets.desc":
       "Define límites de gasto por categoría y recibe una alerta visual antes de pasarte.",
     "landing.features.insights.title": "Reportes claros",
     "landing.features.insights.desc":
       "Visualiza tarjetas con tus KPIs clave: ingresos, gastos y balance del mes.",
-    "landing.features.secure.title": "Tus datos, protegidos",
+    "landing.features.secure.title": "Seguridad para tus datos",
     "landing.features.secure.desc":
-      "Autenticación segura y almacenamiento cifrado. Tu información es solo tuya.",
-    "landing.features.filters.title": "Filtros y búsqueda",
+      "Tu información está protegida mediante autenticación segura y almacenamiento cifrado para mayor privacidad.",
+    "landing.features.filters.title": "Búsqueda y filtros",
     "landing.features.filters.desc":
-      "Encuentra cualquier movimiento por texto, tipo o categoría en un par de clics.",
-    "landing.features.multilang.title": "Multi-idioma",
+      "Encuentra cualquier movimiento en segundos utilizando filtros por fecha, categoría, tipo o palabras clave.",
+    "landing.features.multilang.title": "Disponible en varios idiomas",
     "landing.features.multilang.desc":
-      "Usa la aplicación en el idioma que prefieras, cambia cuando quieras desde la esquina superior.",
+      "Utiliza Monu en el idioma que prefieras y cambia entre ellos cuando lo necesites, de forma sencilla.",
 
     "landing.preview.title": "Así se ve por dentro",
     "landing.preview.subtitle":
@@ -173,6 +173,7 @@ export const translations = {
     "dashboard.greeting.evening": "Buenas noches, {name} 👋",
     "dashboard.subtitle": "Así están tus finanzas hoy.",
     "dashboard.nav.transactions": "Movimientos",
+    "dashboard.nav.budgets": "Presupuestos",
     "dashboard.nav.categories": "Categorías",
     "dashboard.nav.goals": "Metas",
     "dashboard.nav.explore": "Explora",
@@ -184,7 +185,14 @@ export const translations = {
     "dashboard.error.transaction": "No se pudo guardar la transacción: {detail}",
     "dashboard.error.delete": "No se pudo eliminar la transacción: {detail}",
     "dashboard.error.category": "No se pudo guardar la categoría: {detail}",
+    "dashboard.confirm.deleteTitle": "Confirmar eliminación",
     "dashboard.confirm.delete": "¿Estás seguro de que deseas eliminar este movimiento?",
+    "category.confirm.deleteTitle": "Confirmar eliminación",
+    "category.confirm.delete": "¿Eliminar esta categoría? Las transacciones ya registradas no se verán afectadas.",
+    "goals.confirm.deleteTitle": "Confirmar eliminación",
+    "goals.confirm.delete": "¿Eliminar esta meta de ahorro?",
+    "common.dialog.cancel": "Cancelar",
+    "common.dialog.confirm": "Eliminar",
     ...infoPagesEs,
   },
 
@@ -202,12 +210,12 @@ export const translations = {
     "landing.nav.start": "Get started",
     "landing.hero.badgeLink": "See how it works",
     "landing.hero.badge": "Your money, in one place",
-    "landing.hero.title": "Take full control of your finances",
+    "landing.hero.title": "All your money, organized in one place",
     "landing.hero.subtitle":
-      "Track your income and expenses, organize budgets by category, and see exactly where your money goes every month.",
-    "landing.hero.ctaPrimary": "Get started free",
-    "landing.hero.ctaSecondary": "I already have an account",
-    "landing.hero.note": "Free. No credit card required. Set up in 1 minute.",
+      "Take control of your income, expenses, and budgets from a single app. Visualize your progress and make better financial decisions.",
+    "landing.hero.ctaPrimary": "Already have an account?",
+    "landing.hero.ctaSecondary": "Sign in",
+    "landing.hero.note": "",
     "landing.hero.panel.nav.summary": "Summary",
     "landing.hero.panel.nav.transactions": "Transactions",
     "landing.hero.panel.nav.budgets": "Budgets",
@@ -226,27 +234,27 @@ export const translations = {
     "landing.stats.tracked": "Tracked on the platform",
     "landing.stats.rating": "Average rating",
 
-    "landing.features.title": "Everything you need to get your money in order",
+    "landing.features.title": "Everything you need to take control of your money",
     "landing.features.subtitle":
-      "A simple tool, built so understanding your finances takes minutes, not hours.",
-    "landing.features.tracking.title": "Instant transactions",
+      "Organize your income, control your expenses and make better financial decisions from one place.",
+    "landing.features.tracking.title": "Record every transaction",
     "landing.features.tracking.desc":
-      "Log every income and expense in seconds and watch your balance update in real time.",
+      "Add your income and expenses in seconds and keep your balance always up to date without manual calculations.",
     "landing.features.budgets.title": "Budgets by category",
     "landing.features.budgets.desc":
       "Set spending limits per category and get a visual warning before you go over.",
     "landing.features.insights.title": "Clear reports",
     "landing.features.insights.desc":
       "See key KPI cards: income, expenses and balance for the month.",
-    "landing.features.secure.title": "Your data, protected",
+    "landing.features.secure.title": "Security for your data",
     "landing.features.secure.desc":
-      "Secure authentication and encrypted storage. Your information is yours alone.",
-    "landing.features.filters.title": "Filters & search",
+      "Your information is protected by secure authentication and encrypted storage for greater privacy.",
+    "landing.features.filters.title": "Search & filters",
     "landing.features.filters.desc":
-      "Find any transaction by text, type or category in a couple of clicks.",
-    "landing.features.multilang.title": "Multi-language",
+      "Find any transaction in seconds using filters by date, category, type, or keywords.",
+    "landing.features.multilang.title": "Available in multiple languages",
     "landing.features.multilang.desc":
-      "Use the app in the language you prefer, switch anytime from the top corner.",
+      "Use Monu in the language you prefer and switch between them whenever you need.",
 
     "landing.preview.title": "Here's what's inside",
     "landing.preview.subtitle":
@@ -349,7 +357,14 @@ export const translations = {
     "dashboard.error.transaction": "Couldn't save the transaction: {detail}",
     "dashboard.error.delete": "Couldn't delete the transaction: {detail}",
     "dashboard.error.category": "Couldn't save the category: {detail}",
+    "dashboard.confirm.deleteTitle": "Confirm deletion",
     "dashboard.confirm.delete": "Are you sure you want to delete this transaction?",
+    "category.confirm.deleteTitle": "Confirm deletion",
+    "category.confirm.delete": "Delete this category? Existing transactions will not be affected.",
+    "goals.confirm.deleteTitle": "Confirm deletion",
+    "goals.confirm.delete": "Delete this savings goal?",
+    "common.dialog.cancel": "Cancel",
+    "common.dialog.confirm": "Delete",
     ...infoPagesEn,
   },
 
@@ -367,12 +382,12 @@ export const translations = {
     "landing.nav.start": "Começar",
     "landing.hero.badgeLink": "Veja como funciona",
     "landing.hero.badge": "Seu dinheiro, em um só lugar",
-    "landing.hero.title": "Controle suas finanças com total clareza",
+    "landing.hero.title": "Tudo o seu dinheiro, organizado em um só lugar",
     "landing.hero.subtitle":
-      "Registre suas receitas e despesas, organize orçamentos por categoria e descubra em segundos para onde vai seu dinheiro todo mês.",
-    "landing.hero.ctaPrimary": "Começar grátis",
-    "landing.hero.ctaSecondary": "Já tenho uma conta",
-    "landing.hero.note": "Grátis. Sem cartão de crédito. Configuração em 1 minuto.",
+      "Assuma o controle das suas receitas, despesas e orçamentos a partir de um único app. Visualize seu progresso e tome melhores decisões financeiras.",
+    "landing.hero.ctaPrimary": "Já tem uma conta?",
+    "landing.hero.ctaSecondary": "Entrar",
+    "landing.hero.note": "",
     "landing.hero.panel.nav.summary": "Resumo",
     "landing.hero.panel.nav.transactions": "Movimentos",
     "landing.hero.panel.nav.budgets": "Orçamentos",
@@ -391,27 +406,27 @@ export const translations = {
     "landing.stats.tracked": "Registrado na plataforma",
     "landing.stats.rating": "Avaliação média",
 
-    "landing.features.title": "Tudo o que você precisa para organizar seu dinheiro",
+    "landing.features.title": "Tudo o que você precisa para assumir o controle do seu dinheiro",
     "landing.features.subtitle":
-      "Uma ferramenta simples, feita para que entender suas finanças leve minutos, não horas.",
-    "landing.features.tracking.title": "Movimentos instantâneos",
+      "Organize suas receitas, controle suas despesas e tome melhores decisões financeiras em um só lugar.",
+    "landing.features.tracking.title": "Registre cada movimento",
     "landing.features.tracking.desc":
-      "Registre cada receita e despesa em segundos e veja seu saldo atualizar em tempo real.",
+      "Adicione suas receitas e despesas em segundos e mantenha seu saldo sempre atualizado, sem cálculos manuais.",
     "landing.features.budgets.title": "Orçamentos por categoria",
     "landing.features.budgets.desc":
       "Defina limites de gastos por categoria e receba um alerta visual antes de ultrapassar.",
     "landing.features.insights.title": "Relatórios claros",
     "landing.features.insights.desc":
       "Veja cartões com seus KPIs principais: receitas, despesas e saldo do mês.",
-    "landing.features.secure.title": "Seus dados, protegidos",
+    "landing.features.secure.title": "Segurança para seus dados",
     "landing.features.secure.desc":
-      "Autenticação segura e armazenamento criptografado. Sua informação é só sua.",
-    "landing.features.filters.title": "Filtros e busca",
+      "Suas informações são protegidas por autenticação segura e armazenamento criptografado para maior privacidade.",
+    "landing.features.filters.title": "Busca e filtros",
     "landing.features.filters.desc":
-      "Encontre qualquer movimento por texto, tipo ou categoria em poucos cliques.",
-    "landing.features.multilang.title": "Multi-idioma",
+      "Encontre qualquer movimentação em segundos utilizando filtros por data, categoria, tipo ou palavras-chave.",
+    "landing.features.multilang.title": "Disponível em vários idiomas",
     "landing.features.multilang.desc":
-      "Use o aplicativo no idioma que preferir, mude quando quiser no canto superior.",
+      "Use o Monu no idioma que preferir e mude entre eles quando precisar.",
 
     "landing.preview.title": "Veja como é por dentro",
     "landing.preview.subtitle":
@@ -514,7 +529,14 @@ export const translations = {
     "dashboard.error.transaction": "Não foi possível salvar a transação: {detail}",
     "dashboard.error.delete": "Não foi possível excluir a transação: {detail}",
     "dashboard.error.category": "Não foi possível salvar a categoria: {detail}",
+    "dashboard.confirm.deleteTitle": "Confirmar exclusão",
     "dashboard.confirm.delete": "Tem certeza de que deseja excluir este movimento?",
+    "category.confirm.deleteTitle": "Confirmar exclusão",
+    "category.confirm.delete": "Excluir esta categoria? As transações existentes não serão afetadas.",
+    "goals.confirm.deleteTitle": "Confirmar exclusão",
+    "goals.confirm.delete": "Excluir esta meta de economia?",
+    "common.dialog.cancel": "Cancelar",
+    "common.dialog.confirm": "Excluir",
     ...infoPagesPt,
   },
 
@@ -532,12 +554,12 @@ export const translations = {
     "landing.nav.start": "Commencer",
     "landing.hero.badgeLink": "Découvrez comment ça marche",
     "landing.hero.badge": "Votre argent, en un seul endroit",
-    "landing.hero.title": "Maîtrisez vos finances en toute clarté",
+    "landing.hero.title": "Tout votre argent, organisé en un seul endroit",
     "landing.hero.subtitle":
-      "Suivez vos revenus et dépenses, organisez des budgets par catégorie et découvrez en quelques secondes où va votre argent chaque mois.",
-    "landing.hero.ctaPrimary": "Commencer gratuitement",
-    "landing.hero.ctaSecondary": "J'ai déjà un compte",
-    "landing.hero.note": "Gratuit. Sans carte bancaire. Configuration en 1 minute.",
+      "Prenez le contrôle de vos revenus, dépenses et budgets depuis une seule application. Visualisez votre progression et prenez de meilleures décisions financières.",
+    "landing.hero.ctaPrimary": "Vous avez déjà un compte ?",
+    "landing.hero.ctaSecondary": "Se connecter",
+    "landing.hero.note": "",
     "landing.hero.panel.nav.summary": "Résumé",
     "landing.hero.panel.nav.transactions": "Transactions",
     "landing.hero.panel.nav.budgets": "Budgets",
@@ -556,27 +578,27 @@ export const translations = {
     "landing.stats.tracked": "Suivi sur la plateforme",
     "landing.stats.rating": "Note moyenne",
 
-    "landing.features.title": "Tout ce qu'il faut pour organiser votre argent",
+    "landing.features.title": "Tout ce dont vous avez besoin pour prendre le contrôle de votre argent",
     "landing.features.subtitle":
-      "Un outil simple, conçu pour que comprendre vos finances prenne des minutes, pas des heures.",
-    "landing.features.tracking.title": "Transactions instantanées",
+      "Organisez vos revenus, contrôlez vos dépenses et prenez de meilleures décisions financières depuis un seul endroit.",
+    "landing.features.tracking.title": "Enregistrez chaque transaction",
     "landing.features.tracking.desc":
-      "Enregistrez chaque revenu et dépense en quelques secondes et regardez votre solde se mettre à jour en temps réel.",
+      "Ajoutez vos revenus et dépenses en quelques secondes et gardez votre solde toujours à jour, sans calculs manuels.",
     "landing.features.budgets.title": "Budgets par catégorie",
     "landing.features.budgets.desc":
       "Définissez des limites de dépenses par catégorie et recevez une alerte visuelle avant de les dépasser.",
     "landing.features.insights.title": "Rapports clairs",
     "landing.features.insights.desc":
       "Visualisez des cartes avec vos indicateurs clés : revenus, dépenses et solde du mois.",
-    "landing.features.secure.title": "Vos données, protégées",
+    "landing.features.secure.title": "Sécurité pour vos données",
     "landing.features.secure.desc":
-      "Authentification sécurisée et stockage chiffré. Vos informations n'appartiennent qu'à vous.",
-    "landing.features.filters.title": "Filtres et recherche",
+      "Vos informations sont protégées par une authentification sécurisée et un stockage chiffré pour une meilleure confidentialité.",
+    "landing.features.filters.title": "Recherche et filtres",
     "landing.features.filters.desc":
-      "Trouvez n'importe quelle transaction par texte, type ou catégorie en quelques clics.",
-    "landing.features.multilang.title": "Multi-langue",
+      "Trouvez n'importe quelle transaction en quelques secondes en utilisant des filtres par date, catégorie, type ou mot-clé.",
+    "landing.features.multilang.title": "Disponible en plusieurs langues",
     "landing.features.multilang.desc":
-      "Utilisez l'application dans la langue de votre choix, changez à tout moment depuis le coin supérieur.",
+      "Utilisez Monu dans la langue que vous préférez et changez entre elles quand vous en avez besoin.",
 
     "landing.preview.title": "Voici à quoi ça ressemble",
     "landing.preview.subtitle":
@@ -679,7 +701,14 @@ export const translations = {
     "dashboard.error.transaction": "Impossible d'enregistrer la transaction : {detail}",
     "dashboard.error.delete": "Impossible de supprimer la transaction : {detail}",
     "dashboard.error.category": "Impossible d'enregistrer la catégorie : {detail}",
+    "dashboard.confirm.deleteTitle": "Confirmer la suppression",
     "dashboard.confirm.delete": "Voulez-vous vraiment supprimer ce mouvement ?",
+    "category.confirm.deleteTitle": "Confirmer la suppression",
+    "category.confirm.delete": "Supprimer cette catégorie ? Les transactions existantes ne seront pas affectées.",
+    "goals.confirm.deleteTitle": "Confirmer la suppression",
+    "goals.confirm.delete": "Supprimer cet objectif d'épargne ?",
+    "common.dialog.cancel": "Annuler",
+    "common.dialog.confirm": "Supprimer",
     ...infoPagesFr,
   },
 };

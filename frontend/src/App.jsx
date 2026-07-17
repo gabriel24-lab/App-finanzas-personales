@@ -27,9 +27,12 @@ import { LanguageSwitcher } from "./components/LanguageSwitcher";
 import { LandingPage } from "./pages/LandingPage";
 import { AuthPage } from "./pages/AuthPage";
 import { InfoPage } from "./pages/InfoPage";
-import { parseAppHash, scrollToLandingSection } from "./utils/hashRoute";
+import { ResourcesPage } from "./pages/ResourcesPage";
+import { ResourceDetailPage } from "./pages/ResourceDetailPage";
+import { parseAppHash, scrollToLandingSection, resourcesPath, resourceDetailPath } from "./utils/hashRoute";
 import { useAuth } from "./context/AuthContext";
 import { useLanguage } from "./context/LanguageContext";
+import { ConfirmDialog } from "./components/ConfirmDialog";
 import {
   fetchTransactions,
   createTransaction,
@@ -71,6 +74,7 @@ function Dashboard() {
   const [typeFilter, setTypeFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [activeView, setActiveView] = useState("dashboard");
+  const [pendingDeleteTransactionId, setPendingDeleteTransactionId] = useState(null);
 
   // Carga inicial de transacciones, presupuestos y categorías del usuario autenticado.
   useEffect(() => {
@@ -137,18 +141,25 @@ function Dashboard() {
     [token, user._id, wallet, t]
   );
 
-  const handleDeleteTransaction = useCallback(
-    async (id) => {
-      if (!window.confirm(t("dashboard.confirm.delete"))) return;
-      try {
-        await deleteTransactionApi(token, id);
-        setTransactions((prev) => prev.filter((tx) => tx.id !== id));
-      } catch (err) {
-        setError(t("dashboard.error.delete", { detail: err.message }));
-      }
-    },
-    [token, t]
-  );
+  const requestDeleteTransaction = useCallback((id) => {
+    setPendingDeleteTransactionId(id);
+  }, []);
+
+  const cancelDeleteTransaction = useCallback(() => {
+    setPendingDeleteTransactionId(null);
+  }, []);
+
+  const confirmDeleteTransaction = useCallback(async () => {
+    if (!pendingDeleteTransactionId) return;
+    try {
+      await deleteTransactionApi(token, pendingDeleteTransactionId);
+      setTransactions((prev) => prev.filter((tx) => tx.id !== pendingDeleteTransactionId));
+    } catch (err) {
+      setError(t("dashboard.error.delete", { detail: err.message }));
+    } finally {
+      setPendingDeleteTransactionId(null);
+    }
+  }, [pendingDeleteTransactionId, token, t]);
 
   const handleCreateCategory = useCallback(
     async (values) => {
@@ -408,56 +419,67 @@ function Dashboard() {
           <div className="space-y-6 lg:col-span-8">
             <AnimatePresence mode="wait">
               {activeView === "dashboard" && (
-                <motion.div
-                  key="dashboard-view"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.32, ease: easeOut }}
-                  className="space-y-6"
-                >
-                  <KPICards transactions={transactions} wallet={wallet} />
+                    <>
+                      <motion.div
+                        key="dashboard-view"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.32, ease: easeOut }}
+                        className="space-y-6"
+                      >
+                        <KPICards transactions={transactions} wallet={wallet} />
 
-                  {transactions.length > 0 && (
-                    <InsightsPanel token={token} walletId={wallet?.wallet_id} />
-                  )}
-
-                  <DashboardCharts transactions={transactions} categories={categories} wallet={wallet} />
-
-                  <TransactionFilters
-                    categories={categories}
-                    search={search}
-                    setSearch={setSearch}
-                    typeFilter={typeFilter}
-                    setTypeFilter={setTypeFilter}
-                    categoryFilter={categoryFilter}
-                    setCategoryFilter={setCategoryFilter}
-                    onResetFilters={handleResetFilters}
-                  />
-
-                  <div>
-                    <div className="mb-3 flex items-center justify-between px-1">
-                      <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-500">
-                        {t("dashboard.history.title")}
-                      </h3>
-                      <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-500">
-                        {filteredTransactions.length}{" "}
-                        {t(
-                          filteredTransactions.length === 1
-                            ? "dashboard.history.count.one"
-                            : "dashboard.history.count.other"
+                        {transactions.length > 0 && (
+                          <InsightsPanel token={token} walletId={wallet?.wallet_id} />
                         )}
-                      </span>
-                    </div>
-                    <TransactionList
-                      transactions={filteredTransactions}
-                      categories={categories}
-                      onDeleteTransaction={handleDeleteTransaction}
-                      wallet={wallet}
-                    />
-                  </div>
-                </motion.div>
-              )}
+
+                        <DashboardCharts transactions={transactions} categories={categories} wallet={wallet} />
+
+                        <TransactionFilters
+                          categories={categories}
+                          search={search}
+                          setSearch={setSearch}
+                          typeFilter={typeFilter}
+                          setTypeFilter={setTypeFilter}
+                          categoryFilter={categoryFilter}
+                          setCategoryFilter={setCategoryFilter}
+                          onResetFilters={handleResetFilters}
+                        />
+
+                        <div>
+                          <div className="mb-3 flex items-center justify-between px-1">
+                            <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-500">
+                              {t("dashboard.history.title")}
+                            </h3>
+                            <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-500">
+                              {filteredTransactions.length}{" "}
+                              {t(
+                                filteredTransactions.length === 1
+                                  ? "dashboard.history.count.one"
+                                  : "dashboard.history.count.other"
+                              )}
+                            </span>
+                          </div>
+                          <TransactionList
+                            transactions={filteredTransactions}
+                            categories={categories}
+                            onDeleteTransaction={requestDeleteTransaction}
+                            wallet={wallet}
+                          />
+                        </div>
+                      </motion.div>
+                      <ConfirmDialog
+                        open={Boolean(pendingDeleteTransactionId)}
+                        title={t("dashboard.confirm.deleteTitle")}
+                        message={t("dashboard.confirm.delete")}
+                        cancelLabel={t("common.dialog.cancel")}
+                        confirmLabel={t("common.dialog.confirm")}
+                        onCancel={cancelDeleteTransaction}
+                        onConfirm={confirmDeleteTransaction}
+                      />
+                    </>
+                  )}
 
               {activeView === "budgets" && (
                 <motion.div
@@ -527,9 +549,11 @@ function Dashboard() {
 function App() {
   const { user, loading } = useAuth();
   // "landing" -> página de inicio pública | "auth" -> login/registro | "info" -> páginas legales/soporte
+  // "resources" -> lista de recursos | "resource-detail" -> detalle de un recurso
   const [publicView, setPublicView] = useState("landing");
   const [authMode, setAuthMode] = useState("login");
   const [infoSlug, setInfoSlug] = useState(null);
+  const [resourceSlug, setResourceSlug] = useState(null);
 
   // Recuerda si en el render anterior había una sesión activa, para poder
   // detectar el momento exacto del logout (user pasa de "algo" a null).
@@ -549,6 +573,7 @@ function App() {
       setPublicView("landing");
       setAuthMode("login");
       setInfoSlug(null);
+      setResourceSlug(null);
       window.location.hash = "";
     }
   }, [user]);
@@ -556,6 +581,18 @@ function App() {
   useEffect(() => {
     function applyRouteFromHash() {
       const route = parseAppHash();
+
+      if (route.kind === "resource-detail") {
+        setPublicView("resource-detail");
+        setResourceSlug(route.slug);
+        return;
+      }
+
+      if (route.kind === "resources") {
+        setPublicView("resources");
+        setResourceSlug(null);
+        return;
+      }
 
       if (route.kind === "info") {
         setPublicView("info");
@@ -566,6 +603,7 @@ function App() {
       if (route.kind === "landing") {
         setPublicView("landing");
         setInfoSlug(null);
+        setResourceSlug(null);
         scrollToLandingSection(route.section);
       }
     }
@@ -579,7 +617,20 @@ function App() {
     window.location.hash = "";
     setPublicView("landing");
     setInfoSlug(null);
+    setResourceSlug(null);
     scrollToLandingSection(null);
+  };
+
+  const goToResources = () => {
+    window.location.hash = resourcesPath();
+    setPublicView("resources");
+    setResourceSlug(null);
+  };
+
+  const goToResourceDetail = (slug) => {
+    window.location.hash = resourceDetailPath(slug);
+    setPublicView("resource-detail");
+    setResourceSlug(slug);
   };
 
   if (loading) {
@@ -639,6 +690,32 @@ function App() {
           transition={{ duration: 0.35, ease: easeOut }}
         >
           <InfoPage slug={infoSlug} onBack={goHome} />
+        </motion.div>
+      )}
+      {viewKey === "resources" && (
+        <motion.div
+          key="resources"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.35, ease: easeOut }}
+        >
+          <ResourcesPage onNavigate={goToResourceDetail} onBack={goHome} />
+        </motion.div>
+      )}
+      {viewKey === "resource-detail" && (
+        <motion.div
+          key={`resource-detail-${resourceSlug}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.35, ease: easeOut }}
+        >
+          <ResourceDetailPage
+            slug={resourceSlug}
+            onBack={goHome}
+            onBackToResources={goToResources}
+          />
         </motion.div>
       )}
       {viewKey === "dashboard" && (

@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { ICON_OPTIONS, COLOR_OPTIONS, getCategoryIcon } from "../iconMap";
 import { InfoTooltip } from "./InfoTooltip";
+import { ConfirmDialog } from "./ConfirmDialog";
+import { useLanguage } from "../context/LanguageContext";
 
 const easeOut = [0.22, 1, 0.36, 1];
 
@@ -294,14 +296,15 @@ export function CategoryManager({
     [categories],
   );
 
-  const handleDelete = (id) => {
-    if (
-      window.confirm(
-        "¿Eliminar esta categoría? Las transacciones ya registradas no se verán afectadas.",
-      )
-    ) {
-      onDeleteCategory(id);
-    }
+  const { t } = useLanguage();
+  const [pendingDeleteCategoryId, setPendingDeleteCategoryId] = useState(null);
+
+  const requestDeleteCategory = (id) => setPendingDeleteCategoryId(id);
+  const cancelDeleteCategory = () => setPendingDeleteCategoryId(null);
+  const confirmDeleteCategory = () => {
+    if (!pendingDeleteCategoryId) return;
+    onDeleteCategory(pendingDeleteCategoryId);
+    setPendingDeleteCategoryId(null);
   };
 
   return (
@@ -328,7 +331,7 @@ export function CategoryManager({
           categories={incomeCategories}
           onCreate={onCreateCategory}
           onUpdate={onUpdateCategory}
-          onDelete={handleDelete}
+          onDelete={requestDeleteCategory}
         />
         <CategoryTypeSection
           type="expense"
@@ -338,9 +341,18 @@ export function CategoryManager({
           categories={expenseCategories}
           onCreate={onCreateCategory}
           onUpdate={onUpdateCategory}
-          onDelete={handleDelete}
+          onDelete={requestDeleteCategory}
         />
       </div>
+      <ConfirmDialog
+        open={Boolean(pendingDeleteCategoryId)}
+        title={t("category.confirm.deleteTitle")}
+        message={t("category.confirm.delete")}
+        cancelLabel={t("common.dialog.cancel")}
+        confirmLabel={t("common.dialog.confirm")}
+        onCancel={cancelDeleteCategory}
+        onConfirm={confirmDeleteCategory}
+      />
     </div>
   );
 }

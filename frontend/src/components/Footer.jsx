@@ -1,6 +1,6 @@
 import React from "react";
 import { useLanguage } from "../context/LanguageContext";
-import { infoPath, landingSectionPath } from "../utils/hashRoute";
+import { infoPath, landingSectionPath, resourcesPath } from "../utils/hashRoute";
 
 const FOOTER_COLUMNS = [
   {
@@ -22,7 +22,7 @@ const FOOTER_COLUMNS = [
     titleKey: "landing.footer.company.title",
     links: [
       { labelKey: "landing.footer.company.about", href: infoPath("about") },
-      { labelKey: "landing.footer.company.blog", href: infoPath("blog") },
+      { labelKey: "landing.footer.company.blog", href: resourcesPath() },
       { labelKey: "landing.footer.company.contact", href: infoPath("contact") },
     ],
   },
@@ -68,12 +68,12 @@ export function Footer() {
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {column.links.map((link) => (
-                    <li key={link.labelKey}>
+                    <li key={link.labelKey ?? link.label}>
                       <a
                         href={link.href}
                         className="text-sm text-neutral-500 transition-colors hover:text-neutral-900"
                       >
-                        {t(link.labelKey)}
+                        {link.label ?? t(link.labelKey)}
                       </a>
                     </li>
                   ))}
