@@ -13,6 +13,8 @@ import {
   Library,
 } from "lucide-react";
 import { PublicPageLayout } from "../components/PublicPageLayout";
+import { useLanguage } from "../context/LanguageContext";
+import { RESOURCE_TEXTS } from "../i18n/resources";
 
 // ─── Configuración de los 10 recursos ─────────────────────────────────────────
 // Para añadir tu imagen coloca el archivo en /public/resources/<slug>.webp
@@ -125,8 +127,11 @@ const ResourceCardComponent = React.memo(function ResourceCard({
   onNavigate,
   className = "",
 }) {
-  const title = RESOURCE_LABELS[resource.slug];
-  const description = RESOURCE_DESCRIPTIONS[resource.slug];
+  const { lang } = useLanguage();
+  const texts = RESOURCE_TEXTS[lang] ?? RESOURCE_TEXTS.es;
+  const title = texts.labels[resource.slug] ?? RESOURCE_LABELS[resource.slug];
+  const description =
+    texts.descriptions[resource.slug] ?? RESOURCE_DESCRIPTIONS[resource.slug];
 
   return (
     <article
@@ -186,7 +191,7 @@ const ResourceCardComponent = React.memo(function ResourceCard({
 
         {/* CTA */}
         <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-white/90 transition-colors group-hover:text-white">
-          <span>Leer recurso</span>
+          <span>{texts.resourcePage.readResource}</span>
           <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
         </div>
       </div>
@@ -197,13 +202,16 @@ const ResourceCardComponent = React.memo(function ResourceCard({
 export const ResourceCard = ResourceCardComponent;
 
 export function ResourcesPage({ onNavigate, onBack }) {
+  const { lang } = useLanguage();
+  const texts = RESOURCE_TEXTS[lang] ?? RESOURCE_TEXTS.es;
+
   return (
     <PublicPageLayout
-      title="Recursos financieros"
-      subtitle="Guías y artículos para mejorar tu relación con el dinero, paso a paso."
+      title={texts.resourcePage.title}
+      subtitle={texts.resourcePage.subtitle}
       onBack={onBack}
     >
-      <section aria-label="Lista de recursos">
+      <section aria-label={texts.resourcePage.listAria || "Lista de recursos"}>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {RESOURCES.map((resource) => (
             <ResourceCard

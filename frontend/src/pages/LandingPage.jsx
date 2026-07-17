@@ -44,6 +44,7 @@ const FEATURE_KEYS = [
 ];
 
 function ResourceCarousel() {
+  const { t } = useLanguage();
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -106,14 +107,14 @@ function ResourceCarousel() {
       <button
         onClick={() => scroll("left")}
         className="absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 z-10 hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg text-neutral-800 opacity-0 transition-opacity hover:bg-neutral-50 group-hover:opacity-100 ring-1 ring-black/5"
-        aria-label="Anterior"
+        aria-label={t("landing.resources.prev")}
       >
         <ChevronLeft className="h-6 w-6" />
       </button>
       <button
         onClick={() => scroll("right")}
         className="absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 z-10 hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg text-neutral-800 opacity-0 transition-opacity hover:bg-neutral-50 group-hover:opacity-100 ring-1 ring-black/5"
-        aria-label="Siguiente"
+        aria-label={t("landing.resources.next")}
       >
         <ChevronRight className="h-6 w-6" />
       </button>
@@ -733,14 +734,13 @@ export function LandingPage({ onGetStarted, onLogin }) {
         <div className="mx-auto max-w-7xl px-6 lg:px-8 mb-12 text-center">
           <Reveal>
             <h2 className="text-sm font-semibold uppercase tracking-wide text-brand-600">
-              Aprende con nosotros
+              {t("landing.resources.eyebrow")}
             </h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
-              Domina tus finanzas personales
+              {t("landing.resources.title")}
             </p>
             <p className="mt-4 text-lg text-neutral-500 max-w-2xl mx-auto">
-              Descubre guías, métodos de ahorro y consejos prácticos para
-              mejorar tu relación con el dinero.
+              {t("landing.resources.subtitle")}
             </p>
           </Reveal>
         </div>
@@ -753,7 +753,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
             href={resourcesPath()}
             className="inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-neutral-900 shadow-sm ring-1 ring-inset ring-neutral-300 transition-all hover:bg-neutral-50"
           >
-            Ver todos los recursos
+            {t("landing.resources.cta")}
             <ArrowRight className="h-4 w-4 text-neutral-400" />
           </a>
         </div>

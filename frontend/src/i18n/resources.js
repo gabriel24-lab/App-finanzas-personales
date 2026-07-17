@@ -51,6 +51,705 @@ export const RESOURCES = [
   },
 ];
 
+export const RESOURCE_DETAIL_CONTENT = {
+  en: {
+    "como-crear-presupuesto": {
+      readTime: "6 min",
+      category: "Budget",
+      intro:
+        "A budget is a practical way to turn financial chaos into clarity and make every dollar intentional.",
+      sections: [
+        {
+          title: "Why it matters",
+          body:
+            "A budget helps you anticipate future needs instead of reacting to money at the last minute.",
+        },
+        {
+          title: "Start with a simple routine",
+          body:
+            "Track your income and expenses for a month, then assign every peso a purpose before the next month begins.",
+        },
+      ],
+      tips: [
+        "Review your budget weekly.",
+        "Leave room for unexpected expenses.",
+        "Adjust the plan when your life changes.",
+      ],
+    },
+    "regla-50-30-20": {
+      readTime: "5 min",
+      category: "Budget",
+      intro:
+        "The 50/30/20 rule gives you an easy framework to balance essentials, enjoyment, and the future.",
+      sections: [
+        {
+          title: "How it works",
+          body:
+            "Split your income into 50% needs, 30% wants, and 20% saving and debt payments.",
+        },
+        {
+          title: "Why it still helps",
+          body:
+            "It creates a simple structure that helps you decide clearly without overcomplicating your finances.",
+        },
+      ],
+      tips: [
+        "Base the calculation on your net income.",
+        "Review your split every few months.",
+        "Automate savings on payday.",
+      ],
+    },
+    "como-ahorrar-dinero": {
+      readTime: "7 min",
+      category: "Savings",
+      intro:
+        "Saving becomes easier when it is treated as a habit and not as a sacrifice.",
+      sections: [
+        {
+          title: "Pay yourself first",
+          body:
+            "Transfer a portion of your income to savings right away, before spending on anything else.",
+        },
+        {
+          title: "Use automation",
+          body:
+            "Automatic transfers make saving more reliable than relying on willpower alone.",
+        },
+      ],
+      tips: [
+        "Start small and increase gradually.",
+        "Use a separate account for savings.",
+        "Link saving to a concrete goal.",
+      ],
+    },
+    "fondo-de-emergencia": {
+      readTime: "6 min",
+      category: "Savings",
+      intro:
+        "An emergency fund protects you from unexpected events and reduces the risk of falling into debt.",
+      sections: [
+        {
+          title: "What it is for",
+          body:
+            "It helps cover surprise expenses without forcing you to use high-interest debt.",
+        },
+        {
+          title: "How to build it",
+          body:
+            "Start with a small target and grow it steadily until it covers several months of essential expenses.",
+        },
+      ],
+      tips: [
+        "Keep it in a liquid and safe account.",
+        "Do not invest it in volatile products.",
+        "Restore it quickly after using it.",
+      ],
+    },
+    "como-eliminar-deudas": {
+      readTime: "8 min",
+      category: "Debt",
+      intro:
+        "Getting out of debt requires strategy, discipline, and a plan you can actually sustain.",
+      sections: [
+        {
+          title: "List everything first",
+          body:
+            "Write down all your debts and organize them by balance so you can attack them in order.",
+        },
+        {
+          title: "Create momentum",
+          body:
+            "Use any extra money to pay the smallest debt first and build confidence as you progress.",
+        },
+      ],
+      tips: [
+        "Avoid taking on new debt while paying off old ones.",
+        "Celebrate each small win.",
+        "Negotiate before the debt grows larger.",
+      ],
+    },
+    "errores-financieros": {
+      readTime: "6 min",
+      category: "Education",
+      intro:
+        "Many financial mistakes come from habits that look harmless until they quietly damage your stability.",
+      sections: [
+        {
+          title: "Lifestyle inflation",
+          body:
+            "When your expenses grow as fast as your income, you may feel richer while saving less.",
+        },
+        {
+          title: "Emotional decisions",
+          body:
+            "Buying impulsively or using credit under stress can create problems that last much longer than the purchase itself.",
+        },
+      ],
+      tips: [
+        "Review your expenses monthly.",
+        "Wait 24 hours before large purchases.",
+        "Keep your goals in sight.",
+      ],
+    },
+    "educacion-financiera-estudiantes": {
+      readTime: "7 min",
+      category: "Education",
+      intro:
+        "Financial education gives students a strong base for making better decisions before bigger responsibilities arrive.",
+      sections: [
+        {
+          title: "Use this stage well",
+          body:
+            "Student years are the perfect time to build habits that will protect your future freedom.",
+        },
+        {
+          title: "Learn the basics",
+          body:
+            "Understanding income, expenses, debt, and interest makes your decisions calmer and more effective.",
+        },
+      ],
+      tips: [
+        "Track your spending for a month.",
+        "Avoid unnecessary debt.",
+        "Keep learning continuously.",
+      ],
+    },
+    "gastos-hormiga": {
+      readTime: "6 min",
+      category: "Habits",
+      intro:
+        "Small expenses can seem harmless, but they often drain your budget more than you realize.",
+      sections: [
+        {
+          title: "Why they are dangerous",
+          body:
+            "A few small purchases every day can become a major monthly leak without feeling dramatic.",
+        },
+        {
+          title: "How to control them",
+          body:
+            "Create a short pause before buying non-essential items and review your tiny expenses weekly.",
+        },
+      ],
+      tips: [
+        "Review small expenses every week.",
+        "Use a separate card or cash for daily spending.",
+        "Set a monthly limit for pleasures.",
+      ],
+    },
+    "metodos-de-ahorro": {
+      readTime: "7 min",
+      category: "Savings",
+      intro:
+        "The best saving method is the one you can follow consistently in your real life.",
+      sections: [
+        {
+          title: "Pay yourself first",
+          body:
+            "Automate a transfer before you spend on anything else so saving is built into your routine.",
+        },
+        {
+          title: "Choose a system that fits you",
+          body:
+            "A challenge, a budget envelope, or simple automation can work better than a complex plan.",
+        },
+      ],
+      tips: [
+        "Pick one method at a time.",
+        "Use barriers if you are impulsive.",
+        "Prefer simple systems over perfect ones.",
+      ],
+    },
+    "glosario-financiero": {
+      readTime: "8 min",
+      category: "Education",
+      intro:
+        "Learning financial vocabulary gives you more confidence and helps you avoid costly misunderstandings.",
+      sections: [
+        {
+          title: "Assets, liabilities, and net worth",
+          body:
+            "These terms help you understand what you own, what you owe, and what your real financial position is.",
+        },
+        {
+          title: "Interest, inflation, and liquidity",
+          body:
+            "These concepts explain how money can grow, lose value, or become difficult to access.",
+        },
+      ],
+      tips: [
+        "Learn three terms per week.",
+        "Apply each term to a real situation.",
+        "Do not try to master everything at once.",
+      ],
+    },
+  },
+  pt: {
+    "como-crear-presupuesto": {
+      readTime: "6 min",
+      category: "Orçamento",
+      intro:
+        "Um orçamento é uma forma prática de transformar o caos financeiro em clareza e dar propósito a cada real.",
+      sections: [
+        {
+          title: "Por que é importante",
+          body:
+            "Ele ajuda a antecipar necessidades futuras em vez de reagir ao dinheiro no último minuto.",
+        },
+        {
+          title: "Comece com uma rotina simples",
+          body:
+            "Acompanhe sua renda e seus gastos por um mês e defina um destino para cada valor antes do próximo mês.",
+        },
+      ],
+      tips: [
+        "Revise o orçamento semanalmente.",
+        "Deixe espaço para gastos inesperados.",
+        "Ajuste o plano quando a vida mudar.",
+      ],
+    },
+    "regla-50-30-20": {
+      readTime: "5 min",
+      category: "Orçamento",
+      intro:
+        "A regra 50/30/20 oferece uma estrutura simples para equilibrar necessidades, prazeres e futuro.",
+      sections: [
+        {
+          title: "Como funciona",
+          body:
+            "Divida sua renda em 50% para necessidades, 30% para desejos e 20% para poupança e dívidas.",
+        },
+        {
+          title: "Por que ainda ajuda",
+          body:
+            "Ela cria uma estrutura simples para tomar decisões de forma mais clara e menos complicada.",
+        },
+      ],
+      tips: [
+        "Calcule com base na renda líquida.",
+        "Revise a divisão a cada poucos meses.",
+        "Automatize a poupança no dia do pagamento.",
+      ],
+    },
+    "como-ahorrar-dinero": {
+      readTime: "7 min",
+      category: "Poupança",
+      intro:
+        "Economizar fica mais fácil quando vira hábito e não sacrifício.",
+      sections: [
+        {
+          title: "Pague a si mesmo primeiro",
+          body:
+            "Transfira parte da sua renda para a poupança logo no início, antes de gastar em outra coisa.",
+        },
+        {
+          title: "Use automação",
+          body:
+            "Transferências automáticas tornam a poupança mais confiável do que depender só de vontade.",
+        },
+      ],
+      tips: [
+        "Comece pequeno e aumente aos poucos.",
+        "Use uma conta separada para poupar.",
+        "Associe a poupança a uma meta concreta.",
+      ],
+    },
+    "fondo-de-emergencia": {
+      readTime: "6 min",
+      category: "Poupança",
+      intro:
+        "Um fundo de emergência protege você de imprevistos e reduz o risco de entrar em dívidas.",
+      sections: [
+        {
+          title: "Para que serve",
+          body:
+            "Ele ajuda a cobrir despesas surpresa sem te obrigar a usar dívida com juros altos.",
+        },
+        {
+          title: "Como construir",
+          body:
+            "Comece com uma meta pequena e aumente aos poucos até cobrir vários meses de gastos essenciais.",
+        },
+      ],
+      tips: [
+        "Mantenha-o em conta líquida e segura.",
+        "Não invista em produtos voláteis.",
+        "Reponha-o rapidamente depois de usar.",
+      ],
+    },
+    "como-eliminar-deudas": {
+      readTime: "8 min",
+      category: "Dívidas",
+      intro:
+        "Sair das dívidas exige estratégia, disciplina e um plano que você consiga manter.",
+      sections: [
+        {
+          title: "Liste tudo primeiro",
+          body:
+            "Anote todas as dívidas e organize-as por saldo para atacá-las em ordem.",
+        },
+        {
+          title: "Crie impulso",
+          body:
+            "Use qualquer dinheiro extra para pagar a dívida menor primeiro e ganhar confiança.",
+        },
+      ],
+      tips: [
+        "Evite abrir novas dívidas enquanto paga as antigas.",
+        "Celebre cada pequena vitória.",
+        "Negocie antes que a dívida cresça mais.",
+      ],
+    },
+    "errores-financieros": {
+      readTime: "6 min",
+      category: "Educação",
+      intro:
+        "Muitos erros financeiros vêm de hábitos que parecem inofensivos até prejudicar sua estabilidade.",
+      sections: [
+        {
+          title: "Inflação de estilo de vida",
+          body:
+            "Quando seus gastos crescem tanto quanto sua renda, você pode se sentir mais rico e poupar menos.",
+        },
+        {
+          title: "Decisões emocionais",
+          body:
+            "Comprar por impulso ou usar crédito sob estresse pode criar problemas maiores do que a compra em si.",
+        },
+      ],
+      tips: [
+        "Revise seus gastos todo mês.",
+        "Espere 24 horas antes de comprar grandes itens.",
+        "Mantenha suas metas visíveis.",
+      ],
+    },
+    "educacion-financiera-estudiantes": {
+      readTime: "7 min",
+      category: "Educação",
+      intro:
+        "A educação financeira dá aos estudantes uma base forte para tomar decisões melhores antes que surjam responsabilidades maiores.",
+      sections: [
+        {
+          title: "Use este momento bem",
+          body:
+            "Os anos de estudante são perfeitos para construir hábitos que protejam sua liberdade futura.",
+        },
+        {
+          title: "Aprenda o básico",
+          body:
+            "Entender renda, gastos, dívidas e juros torna suas decisões mais calmas e eficazes.",
+        },
+      ],
+      tips: [
+        "Acompanhe seus gastos por um mês.",
+        "Evite dívidas desnecessárias.",
+        "Continue aprendendo continuamente.",
+      ],
+    },
+    "gastos-hormiga": {
+      readTime: "6 min",
+      category: "Hábitos",
+      intro:
+        "Pequenos gastos parecem inofensivos, mas muitas vezes drenam seu orçamento mais do que você percebe.",
+      sections: [
+        {
+          title: "Por que são perigosos",
+          body:
+            "Algumas compras pequenas todos os dias podem virar um vazamento grande no fim do mês sem parecer dramático.",
+        },
+        {
+          title: "Como controlá-los",
+          body:
+            "Crie uma pausa antes de comprar itens não essenciais e revise seus pequenos gastos toda semana.",
+        },
+      ],
+      tips: [
+        "Revise pequenos gastos toda semana.",
+        "Use um cartão separado ou dinheiro para gastos diários.",
+        "Defina um limite mensal para prazeres.",
+      ],
+    },
+    "metodos-de-ahorro": {
+      readTime: "7 min",
+      category: "Poupança",
+      intro:
+        "O melhor método de poupança é aquele que você consegue seguir com regularidade na sua vida real.",
+      sections: [
+        {
+          title: "Pague a si mesmo primeiro",
+          body:
+            "Automatize uma transferência antes de gastar em qualquer outra coisa para que a poupança entre na rotina.",
+        },
+        {
+          title: "Escolha um sistema que combine com você",
+          body:
+            "Um desafio, uma carteira de orçamento ou uma automação simples podem funcionar melhor do que um plano complexo.",
+        },
+      ],
+      tips: [
+        "Escolha um método por vez.",
+        "Use barreiras se você for impulsivo.",
+        "Prefira sistemas simples a perfeitos.",
+      ],
+    },
+    "glosario-financiero": {
+      readTime: "8 min",
+      category: "Educação",
+      intro:
+        "Aprender o vocabulário financeiro aumenta sua confiança e ajuda a evitar equívocos caros.",
+      sections: [
+        {
+          title: "Ativos, passivos e patrimônio",
+          body:
+            "Esses termos ajudam a entender o que você possui, o que deve e qual é sua posição financeira real.",
+        },
+        {
+          title: "Juros, inflação e liquidez",
+          body:
+            "Esses conceitos explicam como o dinheiro pode crescer, perder valor ou se tornar difícil de acessar.",
+        },
+      ],
+      tips: [
+        "Aprenda três termos por semana.",
+        "Aplique cada termo a uma situação real.",
+        "Não tente dominar tudo de uma vez.",
+      ],
+    },
+  },
+  fr: {
+    "como-crear-presupuesto": {
+      readTime: "6 min",
+      category: "Budget",
+      intro:
+        "Un budget est un moyen pratique de transformer le chaos financier en clarté et de donner un sens à chaque euro.",
+      sections: [
+        {
+          title: "Pourquoi c'est important",
+          body:
+            "Il vous aide à anticiper les besoins futurs au lieu de réagir à l'argent au dernier moment.",
+        },
+        {
+          title: "Commencez par une routine simple",
+          body:
+            "Suivez vos revenus et vos dépenses pendant un mois puis attribuez une destination à chaque somme avant le mois suivant.",
+        },
+      ],
+      tips: [
+        "Passez en revue le budget chaque semaine.",
+        "Laissez de la place pour les dépenses imprévues.",
+        "Ajustez le plan si votre vie change.",
+      ],
+    },
+    "regla-50-30-20": {
+      readTime: "5 min",
+      category: "Budget",
+      intro:
+        "La règle 50/30/20 vous donne un cadre simple pour équilibrer besoins, plaisirs et avenir.",
+      sections: [
+        {
+          title: "Comment ça marche",
+          body:
+            "Répartissez vos revenus en 50% pour les besoins, 30% pour les envies et 20% pour l'épargne et le remboursement des dettes.",
+        },
+        {
+          title: "Pourquoi elle reste utile",
+          body:
+            "Elle crée une structure simple pour prendre des décisions plus claires sans compliquer vos finances.",
+        },
+      ],
+      tips: [
+        "Basez le calcul sur votre revenu net.",
+        "Revue la répartition tous les quelques mois.",
+        "Automatisez l'épargne à la réception du salaire.",
+      ],
+    },
+    "como-ahorrar-dinero": {
+      readTime: "7 min",
+      category: "Épargne",
+      intro:
+        "Épargner devient plus simple quand cela devient une habitude et non un sacrifice.",
+      sections: [
+        {
+          title: "Payez-vous d'abord",
+          body:
+            "Transférez une partie de vos revenus vers l'épargne tout de suite, avant de dépenser pour autre chose.",
+        },
+        {
+          title: "Utilisez l'automatisation",
+          body:
+            "Les transferts automatiques rendent l'épargne plus fiable que la seule volonté.",
+        },
+      ],
+      tips: [
+        "Commencez petit puis augmentez progressivement.",
+        "Utilisez un compte séparé pour l'épargne.",
+        "Reliez l'épargne à un objectif concret.",
+      ],
+    },
+    "fondo-de-emergencia": {
+      readTime: "6 min",
+      category: "Épargne",
+      intro:
+        "Un fonds d'urgence vous protège des événements inattendus et réduit le risque de tomber dans la dette.",
+      sections: [
+        {
+          title: "À quoi il sert",
+          body:
+            "Il vous aide à couvrir des dépenses surprises sans devoir recourir à une dette à taux élevés.",
+        },
+        {
+          title: "Comment le construire",
+          body:
+            "Commencez par un petit objectif et augmentez-le progressivement jusqu'à couvrir plusieurs mois de dépenses essentielles.",
+        },
+      ],
+      tips: [
+        "Gardez-le dans un compte liquide et sûr.",
+        "N'investissez pas dans des produits volatils.",
+        "Remplacez-le rapidement après l'avoir utilisé.",
+      ],
+    },
+    "como-eliminar-deudas": {
+      readTime: "8 min",
+      category: "Dette",
+      intro:
+        "Sortir des dettes demande stratégie, discipline et un plan que vous pouvez réellement maintenir.",
+      sections: [
+        {
+          title: "Listez tout d'abord",
+          body:
+            "Écrivez toutes vos dettes et organisez-les par solde pour les attaquer dans l'ordre.",
+        },
+        {
+          title: "Créez de l'élan",
+          body:
+            "Utilisez chaque argent supplémentaire pour rembourser la plus petite dette d'abord et gagner en confiance.",
+        },
+      ],
+      tips: [
+        "Évitez de contracter de nouvelles dettes pendant que vous remboursez les anciennes.",
+        "Célébrez chaque petite victoire.",
+        "Négociez avant que la dette ne grandisse davantage.",
+      ],
+    },
+    "errores-financieros": {
+      readTime: "6 min",
+      category: "Éducation",
+      intro:
+        "Beaucoup d'erreurs financières viennent d'habitudes qui semblent anodines jusqu'à endommager votre stabilité.",
+      sections: [
+        {
+          title: "Inflation du style de vie",
+          body:
+            "Quand vos dépenses augmentent aussi vite que vos revenus, vous pouvez vous sentir plus riche tout en épargnant moins.",
+        },
+        {
+          title: "Décisions émotionnelles",
+          body:
+            "Acheter impulsivement ou utiliser le crédit sous stress peut créer des problèmes plus grands que l'achat lui-même.",
+        },
+      ],
+      tips: [
+        "Passez en revue vos dépenses chaque mois.",
+        "Attendez 24 heures avant de faire de gros achats.",
+        "Gardez vos objectifs visibles.",
+      ],
+    },
+    "educacion-financiera-estudiantes": {
+      readTime: "7 min",
+      category: "Éducation",
+      intro:
+        "L'éducation financière donne aux étudiants une base solide pour prendre de meilleures décisions avant que des responsabilités plus grandes n'arrivent.",
+      sections: [
+        {
+          title: "Profitez bien de cette étape",
+          body:
+            "Les années d'étudiant sont parfaites pour construire des habitudes qui protégeront votre liberté future.",
+        },
+        {
+          title: "Apprenez les bases",
+          body:
+            "Comprendre les revenus, les dépenses, les dettes et les intérêts rend vos décisions plus calmes et plus efficaces.",
+        },
+      ],
+      tips: [
+        "Suivez vos dépenses pendant un mois.",
+        "Évitez les dettes inutiles.",
+        "Continuez à apprendre régulièrement.",
+      ],
+    },
+    "gastos-hormiga": {
+      readTime: "6 min",
+      category: "Habitudes",
+      intro:
+        "Les petites dépenses semblent anodines, mais elles vidangent souvent votre budget plus que vous ne le pensez.",
+      sections: [
+        {
+          title: "Pourquoi elles sont dangereuses",
+          body:
+            "Quelques petits achats chaque jour peuvent devenir une fuite majeure à la fin du mois sans paraître dramatique.",
+        },
+        {
+          title: "Comment les contrôler",
+          body:
+            "Créez une courte pause avant d'acheter des articles non essentiels et passez en revue vos petites dépenses chaque semaine.",
+        },
+      ],
+      tips: [
+        "Passez en revue les petites dépenses chaque semaine.",
+        "Utilisez une carte séparée ou de l'argent pour les dépenses quotidiennes.",
+        "Fixez une limite mensuelle pour les plaisirs.",
+      ],
+    },
+    "metodos-de-ahorro": {
+      readTime: "7 min",
+      category: "Épargne",
+      intro:
+        "La meilleure méthode d'épargne est celle que vous pouvez suivre régulièrement dans votre vraie vie.",
+      sections: [
+        {
+          title: "Payez-vous d'abord",
+          body:
+            "Automatisez un transfert avant de dépenser quoi que ce soit d'autre pour que l'épargne fasse partie de votre routine.",
+        },
+        {
+          title: "Choisissez un système qui vous convient",
+          body:
+            "Un défi, un porte-monnaie budgétaire ou une automatisation simple peuvent mieux fonctionner qu'un plan complexe.",
+        },
+      ],
+      tips: [
+        "Choisissez une méthode à la fois.",
+        "Utilisez des barrières si vous êtes impulsif.",
+        "Privilégiez des systèmes simples plutôt que parfaits.",
+      ],
+    },
+    "glosario-financiero": {
+      readTime: "8 min",
+      category: "Éducation",
+      intro:
+        "Apprendre le vocabulaire financier augmente votre confiance et vous aide à éviter des malentendus coûteux.",
+      sections: [
+        {
+          title: "Actifs, passifs et patrimoine net",
+          body:
+            "Ces termes vous aident à comprendre ce que vous possédez, ce que vous devez et quelle est votre vraie situation financière.",
+        },
+        {
+          title: "Intérêts, inflation et liquidité",
+          body:
+            "Ces concepts expliquent comment l'argent peut croître, perdre de la valeur ou devenir difficile à accéder.",
+        },
+      ],
+      tips: [
+        "Apprenez trois termes par semaine.",
+        "Appliquez chaque terme à une situation réelle.",
+        "Ne tentez pas de tout maîtriser d'un coup.",
+      ],
+    },
+  },
+};
+
 export const RESOURCE_TEXTS = {
   es: {
     resourcePage: {
@@ -64,6 +763,8 @@ export const RESOURCE_TEXTS = {
       quickTips: "Consejos rápidos",
       infoBanner:
         "Este recurso es informativo. Para decisiones financieras importantes, consulta con un profesional certificado.",
+      listAria: "Lista de recursos",
+      readTimeSuffix: "de lectura",
     },
     labels: {
       "como-crear-presupuesto": "Cómo crear un presupuesto",
@@ -160,6 +861,8 @@ export const RESOURCE_TEXTS = {
       quickTips: "Quick tips",
       infoBanner:
         "This resource is informational. For important financial decisions, consult a certified professional.",
+      listAria: "Resources list",
+      readTimeSuffix: "read",
     },
     labels: {
       "como-crear-presupuesto": "How to create a budget",
@@ -254,6 +957,8 @@ export const RESOURCE_TEXTS = {
       quickTips: "Dicas rápidas",
       infoBanner:
         "Este recurso é informativo. Para decisões financeiras importantes, consulte um profissional certificado.",
+      listAria: "Lista de recursos",
+      readTimeSuffix: "de leitura",
     },
     labels: {
       "como-crear-presupuesto": "Como criar um orçamento",
@@ -348,6 +1053,8 @@ export const RESOURCE_TEXTS = {
       quickTips: "Conseils rapides",
       infoBanner:
         "Cette ressource est informative. Pour des décisions financières importantes, consultez un professionnel certifié.",
+      listAria: "Liste des ressources",
+      readTimeSuffix: "de lecture",
     },
     labels: {
       "como-crear-presupuesto": "Comment créer un budget",

@@ -104,6 +104,13 @@ export const translations = {
     "landing.cta.subtitle":
       "Crea tu cuenta gratis, no necesitas tarjeta de crédito.",
     "landing.cta.button": "Crear mi cuenta gratis",
+    "landing.resources.eyebrow": "Aprende con nosotros",
+    "landing.resources.title": "Domina tus finanzas personales",
+    "landing.resources.subtitle":
+      "Descubre guías, métodos de ahorro y consejos prácticos para mejorar tu relación con el dinero.",
+    "landing.resources.cta": "Ver todos los recursos",
+    "landing.resources.prev": "Anterior",
+    "landing.resources.next": "Siguiente",
 
     "landing.footer.heading": "Pie de página",
     "landing.footer.rights": "Todos los derechos reservados.",
@@ -287,6 +294,13 @@ export const translations = {
     "landing.cta.title": "Start organizing your finances today",
     "landing.cta.subtitle": "Create your free account, no credit card needed.",
     "landing.cta.button": "Create my free account",
+    "landing.resources.eyebrow": "Learn with us",
+    "landing.resources.title": "Master your personal finances",
+    "landing.resources.subtitle":
+      "Discover guides, saving methods, and practical advice to improve your relationship with money.",
+    "landing.resources.cta": "View all resources",
+    "landing.resources.prev": "Previous",
+    "landing.resources.next": "Next",
 
     "landing.footer.heading": "Footer",
     "landing.footer.rights": "All rights reserved.",
@@ -467,6 +481,13 @@ export const translations = {
     "landing.cta.subtitle":
       "Crie sua conta grátis, sem necessidade de cartão de crédito.",
     "landing.cta.button": "Criar minha conta grátis",
+    "landing.resources.eyebrow": "Aprenda conosco",
+    "landing.resources.title": "Domine suas finanças pessoais",
+    "landing.resources.subtitle":
+      "Descubra guias, métodos de poupança e conselhos práticos para melhorar sua relação com o dinheiro.",
+    "landing.resources.cta": "Ver todos os recursos",
+    "landing.resources.prev": "Anterior",
+    "landing.resources.next": "Próximo",
 
     "landing.footer.heading": "Rodapé",
     "landing.footer.rights": "Todos os direitos reservados.",
@@ -652,6 +673,13 @@ export const translations = {
     "landing.cta.subtitle":
       "Créez votre compte gratuit, sans carte bancaire nécessaire.",
     "landing.cta.button": "Créer mon compte gratuit",
+    "landing.resources.eyebrow": "Apprenez avec nous",
+    "landing.resources.title": "Maîtrisez vos finances personnelles",
+    "landing.resources.subtitle":
+      "Découvrez des guides, des méthodes d'épargne et des conseils pratiques pour améliorer votre relation avec l'argent.",
+    "landing.resources.cta": "Voir toutes les ressources",
+    "landing.resources.prev": "Précédent",
+    "landing.resources.next": "Suivant",
 
     "landing.footer.heading": "Pied de page",
     "landing.footer.rights": "Tous droits réservés.",

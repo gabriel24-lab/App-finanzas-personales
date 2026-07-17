@@ -9,6 +9,8 @@ import {
   BookOpen,
 } from "lucide-react";
 import { PublicPageLayout } from "../components/PublicPageLayout";
+import { useLanguage } from "../context/LanguageContext";
+import { RESOURCE_DETAIL_CONTENT, RESOURCE_TEXTS } from "../i18n/resources";
 import { RESOURCES } from "./ResourcesPage";
 
 // ─── Títulos ──────────────────────────────────────────────────────────────────
@@ -440,7 +442,7 @@ function ContentSection({ section, index }) {
   );
 }
 
-function TipsBlock({ tips, color }) {
+function TipsBlock({ tips, color, title }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 18 }}
@@ -451,7 +453,7 @@ function TipsBlock({ tips, color }) {
       <div className="flex items-center gap-2 mb-4">
         <CheckCircle2 className="h-5 w-5" style={{ color }} />
         <h2 className="text-base font-bold text-neutral-900">
-          Consejos rápidos
+          {title}
         </h2>
       </div>
       <ul className="space-y-3">
@@ -473,7 +475,7 @@ function TipsBlock({ tips, color }) {
   );
 }
 
-function AlertBanner({ color }) {
+function AlertBanner({ color, text }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -487,28 +489,36 @@ function AlertBanner({ color }) {
     >
       <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" style={{ color }} />
       <p className="text-sm leading-relaxed" style={{ color }}>
-        Este recurso es informativo. Para decisiones financieras importantes,
-        consulta con un profesional certificado.
+        {text}
       </p>
     </motion.div>
   );
 }
 
 export function ResourceDetailPage({ slug, onBack, onBackToResources }) {
+  const { lang } = useLanguage();
+  const texts = RESOURCE_TEXTS[lang] ?? RESOURCE_TEXTS.es;
   const resource = RESOURCES.find((r) => r.slug === slug);
-  const content = RESOURCE_CONTENT[slug];
+  const fallbackContent = RESOURCE_CONTENT[slug];
+  const translatedContent =
+    lang === "es"
+      ? fallbackContent
+      : RESOURCE_DETAIL_CONTENT[lang]?.[slug] ??
+        RESOURCE_DETAIL_CONTENT.en?.[slug] ??
+        fallbackContent;
+  const content = translatedContent ?? fallbackContent;
 
   if (!resource || !content) {
     return (
       <PublicPageLayout
-        title="Recurso no encontrado"
-        subtitle="El recurso que buscas no existe."
+        title={texts.resourcePage.notFoundTitle}
+        subtitle={texts.resourcePage.notFoundSubtitle}
         onBack={onBack}
       />
     );
   }
 
-  const title = RESOURCE_TITLES[slug];
+  const title = texts.detailTitles?.[slug] ?? RESOURCE_TITLES[slug];
 
   return (
     <PublicPageLayout title={title} subtitle={content.intro} onBack={onBack}>
@@ -516,7 +526,7 @@ export function ResourceDetailPage({ slug, onBack, onBackToResources }) {
       <div className="mb-5 flex flex-wrap items-center gap-3">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1 text-xs font-semibold text-neutral-600">
           <Clock className="h-3.5 w-3.5" />
-          {content.readTime} de lectura
+          {content.readTime} {texts.resourcePage.readTimeSuffix}
         </span>
         <span
           className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold text-white"
@@ -544,12 +554,12 @@ export function ResourceDetailPage({ slug, onBack, onBackToResources }) {
         className="mb-6 inline-flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-600 shadow-sm transition-colors hover:bg-neutral-50 hover:text-neutral-900 cursor-pointer"
       >
         <ArrowLeft className="h-4 w-4" />
-        Ver todos los recursos
+        {texts.resourcePage.backToResources}
       </button>
 
       {/* Banner aviso */}
       <div className="mb-5">
-        <AlertBanner color={resource.color} />
+        <AlertBanner color={resource.color} text={texts.resourcePage.infoBanner} />
       </div>
 
       {/* Secciones de contenido */}
@@ -560,7 +570,11 @@ export function ResourceDetailPage({ slug, onBack, onBackToResources }) {
 
         {/* Bloque de consejos */}
         {content.tips?.length > 0 && (
-          <TipsBlock tips={content.tips} color={resource.color} />
+          <TipsBlock
+            tips={content.tips}
+            color={resource.color}
+            title={texts.resourcePage.quickTips}
+          />
         )}
       </div>
     </PublicPageLayout>
