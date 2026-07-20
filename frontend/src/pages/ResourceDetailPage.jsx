@@ -375,7 +375,7 @@ const easeOut = [0.22, 1, 0.36, 1];
 function HeroImage({ resource }) {
   return (
     <div
-      className="relative w-full overflow-hidden rounded-3xl shadow-xl"
+      className="relative w-full overflow-hidden rounded-3xl shadow-xl force-light"
       style={{ height: "280px" }}
     >
       <img
@@ -452,9 +452,7 @@ function TipsBlock({ tips, color, title }) {
     >
       <div className="flex items-center gap-2 mb-4">
         <CheckCircle2 className="h-5 w-5" style={{ color }} />
-        <h2 className="text-base font-bold text-neutral-900">
-          {title}
-        </h2>
+        <h2 className="text-base font-bold text-neutral-900">{title}</h2>
       </div>
       <ul className="space-y-3">
         {tips.map((tip, i) => (
@@ -503,9 +501,9 @@ export function ResourceDetailPage({ slug, onBack, onBackToResources }) {
   const translatedContent =
     lang === "es"
       ? fallbackContent
-      : RESOURCE_DETAIL_CONTENT[lang]?.[slug] ??
+      : (RESOURCE_DETAIL_CONTENT[lang]?.[slug] ??
         RESOURCE_DETAIL_CONTENT.en?.[slug] ??
-        fallbackContent;
+        fallbackContent);
   const content = translatedContent ?? fallbackContent;
 
   if (!resource || !content) {
@@ -559,7 +557,10 @@ export function ResourceDetailPage({ slug, onBack, onBackToResources }) {
 
       {/* Banner aviso */}
       <div className="mb-5">
-        <AlertBanner color={resource.color} text={texts.resourcePage.infoBanner} />
+        <AlertBanner
+          color={resource.color}
+          text={texts.resourcePage.infoBanner}
+        />
       </div>
 
       {/* Secciones de contenido */}

@@ -18,6 +18,8 @@ import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { CurrencySelector } from "../components/CurrencySelector";
+import { ThemeToggle } from "../components/ThemeToggle";
+import { useTheme } from "../context/ThemeContext";
 
 function FieldInput({ icon: Icon, error, ...props }) {
   return (
@@ -44,7 +46,7 @@ function FieldInput({ icon: Icon, error, ...props }) {
 function BrandPanel({ t }) {
   return (
     <div
-      className="relative hidden h-full flex-col justify-between overflow-hidden bg-linear-to-b from-brand-950 via-brand-900 to-brand-800 bg-cover bg-center p-10 text-white lg:flex"
+      className="relative hidden h-full flex-col justify-between overflow-hidden bg-linear-to-b from-brand-950 via-brand-900 to-brand-800 bg-cover bg-center p-10 text-white lg:flex force-light"
       style={{ backgroundImage: "url('/auth-panel-bg.jpg')" }}
     >
       {/* Capa oscura sobre la foto: sin esto, el texto blanco pierde
@@ -141,6 +143,7 @@ function BrandPanel({ t }) {
 export function AuthPage({ onBack, initialMode = "login" }) {
   const { login, register } = useAuth();
   const { t } = useLanguage();
+  const { theme } = useTheme();
   const [mode, setMode] = useState(initialMode); // "login" | "register"
 
   const [name, setName] = useState("");
@@ -277,15 +280,20 @@ export function AuthPage({ onBack, initialMode = "login" }) {
           ) : (
             <span />
           )}
-          <LanguageSwitcher variant="default" />
+          <div className="flex shrink-0 items-center gap-2">
+            <ThemeToggle variant="icon" />
+            <LanguageSwitcher variant="default" />
+          </div>
         </div>
 
         <div data-gsap="auth-form" className="w-full max-w-sm">
           {/* Logo visible solo en mobile */}
           <div className="mb-8 flex items-center gap-2.5 lg:hidden">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-brand-900 text-white">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-brand-900">
               <img
-                src="/isotipo-light.png"
+                src={
+                  theme === "dark" ? "/isotipo-dark.png" : "/isotipo-light.png"
+                }
                 alt={t("common.appName")}
                 className="h-10 w-10 object-contain"
               />

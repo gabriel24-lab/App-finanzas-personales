@@ -20,6 +20,8 @@ import { useLanguage } from "../context/LanguageContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { FloatingCoins } from "../components/FloatingCoins";
 import { Reveal, RevealGroup, revealItemVariants } from "../components/Reveal";
+import { ThemeToggle } from "../components/ThemeToggle";
+import { useTheme } from "../context/ThemeContext";
 import { Footer } from "../components/Footer";
 import { RESOURCES, ResourceCard } from "./ResourcesPage";
 import { resourceDetailPath, resourcesPath } from "../utils/hashRoute";
@@ -372,6 +374,7 @@ function DashboardPreviewMock({ t }) {
 
 export function LandingPage({ onGetStarted, onLogin }) {
   const { t } = useLanguage();
+  const { theme } = useTheme();
   const pageRef = useRef(null);
   const headerRef = useRef(null);
 
@@ -459,7 +462,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
         className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
           isScrolled
             ? "bg-white/90 shadow-sm backdrop-blur-md"
-            : "bg-transparent"
+            : "bg-transparent force-light"
         }`}
       >
         <div className="mx-auto grid max-w-6xl grid-cols-2 items-center px-4 py-6 sm:px-6 lg:grid-cols-3 lg:px-8">
@@ -470,7 +473,13 @@ export function LandingPage({ onGetStarted, onLogin }) {
               }`}
             >
               <img
-                src={isScrolled ? "/isotipo-dark.png" : "/isotipo-light.png"}
+                src={
+                  isScrolled
+                    ? theme === "dark"
+                      ? "/isotipo-light.png"
+                      : "/isotipo-dark.png"
+                    : "/isotipo-light.png"
+                }
                 alt={t("common.appName")}
                 className="h-9 w-9 object-contain"
               />
@@ -519,6 +528,9 @@ export function LandingPage({ onGetStarted, onLogin }) {
 
           <div className="flex items-center justify-end gap-2 sm:gap-3">
             <div>
+              <ThemeToggle variant={isScrolled ? "icon" : "icon-light"} />
+            </div>
+            <div>
               <LanguageSwitcher variant={isScrolled ? "default" : "light"} />
             </div>
             <button
@@ -536,7 +548,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
       </motion.header>
 
       <div
-        className="relative overflow-hidden bg-brand-950 bg-cover bg-center"
+        className="relative overflow-hidden bg-brand-950 bg-cover bg-center force-light"
         style={{
           backgroundImage: "url('/hero.jpg')",
           paddingTop: headerHeight,
@@ -684,7 +696,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
       {/* Preview / cómo se ve la app */}
       <section
         id="preview"
-        className="relative overflow-hidden bg-brand-950 bg-cover bg-center py-20"
+        className="relative overflow-hidden bg-brand-950 bg-cover bg-center py-20 force-light"
         style={{ backgroundImage: "url('/dentro.jpg')" }}
       >
         <div
@@ -762,7 +774,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
       {/* CTA final */}
       <section
         id="empezar"
-        className="relative overflow-hidden bg-brand-950 py-20 text-white"
+        className="relative overflow-hidden bg-brand-950 py-20 text-white force-light"
       >
         <div className="pointer-events-none absolute inset-0">
           <div

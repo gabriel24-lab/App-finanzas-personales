@@ -9,6 +9,9 @@ import {
   Loader2,
   AlertCircle,
   LogOut,
+  Menu,
+  X,
+  PlusCircle,
 } from "lucide-react";
 import { KPICards } from "./components/KPICards";
 import { InsightsPanel } from "./components/InsightsPanel";
@@ -35,8 +38,10 @@ import {
   resourcesPath,
   resourceDetailPath,
 } from "./utils/hashRoute";
+import { ThemeToggle } from "./components/ThemeToggle";
 import { useAuth } from "./context/AuthContext";
 import { useLanguage } from "./context/LanguageContext";
+import { useTheme } from "./context/ThemeContext";
 import { ConfirmDialog } from "./components/ConfirmDialog";
 import {
   fetchTransactions,
@@ -55,6 +60,7 @@ const easeOut = [0.22, 1, 0.36, 1];
 function Dashboard() {
   const { user, token, logout, updateUserData } = useAuth();
   const { t } = useLanguage();
+  const { theme } = useTheme();
 
   // Guard: al cerrar sesión, `user` pasa a null de inmediato, pero este
   // componente sigue montado unos milisegundos más mientras AnimatePresence
@@ -79,8 +85,18 @@ function Dashboard() {
   const [typeFilter, setTypeFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [activeView, setActiveView] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pendingDeleteTransactionId, setPendingDeleteTransactionId] =
     useState(null);
+
+  const NAV_ITEMS = [
+    { id: "dashboard", labelKey: "dashboard.nav.transactions", Icon: LayoutDashboard },
+    { id: "agregar",   labelKey: "dashboard.nav.add",          Icon: PlusCircle },
+    { id: "budgets",   labelKey: "dashboard.nav.budgets",      Icon: PiggyBank },
+    { id: "categories",labelKey: "dashboard.nav.categories",   Icon: Tags },
+    { id: "goals",     labelKey: "dashboard.nav.goals",        Icon: Target },
+    { id: "explore",   labelKey: "dashboard.nav.explore",      Icon: Compass },
+  ];
 
   // Carga inicial de transacciones, presupuestos y categorías del usuario autenticado.
   useEffect(() => {
@@ -296,364 +312,348 @@ function Dashboard() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, ease: easeOut }}
-      className="min-h-screen bg-neutral-50 px-3 py-4 text-neutral-800 antialiased sm:px-6 sm:py-6 lg:px-8"
+      className="flex h-screen overflow-hidden antialiased"
     >
-      <div className="mx-auto max-w-6xl space-y-6">
-        {/* Header */}
-        <motion.header
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: easeOut }}
-          className="flex flex-col gap-4 pb-6"
-        >
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-brand-900 text-white shadow-lg shadow-black/20 sm:h-14 sm:w-14">
-                <img
-                  src="/isotipo-light.png"
-                  alt={t("common.appName")}
-                  className="h-7 w-7 object-contain sm:h-10 sm:w-10"
-                />
-              </div>
-              <div className="min-w-0">
-                <h1 className="truncate text-base font-bold tracking-tight text-neutral-900 sm:text-xl lg:text-2xl">
-                  {t(greetingKey, { name: firstName })}
-                </h1>
-                <p className="hidden text-sm font-medium text-neutral-500 sm:block">
-                  {t("dashboard.subtitle")}
-                </p>
-              </div>
-            </div>
+      {/* ── Mobile overlay ───────────────────────────────── */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            key="sidebar-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-20 bg-black/60 backdrop-blur-sm lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+      </AnimatePresence>
 
-            {/* En móvil, idioma y salir viven junto al logo; el selector de
-                vistas baja a su propia fila con scroll horizontal. */}
-            <div className="flex shrink-0 items-center gap-2 sm:hidden">
-              <LanguageSwitcher variant="default" />
-              <button
-                type="button"
-                onClick={logout}
-                title={t("common.logoutTitle")}
-                aria-label={t("common.logout")}
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 bg-white text-neutral-500 shadow-sm transition-all active:bg-rose-50 active:text-rose-600 cursor-pointer"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            {/* View Switcher: en pantallas angostas se desliza horizontal en
-                vez de encimarse o desbordar la pantalla. */}
-            <div className="scrollbar-hide -mx-3 flex items-center gap-1.5 overflow-x-auto rounded-2xl border border-neutral-200 bg-white p-1 px-3 shadow-sm sm:mx-0 sm:px-1">
-              <button
-                type="button"
-                onClick={() => setActiveView("dashboard")}
-                className={`relative z-10 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
-                  activeView === "dashboard"
-                    ? "text-white"
-                    : "text-neutral-500 hover:text-neutral-900"
-                }`}
-              >
-                <LayoutDashboard className="h-3.5 w-3.5" />
-                {t("dashboard.nav.transactions")}
-                {activeView === "dashboard" && (
-                  <motion.span
-                    layoutId="viewSwitcherPill"
-                    transition={{ duration: 0.35, ease: easeOut }}
-                    className="absolute inset-0 -z-10 rounded-xl bg-brand-600 shadow-sm"
-                  />
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveView("budgets")}
-                className={`relative z-10 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
-                  activeView === "budgets"
-                    ? "text-white"
-                    : "text-neutral-500 hover:text-neutral-900"
-                }`}
-              >
-                <PiggyBank className="h-3.5 w-3.5" />
-                {t("dashboard.nav.budgets")}
-                {activeView === "budgets" && (
-                  <motion.span
-                    layoutId="viewSwitcherPill"
-                    transition={{ duration: 0.35, ease: easeOut }}
-                    className="absolute inset-0 -z-10 rounded-xl bg-brand-600 shadow-sm"
-                  />
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveView("categories")}
-                className={`relative z-10 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
-                  activeView === "categories"
-                    ? "text-white"
-                    : "text-neutral-500 hover:text-neutral-900"
-                }`}
-              >
-                <Tags className="h-3.5 w-3.5" />
-                {t("dashboard.nav.categories")}
-                {activeView === "categories" && (
-                  <motion.span
-                    layoutId="viewSwitcherPill"
-                    transition={{ duration: 0.35, ease: easeOut }}
-                    className="absolute inset-0 -z-10 rounded-xl bg-brand-600 shadow-sm"
-                  />
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveView("goals")}
-                className={`relative z-10 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
-                  activeView === "goals"
-                    ? "text-white"
-                    : "text-neutral-500 hover:text-neutral-900"
-                }`}
-              >
-                <Target className="h-3.5 w-3.5" />
-                {t("dashboard.nav.goals")}
-                {activeView === "goals" && (
-                  <motion.span
-                    layoutId="viewSwitcherPill"
-                    transition={{ duration: 0.35, ease: easeOut }}
-                    className="absolute inset-0 -z-10 rounded-xl bg-brand-600 shadow-sm"
-                  />
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveView("explore")}
-                className={`relative z-10 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
-                  activeView === "explore"
-                    ? "text-white"
-                    : "text-neutral-500 hover:text-neutral-900"
-                }`}
-              >
-                <Compass className="h-3.5 w-3.5" />
-                {t("dashboard.nav.explore")}
-                {activeView === "explore" && (
-                  <motion.span
-                    layoutId="viewSwitcherPill"
-                    transition={{ duration: 0.35, ease: easeOut }}
-                    className="absolute inset-0 -z-10 rounded-xl bg-brand-600 shadow-sm"
-                  />
-                )}
-              </button>
-            </div>
-
-            {/* En sm+ (tablet/desktop), idioma y salir vuelven a vivir al
-                lado del selector de vistas, en vez de junto al logo. */}
-            <div className="hidden shrink-0 items-center gap-3 sm:flex">
-              <LanguageSwitcher variant="default" />
-
-              <button
-                type="button"
-                onClick={logout}
-                title={t("common.logoutTitle")}
-                className="flex items-center gap-1.5 rounded-2xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-neutral-500 shadow-sm transition-all hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 cursor-pointer"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">{t("common.logout")}</span>
-              </button>
-            </div>
-          </div>
-        </motion.header>
-
-        <OnboardingChecklist
-          userId={user._id}
-          hasTransactions={transactions.length > 0}
-          hasBudget={hasBudget}
-          hasCustomCategory={hasCustomCategory}
-          onGoToBudgets={() => setActiveView("budgets")}
-          onGoToCategories={() => setActiveView("categories")}
-        />
-
-        <AnimatePresence>
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -8, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: "auto" }}
-              exit={{ opacity: 0, y: -8, height: 0 }}
-              transition={{ duration: 0.3, ease: easeOut }}
-              className="flex items-start gap-2 overflow-hidden rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700"
-            >
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-              <p>{error}</p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Dashboard Layout */}
-        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
-          {/* Left Column: Form.
-              En móvil este panel solo tiene sentido dentro de la vista de
-              transacciones: si se deja siempre visible, al cambiar de
-              pestaña (presupuesto, categorías, etc.) el contenido nuevo
-              queda oculto debajo de este formulario y parece que el botón
-              no hizo nada. En pantallas lg+ (desktop) se mantiene visible
-              siempre, como panel fijo junto al contenido. */}
+      {/* ── Sidebar ──────────────────────────────────────── */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-30 flex w-60 shrink-0 flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+        style={{ backgroundColor: "#111111" }}
+      >
+        {/* Logo */}
+        <div className="flex items-center gap-3 border-b px-5 py-5" style={{ borderColor: "#1f1f1f" }}>
           <div
-            className={`space-y-6 lg:sticky lg:top-8 lg:col-span-4 ${
-              activeView === "dashboard" ? "" : "hidden lg:block"
-            }`}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+            style={{ backgroundColor: "#1a1a1a" }}
           >
-            <TransactionForm
-              categories={categories}
-              onAddTransaction={handleAddTransaction}
-            />
-            <UpcomingPayments
-              transactions={transactions}
-              categories={categories}
-              wallet={wallet}
+            <img
+              src="/isotipo-light.png"
+              alt={t("common.appName")}
+              className="h-6 w-6 object-contain"
             />
           </div>
+          <span className="text-sm font-bold tracking-tight text-white">
+            {t("common.appName")}
+          </span>
+          {/* Close button — mobile only */}
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(false)}
+            className="ml-auto flex h-7 w-7 items-center justify-center rounded-lg text-[#9ca3af] hover:text-white transition-colors lg:hidden cursor-pointer"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
 
-          {/* Right Column: Cards, Filters & List */}
-          <div className="space-y-6 lg:col-span-8">
-            <AnimatePresence mode="wait">
-              {activeView === "dashboard" && (
-                <>
-                  <motion.div
-                    key="dashboard-view"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.32, ease: easeOut }}
-                    className="space-y-6"
-                  >
-                    <KPICards transactions={transactions} wallet={wallet} />
+        {/* Greeting (mobile, inside sidebar) */}
+        <div className="border-b px-5 py-3 lg:hidden" style={{ borderColor: "#1f1f1f" }}>
+          <p className="text-xs font-semibold text-white">{t(greetingKey, { name: firstName })}</p>
+          <p className="text-[11px] text-[#9ca3af]">{t("dashboard.subtitle")}</p>
+        </div>
 
-                    {transactions.length > 0 && (
-                      <InsightsPanel
-                        token={token}
-                        walletId={wallet?.wallet_id}
-                      />
-                    )}
-
-                    <DashboardCharts
-                      transactions={transactions}
-                      categories={categories}
-                      wallet={wallet}
-                    />
-
-                    <TransactionFilters
-                      categories={categories}
-                      search={search}
-                      setSearch={setSearch}
-                      typeFilter={typeFilter}
-                      setTypeFilter={setTypeFilter}
-                      categoryFilter={categoryFilter}
-                      setCategoryFilter={setCategoryFilter}
-                      onResetFilters={handleResetFilters}
-                    />
-
-                    <div>
-                      <div className="mb-3 flex items-center justify-between px-1">
-                        <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-500">
-                          {t("dashboard.history.title")}
-                        </h3>
-                        <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-500">
-                          {filteredTransactions.length}{" "}
-                          {t(
-                            filteredTransactions.length === 1
-                              ? "dashboard.history.count.one"
-                              : "dashboard.history.count.other",
-                          )}
-                        </span>
-                      </div>
-                      <TransactionList
-                        transactions={filteredTransactions}
-                        categories={categories}
-                        onDeleteTransaction={requestDeleteTransaction}
-                        wallet={wallet}
-                      />
-                    </div>
-                  </motion.div>
-                  <ConfirmDialog
-                    open={Boolean(pendingDeleteTransactionId)}
-                    title={t("dashboard.confirm.deleteTitle")}
-                    message={t("dashboard.confirm.delete")}
-                    cancelLabel={t("common.dialog.cancel")}
-                    confirmLabel={t("common.dialog.confirm")}
-                    onCancel={cancelDeleteTransaction}
-                    onConfirm={confirmDeleteTransaction}
+        {/* Nav items */}
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
+          {NAV_ITEMS.map(({ id, labelKey, Icon }) => {
+            const isActive = activeView === id;
+            return (
+              <button
+                key={id}
+                type="button"
+                onClick={() => { setActiveView(id); setSidebarOpen(false); }}
+                className="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all cursor-pointer"
+                style={{
+                  backgroundColor: isActive ? "rgba(74,222,128,0.08)" : "transparent",
+                  color: isActive ? "#4ade80" : "#9ca3af",
+                }}
+                onMouseEnter={e => { if (!isActive) { e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.05)"; e.currentTarget.style.color = "#ffffff"; } }}
+                onMouseLeave={e => { if (!isActive) { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#9ca3af"; } }}
+              >
+                {/* Active indicator bar */}
+                {isActive && (
+                  <span
+                    className="absolute left-0 h-5 w-0.5 rounded-r-full"
+                    style={{ backgroundColor: "#4ade80" }}
                   />
-                </>
-              )}
+                )}
+                <Icon className="h-4 w-4 shrink-0" />
+                {t(labelKey)}
+              </button>
+            );
+          })}
+        </nav>
 
-              {activeView === "budgets" && (
+        {/* Bottom: theme + lang + logout */}
+        <div className="border-t px-3 py-4 space-y-0.5" style={{ borderColor: "#1f1f1f" }}>
+          <div className="flex items-center gap-2 px-3 py-2">
+            <ThemeToggle variant="icon" />
+            <LanguageSwitcher variant="default" align="left" drop="up" />
+          </div>
+          <button
+            type="button"
+            onClick={logout}
+            className="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all cursor-pointer"
+            style={{ color: "#9ca3af" }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = "rgba(248,113,113,0.08)"; e.currentTarget.style.color = "#f87171"; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#9ca3af"; }}
+          >
+            <LogOut className="h-4 w-4 shrink-0" />
+            {t("common.logout")}
+          </button>
+        </div>
+      </aside>
+
+      {/* ── Main content ─────────────────────────────────── */}
+      <div className="flex flex-1 flex-col overflow-hidden bg-neutral-50 text-neutral-800">
+
+        {/* Top header bar */}
+        <header className="relative z-50 flex shrink-0 items-center justify-between gap-4 border-b border-neutral-200 bg-white/80 px-4 py-3 backdrop-blur-md sm:px-6">
+          <div className="flex items-center gap-3">
+            {/* Hamburger — mobile only */}
+            <button
+              type="button"
+              onClick={() => setSidebarOpen(true)}
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 bg-white text-neutral-500 shadow-sm transition-all hover:bg-neutral-100 lg:hidden cursor-pointer"
+            >
+              <Menu className="h-4 w-4" />
+            </button>
+            <div>
+              <h1 className="text-base font-bold text-neutral-900 sm:text-lg">
+                {t(NAV_ITEMS.find(n => n.id === activeView)?.labelKey ?? "dashboard.nav.transactions")}
+              </h1>
+              <p className="hidden text-xs font-medium text-neutral-500 sm:block">
+                {t(greetingKey, { name: firstName })} &middot; {t("dashboard.subtitle")}
+              </p>
+            </div>
+          </div>
+
+          {/* Desktop right-side actions (sidebar already shows these on mobile) */}
+          <div className="hidden items-center gap-2 lg:flex">
+            <ThemeToggle variant="icon" />
+            <LanguageSwitcher variant="default" />
+            <button
+              type="button"
+              onClick={logout}
+              className="flex items-center gap-1.5 rounded-2xl border border-neutral-200 bg-white px-3.5 py-2 text-xs font-semibold text-neutral-500 shadow-sm transition-all hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 cursor-pointer"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              {t("common.logout")}
+            </button>
+          </div>
+          {/* Mobile: just theme toggle in header */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <ThemeToggle variant="icon" />
+          </div>
+        </header>
+
+        {/* Scrollable page content */}
+        <main className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
+
+          <OnboardingChecklist
+            userId={user._id}
+            hasTransactions={transactions.length > 0}
+            hasBudget={hasBudget}
+            hasCustomCategory={hasCustomCategory}
+            onGoToBudgets={() => setActiveView("budgets")}
+            onGoToCategories={() => setActiveView("categories")}
+          />
+
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -8, height: 0 }}
+                animate={{ opacity: 1, y: 0, height: "auto" }}
+                exit={{ opacity: 0, y: -8, height: 0 }}
+                transition={{ duration: 0.3, ease: easeOut }}
+                className="mb-4 flex items-start gap-2 overflow-hidden rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700"
+              >
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                <p>{error}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* ── Views (all full-width) ────────────────────── */}
+          <AnimatePresence mode="wait">
+            {activeView === "dashboard" && (
+              <>
                 <motion.div
-                  key="budgets-view"
+                  key="dashboard-view"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.32, ease: easeOut }}
                   className="space-y-6"
                 >
-                  <BudgetOverview
+                  <KPICards transactions={transactions} wallet={wallet} />
+
+                  {transactions.length > 0 && (
+                    <InsightsPanel
+                      token={token}
+                      walletId={wallet?.wallet_id}
+                    />
+                  )}
+
+                  <DashboardCharts
                     transactions={transactions}
-                    budgets={budgets}
                     categories={categories}
                     wallet={wallet}
                   />
-                  <BudgetManager
+
+                  <TransactionFilters
                     categories={categories}
-                    budgets={budgets}
-                    onUpdateBudget={handleUpdateBudget}
+                    search={search}
+                    setSearch={setSearch}
+                    typeFilter={typeFilter}
+                    setTypeFilter={setTypeFilter}
+                    categoryFilter={categoryFilter}
+                    setCategoryFilter={setCategoryFilter}
+                    onResetFilters={handleResetFilters}
                   />
-                </motion.div>
-              )}
 
-              {activeView === "categories" && (
-                <motion.div
-                  key="categories-view"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.32, ease: easeOut }}
-                  className="space-y-6"
-                >
-                  <CategoryManager
+                  <div>
+                    <div className="mb-3 flex items-center justify-between px-1">
+                      <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-500">
+                        {t("dashboard.history.title")}
+                      </h3>
+                      <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-500">
+                        {filteredTransactions.length}{" "}
+                        {t(
+                          filteredTransactions.length === 1
+                            ? "dashboard.history.count.one"
+                            : "dashboard.history.count.other",
+                        )}
+                      </span>
+                    </div>
+                    <TransactionList
+                      transactions={filteredTransactions}
+                      categories={categories}
+                      onDeleteTransaction={requestDeleteTransaction}
+                      wallet={wallet}
+                    />
+                  </div>
+                </motion.div>
+                <ConfirmDialog
+                  open={Boolean(pendingDeleteTransactionId)}
+                  title={t("dashboard.confirm.deleteTitle")}
+                  message={t("dashboard.confirm.delete")}
+                  cancelLabel={t("common.dialog.cancel")}
+                  confirmLabel={t("common.dialog.confirm")}
+                  onCancel={cancelDeleteTransaction}
+                  onConfirm={confirmDeleteTransaction}
+                />
+              </>
+            )}
+
+            {activeView === "agregar" && (
+              <motion.div
+                key="agregar-view"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.32, ease: easeOut }}
+                className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2"
+              >
+                <div className="lg:sticky lg:top-6">
+                  <TransactionForm
                     categories={categories}
-                    onCreateCategory={handleCreateCategory}
-                    onUpdateCategory={handleUpdateCategory}
-                    onDeleteCategory={handleDeleteCategory}
+                    onAddTransaction={handleAddTransaction}
                   />
-                </motion.div>
-              )}
+                </div>
+                <UpcomingPayments
+                  transactions={transactions}
+                  categories={categories}
+                  wallet={wallet}
+                />
+              </motion.div>
+            )}
 
-              {activeView === "goals" && (
-                <motion.div
-                  key="goals-view"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.32, ease: easeOut }}
-                  className="space-y-6"
-                >
-                  <SavingsGoals userId={user._id} wallet={wallet} />
-                </motion.div>
-              )}
+            {activeView === "budgets" && (
+              <motion.div
+                key="budgets-view"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.32, ease: easeOut }}
+                className="space-y-6"
+              >
+                <BudgetOverview
+                  transactions={transactions}
+                  budgets={budgets}
+                  categories={categories}
+                  wallet={wallet}
+                />
+                <BudgetManager
+                  categories={categories}
+                  budgets={budgets}
+                  onUpdateBudget={handleUpdateBudget}
+                />
+              </motion.div>
+            )}
 
-              {activeView === "explore" && (
-                <motion.div
-                  key="explore-view"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.32, ease: easeOut }}
-                  className="space-y-6"
-                >
-                  <InvestmentExplorer
-                    token={token}
-                    walletId={wallet?.wallet_id}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
+            {activeView === "categories" && (
+              <motion.div
+                key="categories-view"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.32, ease: easeOut }}
+                className="space-y-6"
+              >
+                <CategoryManager
+                  categories={categories}
+                  onCreateCategory={handleCreateCategory}
+                  onUpdateCategory={handleUpdateCategory}
+                  onDeleteCategory={handleDeleteCategory}
+                />
+              </motion.div>
+            )}
+
+            {activeView === "goals" && (
+              <motion.div
+                key="goals-view"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.32, ease: easeOut }}
+                className="space-y-6"
+              >
+                <SavingsGoals userId={user._id} wallet={wallet} />
+              </motion.div>
+            )}
+
+            {activeView === "explore" && (
+              <motion.div
+                key="explore-view"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.32, ease: easeOut }}
+                className="space-y-6"
+              >
+                <InvestmentExplorer
+                  token={token}
+                  walletId={wallet?.wallet_id}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
       </div>
     </motion.div>
   );

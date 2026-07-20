@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useLanguage } from "../context/LanguageContext";
+import { useTheme } from "../context/ThemeContext";
+import { ThemeToggle } from "./ThemeToggle";
 import {
   infoPath,
   landingSectionPath,
@@ -50,6 +52,7 @@ const FOOTER_COLUMNS = [
 
 export function Footer() {
   const { t } = useLanguage();
+  const { theme } = useTheme();
   const year = new Date().getFullYear();
   const footerRef = useRef(null);
 
@@ -89,13 +92,16 @@ export function Footer() {
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-6">
             <img
-              src="/isotipo-dark.png"
+              src={theme === "dark" ? "/isotipo-light.png" : "/isotipo-dark.png"}
               alt={t("common.appName")}
               className="h-12 w-auto"
             />
             <p className="max-w-xs text-sm leading-relaxed text-neutral-500">
               {t("landing.footer.tagline")}
             </p>
+            <div className="flex items-center gap-4">
+              <ThemeToggle />
+            </div>
             <p className="text-xs text-neutral-400">
               © {year} {t("common.appName")}. {t("landing.footer.rights")}
             </p>

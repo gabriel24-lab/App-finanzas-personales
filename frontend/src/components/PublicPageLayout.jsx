@@ -1,11 +1,14 @@
 import React from "react";
 import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
+import { useTheme } from "../context/ThemeContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 import { Footer } from "./Footer";
 
 export function PublicPageLayout({ title, subtitle, children, onBack }) {
   const { t } = useLanguage();
+  const { theme } = useTheme();
 
   return (
     <div className="min-h-screen bg-neutral-50 text-neutral-800 antialiased">
@@ -29,7 +32,7 @@ export function PublicPageLayout({ title, subtitle, children, onBack }) {
             className="flex items-center gap-2"
           >
             <img
-              src="/isotipo-dark.png"
+              src={theme === "dark" ? "/isotipo-light.png" : "/isotipo-dark.png"}
               alt={t("common.appName")}
               className="h-10 w-auto"
             />
@@ -38,7 +41,10 @@ export function PublicPageLayout({ title, subtitle, children, onBack }) {
             </span>
           </a>
 
-          <LanguageSwitcher variant="default" />
+          <div className="flex shrink-0 items-center gap-2">
+            <ThemeToggle variant="icon" />
+            <LanguageSwitcher variant="default" />
+          </div>
         </div>
       </header>
 

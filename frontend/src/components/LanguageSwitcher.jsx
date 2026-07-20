@@ -6,7 +6,9 @@ import { useLanguage } from "../context/LanguageContext";
 // Selector de idioma tipo "mundo" para la esquina superior derecha.
 // variant="light"  -> pensado para fondos oscuros (landing hero, panel de auth)
 // variant="default"-> pensado para fondos claros (dashboard, resto de la app)
-export function LanguageSwitcher({ variant = "default" }) {
+// align="right" | "left" -> alineación horizontal del dropdown
+// drop="down" | "up" -> dirección en la que se abre el dropdown
+export function LanguageSwitcher({ variant = "default", align = "right", drop = "down" }) {
   const { lang, setLang, languages, t } = useLanguage();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -48,11 +50,13 @@ export function LanguageSwitcher({ variant = "default" }) {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -6, scale: 0.97 }}
+            initial={{ opacity: 0, y: drop === "up" ? 6 : -6, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -6, scale: 0.97 }}
+            exit={{ opacity: 0, y: drop === "up" ? 6 : -6, scale: 0.97 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className={`absolute right-0 z-50 mt-2 w-48 overflow-hidden rounded-2xl border shadow-xl ${
+            className={`absolute z-50 w-48 overflow-hidden rounded-2xl border shadow-xl ${
+              align === "left" ? "left-0" : "right-0"
+            } ${drop === "up" ? "bottom-full mb-2" : "top-full mt-2"} ${
               isLight
                 ? "border-white/10 bg-brand-950/95 backdrop-blur"
                 : "border-neutral-200 bg-white"

@@ -30,12 +30,92 @@
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  color: #1c1c1c;
-  background: #f7f7f7;
+  color: var(--color-brand-800);
+  background: var(--color-brand-100);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.dark {
+  /* Invert Brand Palette */
+  --color-brand-50: #000000;
+  --color-brand-100: #0a0a0a;
+  --color-brand-200: #1c1c1c;
+  --color-brand-300: #4a4a4a;
+  --color-brand-400: #757575;
+  --color-brand-500: #9e9e9e;
+  --color-brand-600: #c2c2c2;
+  --color-brand-700: #dcdcdc;
+  --color-brand-800: #ececec;
+  --color-brand-900: #f7f7f7;
+  --color-brand-950: #ffffff;
+
+  /* Invert Neutral Palette — texts stay legible in dark backgrounds */
+  --color-neutral-50: #171717;   /* fondos más oscuros */
+  --color-neutral-100: #262626;  /* fondos oscuros */
+  --color-neutral-200: #404040;  /* bordes sutiles */
+  --color-neutral-300: #737373;  /* texto muy secundario */
+  --color-neutral-400: #a3a3a3;  /* texto secundario suave */
+  --color-neutral-500: #d4d4d4;  /* texto secundario → gris claro visible */
+  --color-neutral-600: #e5e5e5;  /* texto medio → casi blanco */
+  --color-neutral-700: #f0f0f0;  /* texto importante → blanco suave */
+  --color-neutral-800: #f5f5f5;  /* texto principal → blanco */
+  --color-neutral-900: #fafafa;  /* texto principal fuerte → blanco puro */
+  --color-neutral-950: #ffffff;  /* máximo contraste */
+
+  /* Invert White and Black */
+  --color-white: #0a0a0a;
+  --color-black: #ffffff;
+
+  /* Adjust Accents for Dark Mode (prevent blinding) */
+  --color-rose-50: #4c0519;
+  --color-rose-100: #881337;
+  --color-rose-200: #9f1239;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #fb7185;
+  --color-rose-700: #fda4af;
+  
+  --color-emerald-50: #022c22;
+  --color-emerald-100: #064e3b;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #34d399;
+  
+  --color-amber-50: #451a03;
+  --color-amber-100: #78350f;
+  --color-amber-500: #f59e0b;
+}
+
+/* Utilidad para secciones con imágenes oscuras físicas que siempre deben
+   comportarse como si estuvieran en modo claro para preservar legibilidad */
+.force-light {
+  --color-brand-50: #ffffff !important;
+  --color-brand-100: #f7f7f7 !important;
+  --color-brand-200: #ececec !important;
+  --color-brand-300: #dcdcdc !important;
+  --color-brand-400: #c2c2c2 !important;
+  --color-brand-500: #9e9e9e !important;
+  --color-brand-600: #757575 !important;
+  --color-brand-700: #4a4a4a !important;
+  --color-brand-800: #1c1c1c !important;
+  --color-brand-900: #0a0a0a !important;
+  --color-brand-950: #000000 !important;
+
+  --color-neutral-50: #fafafa !important;
+  --color-neutral-100: #f5f5f5 !important;
+  --color-neutral-200: #e5e5e5 !important;
+  --color-neutral-300: #d4d4d4 !important;
+  --color-neutral-400: #a3a3a3 !important;
+  --color-neutral-500: #737373 !important;
+  --color-neutral-600: #525252 !important;
+  --color-neutral-700: #404040 !important;
+  --color-neutral-800: #262626 !important;
+  --color-neutral-900: #171717 !important;
+  --color-neutral-950: #0a0a0a !important;
+
+  --color-white: #ffffff !important;
+  --color-black: #000000 !important;
 }
 
 * {
@@ -43,7 +123,7 @@
 }
 
 html {
-  background: #f7f7f7;
+  background: var(--color-brand-100);
   scroll-behavior: smooth;
 }
 

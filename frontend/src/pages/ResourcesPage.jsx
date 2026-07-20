@@ -135,7 +135,7 @@ const ResourceCardComponent = React.memo(function ResourceCard({
 
   return (
     <article
-      className={`${cardBaseClass} ${className}`}
+      className={`${cardBaseClass} force-light ${className}`}
       style={{
         minHeight: "260px",
         contain: "layout paint style",
