@@ -154,7 +154,7 @@ export function OnboardingChecklist({
                 <p
                   className={`text-xs font-semibold leading-tight ${
                     step.done
-                      ? "text-emerald-700 line-through"
+                      ? "text-emerald-700 line-through dark:text-white"
                       : "text-neutral-800"
                   }`}
                 >

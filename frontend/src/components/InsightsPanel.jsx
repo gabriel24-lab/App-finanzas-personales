@@ -20,9 +20,9 @@ const ICON_MAP = {
 };
 
 const SEVERITY_STYLES = {
-  positive: "border-emerald-100 bg-emerald-50 text-emerald-800",
-  warning: "border-amber-100 bg-amber-50 text-amber-800",
-  neutral: "border-neutral-100 bg-neutral-50 text-neutral-700",
+  positive: "border-emerald-100 bg-emerald-50 text-emerald-800 dark:text-white",
+  warning: "border-amber-100 bg-amber-50 text-amber-800 dark:text-white",
+  neutral: "border-neutral-100 bg-neutral-50 text-neutral-700 dark:text-white",
 };
 
 export function InsightsPanel({ token, walletId }) {
