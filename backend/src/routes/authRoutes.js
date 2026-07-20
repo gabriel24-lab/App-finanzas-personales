@@ -26,7 +26,7 @@ router.post("/login", authLimiter, validate(loginSchema), login);
 // GET /api/auth/me
 router.get("/me", protect, me);
 
-// POST /api/auth/logout
-router.post("/logout", logout);
+// POST /api/auth/logout — requiere token válido para poder revocarlo
+router.post("/logout", protect, logout);
 
 module.exports = router;

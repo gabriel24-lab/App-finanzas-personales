@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { Parser } = require("json2csv");
 const ExcelJS = require("exceljs");
 const User = require("../models/User");
 const Transaction = require("../models/Transaction");
@@ -12,6 +11,25 @@ const {
   groupByCategory,
   escapeRegex,
 } = require("../utils/reportUtils");
+
+/**
+ * Serializa un valor individual al formato CSV (RFC 4180).
+ * Encierra el campo en comillas dobles si contiene comas, comillas o saltos
+ * de línea; duplica las comillas internas según el estándar.
+ * SEC-16: reemplaza la dependencia json2csv (alpha) con implementación propia.
+ */
+function escapeCSV(value) {
+  if (value === null || value === undefined) return "";
+  const str = String(value);
+  if (str.includes(",") || str.includes('"') || str.includes("\n") || str.includes("\r")) {
+    return '"' + str.replace(/"/g, '""') + '"';
+  }
+  return str;
+}
+
+function rowToCSV(fields) {
+  return fields.map(escapeCSV).join(",");
+}
 
 /**
  * POST /api/transactions
@@ -707,7 +725,10 @@ const searchTransactions = asyncHandler(async (req, res) => {
     throw new ApiError(400, "La búsqueda debe tener al menos 2 caracteres.");
   }
 
-  const query = String(q).trim();
+  // SEC-07: limitar la longitud máxima del query antes de construir el regex,
+  // reduciendo el coste del motor de expresiones regulares en MongoDB.
+  const MAX_Q = 100;
+  const query = String(q).trim().slice(0, MAX_Q);
   const filter = { user_id: req.userId };
 
   if (wallet_id) filter.wallet_id = wallet_id;
@@ -716,7 +737,7 @@ const searchTransactions = asyncHandler(async (req, res) => {
   const numericQuery = Number(query.replace(/[^\d.-]/g, ""));
   const orConditions = [
     { description: { $regex: escapeRegex(query), $options: "i" } },
-    { category: { $regex: escapeRegex(query), $options: "i" } },
+    { category:    { $regex: escapeRegex(query), $options: "i" } },
   ];
   if (!Number.isNaN(numericQuery) && numericQuery > 0) {
     orConditions.push({ amount: numericQuery });
@@ -745,60 +766,84 @@ const exportTransactions = asyncHandler(async (req, res) => {
 
   const filter = { user_id: req.userId };
   if (wallet_id) filter.wallet_id = wallet_id;
-  if (type) filter.type = type;
-  if (category) filter.category = category;
+  if (type)      filter.type = type;
+  if (category)  filter.category = category;
   if (from || to) {
     filter.date = {};
     if (from) filter.date.$gte = new Date(from);
-    if (to) filter.date.$lte = new Date(to);
+    if (to)   filter.date.$lte = new Date(to);
   }
 
-  const transactions = await Transaction.find(filter).sort({ date: -1 }).limit(5000);
-
-  const rows = transactions.map((t) => ({
-    fecha: new Date(t.date).toISOString().split("T")[0],
-    descripcion: t.description,
-    categoria: t.category,
-    tipo: t.type === "income" ? "Ingreso" : "Gasto",
-    monto: t.amount,
-    moneda: t.currency_code,
-    billetera: t.wallet_id,
-  }));
-
   const timestamp = new Date().toISOString().split("T")[0];
+  const EXPORT_LIMIT = 5000;
 
   if (format === "csv") {
-    const parser = new Parser({ fields: Object.keys(rows[0] || {}) });
-    const csv = rows.length > 0 ? parser.parse(rows) : "fecha,descripcion,categoria,tipo,monto,moneda,billetera\n";
+    // SEC-08: streaming con cursor de Mongoose para evitar cargar todos los
+    // registros en memoria antes de comenzar a escribir la respuesta.
+    const safeName = `transacciones-${timestamp}.csv`;
     res.setHeader("Content-Type", "text/csv; charset=utf-8");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename="transacciones-${timestamp}.csv"`
+      `attachment; filename="${safeName}"; filename*=UTF-8''${encodeURIComponent(safeName)}`
     );
-    return res.send("\uFEFF" + csv);
+
+    // BOM UTF-8 para que Excel abra el archivo correctamente
+    res.write("\uFEFF");
+    res.write(rowToCSV(["fecha", "descripcion", "categoria", "tipo", "monto", "moneda", "billetera"]) + "\n");
+
+    const cursor = Transaction.find(filter).sort({ date: -1 }).limit(EXPORT_LIMIT).cursor();
+    for await (const t of cursor) {
+      res.write(
+        rowToCSV([
+          new Date(t.date).toISOString().split("T")[0],
+          t.description,
+          t.category,
+          t.type === "income" ? "Ingreso" : "Gasto",
+          t.amount,
+          t.currency_code,
+          t.wallet_id,
+        ]) + "\n"
+      );
+    }
+    return res.end();
   }
+
+  // XLSX: ExcelJS no soporta streaming fila a fila de forma sencilla;
+  // se mantiene carga en memoria con el mismo límite de 5000 filas.
+  const transactions = await Transaction.find(filter).sort({ date: -1 }).limit(EXPORT_LIMIT);
 
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet("Transacciones");
   sheet.columns = [
-    { header: "Fecha", key: "fecha", width: 14 },
+    { header: "Fecha",       key: "fecha",      width: 14 },
     { header: "Descripción", key: "descripcion", width: 32 },
-    { header: "Categoría", key: "categoria", width: 18 },
-    { header: "Tipo", key: "tipo", width: 12 },
-    { header: "Monto", key: "monto", width: 14 },
-    { header: "Moneda", key: "moneda", width: 10 },
-    { header: "Billetera", key: "billetera", width: 16 },
+    { header: "Categoría",  key: "categoria",   width: 18 },
+    { header: "Tipo",        key: "tipo",        width: 12 },
+    { header: "Monto",       key: "monto",       width: 14 },
+    { header: "Moneda",      key: "moneda",      width: 10 },
+    { header: "Billetera",   key: "billetera",   width: 16 },
   ];
-  sheet.addRows(rows);
+  sheet.addRows(
+    transactions.map((t) => ({
+      fecha:       new Date(t.date).toISOString().split("T")[0],
+      descripcion: t.description,
+      categoria:   t.category,
+      tipo:        t.type === "income" ? "Ingreso" : "Gasto",
+      monto:       t.amount,
+      moneda:      t.currency_code,
+      billetera:   t.wallet_id,
+    }))
+  );
   sheet.getRow(1).font = { bold: true };
 
+  const safeXlsxName = `transacciones-${timestamp}.xlsx`;
   res.setHeader(
     "Content-Type",
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   );
   res.setHeader(
     "Content-Disposition",
-    `attachment; filename="transacciones-${timestamp}.xlsx"`
+    `attachment; filename="${safeXlsxName}"; filename*=UTF-8''${encodeURIComponent(safeXlsxName)}`
   );
   await workbook.xlsx.write(res);
   res.end();

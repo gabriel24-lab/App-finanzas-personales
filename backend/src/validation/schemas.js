@@ -31,8 +31,10 @@ const registerSchema = z
     email: z.string().trim().toLowerCase().email("Email inválido.").max(254),
     password: z
       .string()
-      .min(6, "La contraseña debe tener al menos 6 caracteres.")
-      .max(128, "La contraseña es demasiado larga."),
+      .min(8, "La contraseña debe tener al menos 8 caracteres.")
+      .max(128, "La contraseña es demasiado larga.")
+      .regex(/[A-Z]/, "La contraseña debe contener al menos una letra mayúscula.")
+      .regex(/[0-9]/, "La contraseña debe contener al menos un número."),
     currency_code: currencyCode.optional(),
   })
   .strict();

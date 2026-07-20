@@ -53,7 +53,7 @@ import {
 const easeOut = [0.22, 1, 0.36, 1];
 
 function Dashboard() {
-  const { user, token, logout, setUser } = useAuth();
+  const { user, token, logout, updateUserData } = useAuth();
   const { t } = useLanguage();
 
   // Guard: al cerrar sesión, `user` pasa a null de inmediato, pero este
@@ -137,10 +137,8 @@ function Dashboard() {
   const applyWalletUpdate = useCallback(
     (updatedWallet) => {
       if (!updatedWallet) return;
-      setUser((prev) => {
-        if (!prev) return prev;
+      updateUserData((prev) => {
         return {
-          ...prev,
           wallets: prev.wallets.map((w) =>
             w.wallet_id === updatedWallet.wallet_id
               ? { ...w, ...updatedWallet }
@@ -149,7 +147,7 @@ function Dashboard() {
         };
       });
     },
-    [setUser],
+    [updateUserData],
   );
 
   const handleAddTransaction = useCallback(

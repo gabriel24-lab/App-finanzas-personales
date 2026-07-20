@@ -36,11 +36,16 @@ function formatMoney(value, currency = "COP") {
 const generatePDFReport = asyncHandler(async (req, res) => {
   const now = new Date();
   const month = Number(req.query.month ?? now.getMonth() + 1);
-  const year = Number(req.query.year ?? now.getFullYear());
+  const year  = Number(req.query.year  ?? now.getFullYear());
   const { wallet_id } = req.query;
 
   if (month < 1 || month > 12) {
     throw new ApiError(400, "El mes debe estar entre 1 y 12.");
+  }
+  // SEC-09: validar rango de año para evitar valores absurdos o intentos de
+  // header injection en el Content-Disposition del nombre de archivo.
+  if (!Number.isInteger(year) || year < 2000 || year > 2100) {
+    throw new ApiError(400, "El año debe estar entre 2000 y 2100.");
   }
 
   const user = await User.findById(req.userId);
@@ -70,10 +75,16 @@ const generatePDFReport = asyncHandler(async (req, res) => {
     "COP";
 
   const doc = new PDFDocument({ margin: 50, size: "A4" });
-  const filename = `reporte-${year}-${String(month).padStart(2, "0")}.pdf`;
+  const safeMonth = String(month).padStart(2, "0");
+  const safeName  = `reporte-${year}-${safeMonth}.pdf`;
 
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+  // SEC-09: RFC 5987 — nombre de archivo ASCII en filename, codificado en
+  // filename* para compatibilidad máxima con todos los navegadores.
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="${safeName}"; filename*=UTF-8''${encodeURIComponent(safeName)}`
+  );
   doc.pipe(res);
 
   doc.fontSize(18).text("Reporte de Finanzas", { align: "center" });

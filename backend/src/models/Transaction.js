@@ -18,4 +18,9 @@ const TransactionSchema = new mongoose.Schema({
 // Acelera las consultas más comunes: historial por usuario, filtrado por billetera/fecha
 TransactionSchema.index({ user_id: 1, wallet_id: 1, date: -1 });
 
+// Índice de texto para el endpoint de búsqueda (/search?q=...).
+// Es más eficiente que $regex y resistente a ReDoS al no ejecutar expresiones
+// regulares sobre cada documento.
+TransactionSchema.index({ description: "text", category: "text" });
+
 module.exports = mongoose.model("Transaction", TransactionSchema);

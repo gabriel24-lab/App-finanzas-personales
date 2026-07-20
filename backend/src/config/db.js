@@ -30,7 +30,7 @@ async function connectDB() {
       // se dejan solo como referencia si se usa un driver más antiguo.
     });
 
-    console.log(`[DB] Conectado a MongoDB -> ${mongoose.connection.name}`);
+    console.log("[DB] Conectado a MongoDB correctamente.");
   } catch (error) {
     console.error("[DB] Error al conectar a MongoDB:", error.message);
     process.exit(1);

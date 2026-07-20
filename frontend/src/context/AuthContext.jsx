@@ -83,7 +83,15 @@ export function AuthProvider({ children }) {
     logoutApi().catch(() => {});
   }, []);
 
-  const value = { user, token, loading, login, register, logout, setUser };
+  const updateUserData = useCallback((partialUser) => {
+    setUser((prev) => {
+      if (!prev) return null;
+      const updates = typeof partialUser === "function" ? partialUser(prev) : partialUser;
+      return { ...prev, ...updates };
+    });
+  }, []);
+
+  const value = { user, token, loading, login, register, logout, updateUserData };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

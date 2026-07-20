@@ -14,15 +14,34 @@ const { notFoundHandler, errorHandler } = require("./middleware/errorHandler");
 
 const app = express();
 
-// Render (y la mayoría de PaaS) coloca la app detrás de un proxy inverso.
-// Sin esto, express-rate-limit y `req.ip` verían siempre la IP del proxy
-// en vez de la IP real del usuario, rompiendo el rate limiting por IP.
-// El valor 1 le dice a Express que confíe en un solo "hop" de proxy
-// (el de Render), tomando la IP real desde X-Forwarded-For.
-app.set("trust proxy", 1);
+// SEC-04: trust proxy condicional.
+// En producción (Render), hay exactamente un hop de proxy inverso, así que
+// Express toma la IP real del usuario desde X-Forwarded-For.
+// En desarrollo local no hay proxy: usamos la IP directa para que el rate
+// limiter no vea siempre 127.0.0.1 ni acepte X-Forwarded-For manipulados.
+app.set("trust proxy", process.env.NODE_ENV === "production" ? 1 : 0);
 
-// Cabeceras de seguridad (mitiga XSS, clickjacking, sniffing, etc).
-app.use(helmet());
+// Cabeceras de seguridad (mitiga XSS, clickjacking, sniffing, etc.).
+// SEC-10: CSP explícita en lugar de la genérica por defecto de Helmet.
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc:  ["'self'"],
+        styleSrc:   ["'self'", "'unsafe-inline'"],
+        imgSrc:     ["'self'", "data:"],
+        connectSrc: ["'self'"].concat(
+          (process.env.CORS_ORIGIN || "").split(",").map((o) => o.trim()).filter(Boolean)
+        ),
+        fontSrc:    ["'self'", "https://fonts.gstatic.com"],
+        objectSrc:  ["'none'"],
+        frameAncestors: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    },
+  })
+);
 
 // Lista blanca de orígenes permitidos. En producción, CORS_ORIGIN debe ser
 // la URL exacta del frontend desplegado (puede ser una lista separada por
@@ -49,7 +68,10 @@ app.use(
   })
 );
 
-app.use(express.json());
+// SEC-06: límite de tamaño del body para prevenir ataques de agotamiento de
+// memoria (OOM) con payloads JSON enormes. 16 KB es más que suficiente para
+// cualquier request legítima de esta API.
+app.use(express.json({ limit: "16kb" }));
 
 // Elimina claves con `$` o `.` de body/query/params para prevenir inyección
 // de operadores NoSQL (ej: { "email": { "$ne": null } }).
@@ -68,8 +90,10 @@ const apiLimiter = rateLimit({
 });
 app.use("/api", apiLimiter);
 
+// SEC-13: Health check sin metadata de tecnología.
+// Solo confirma que el proceso está activo (útil para Render/uptime monitors).
 app.get("/api/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
+  res.status(200).send("ok");
 });
 
 app.use("/api/auth", authRoutes);

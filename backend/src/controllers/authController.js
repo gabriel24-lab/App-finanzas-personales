@@ -1,5 +1,7 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Category = require("../models/Category");
+const RevokedToken = require("../models/RevokedToken");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 const generateToken = require("../utils/generateToken");
@@ -33,8 +35,14 @@ const register = asyncHandler(async (req, res) => {
     throw new ApiError(400, "El nombre debe tener al menos 2 caracteres.");
   }
 
-  if (password.length < 6) {
-    throw new ApiError(400, "La contraseña debe tener al menos 6 caracteres.");
+  if (password.length < 8) {
+    throw new ApiError(400, "La contraseña debe tener al menos 8 caracteres.");
+  }
+  if (!/[A-Z]/.test(password)) {
+    throw new ApiError(400, "La contraseña debe contener al menos una letra mayúscula.");
+  }
+  if (!/[0-9]/.test(password)) {
+    throw new ApiError(400, "La contraseña debe contener al menos un número.");
   }
 
   const normalizedEmail = String(email).toLowerCase().trim();
@@ -113,14 +121,34 @@ const login = asyncHandler(async (req, res) => {
 
 /**
  * POST /api/auth/logout
- * Con el token viajando en localStorage (no en cookie), cerrar sesión es
- * responsabilidad del frontend (borrar el token guardado). Este endpoint
- * se mantiene por compatibilidad y para futuras extensiones (ej. invalidar
- * el token en una lista negra), pero no requiere `protect`.
+ * Requiere `protect`: extrae el JWT del header, decodifica el jti y lo
+ * guarda en RevokedToken con un TTL que coincide con la expiración original
+ * del token. A partir de ese momento, ese token queda inutilizable aunque
+ * siga siendo criptográficamente válido.
  */
-const logout = (req, res) => {
+const logout = asyncHandler(async (req, res) => {
+  // protect ya verificó la firma y puso req.userId; ahora necesitamos el
+  // payload completo para extraer jti y exp.
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
+
+  if (token) {
+    try {
+      const decoded = jwt.decode(token); // ya sabemos que es válido (protect pasó)
+      if (decoded?.jti && decoded?.exp) {
+        await RevokedToken.create({
+          jti: decoded.jti,
+          // exp es un timestamp Unix (segundos); lo convertimos a Date
+          expiresAt: new Date(decoded.exp * 1000),
+        });
+      }
+    } catch {
+      // Si falla el guardado, igual cerramos sesión en el cliente.
+    }
+  }
+
   res.status(200).json({ message: "Sesión cerrada correctamente." });
-};
+});
 
 /**
  * GET /api/auth/me
