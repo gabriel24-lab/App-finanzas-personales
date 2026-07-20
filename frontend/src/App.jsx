@@ -348,14 +348,14 @@ function Dashboard() {
               className="h-6 w-6 object-contain"
             />
           </div>
-          <span className="text-sm font-bold tracking-tight text-white">
+          <span className="text-sm font-bold tracking-tight text-[#ffffff]">
             {t("common.appName")}
           </span>
           {/* Close button — mobile only */}
           <button
             type="button"
             onClick={() => setSidebarOpen(false)}
-            className="ml-auto flex h-7 w-7 items-center justify-center rounded-lg text-[#9ca3af] hover:text-white transition-colors lg:hidden cursor-pointer"
+            className="ml-auto flex h-7 w-7 items-center justify-center rounded-lg text-[#9ca3af] hover:text-[#ffffff] transition-colors lg:hidden cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -363,7 +363,7 @@ function Dashboard() {
 
         {/* Greeting (mobile, inside sidebar) */}
         <div className="border-b px-5 py-3 lg:hidden" style={{ borderColor: "#1f1f1f" }}>
-          <p className="text-xs font-semibold text-white">{t(greetingKey, { name: firstName })}</p>
+          <p className="text-xs font-semibold text-[#ffffff]">{t(greetingKey, { name: firstName })}</p>
           <p className="text-[11px] text-[#9ca3af]">{t("dashboard.subtitle")}</p>
         </div>
 
