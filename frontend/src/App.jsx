@@ -323,7 +323,7 @@ function Dashboard() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-20 bg-black/60 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}
@@ -331,7 +331,7 @@ function Dashboard() {
 
       {/* ── Sidebar ──────────────────────────────────────── */}
       <aside
-        className={`fixed inset-y-0 left-0 z-30 flex w-60 shrink-0 flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-60 shrink-0 flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         style={{ backgroundColor: "#111111" }}
@@ -455,9 +455,17 @@ function Dashboard() {
               {t("common.logout")}
             </button>
           </div>
-          {/* Mobile: just theme toggle in header */}
+          {/* Mobile: theme toggle and logout in header */}
           <div className="flex items-center gap-2 lg:hidden">
             <ThemeToggle variant="icon" />
+            <button
+              type="button"
+              onClick={logout}
+              title={t("common.logout")}
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 bg-white text-neutral-500 shadow-sm transition-all hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 cursor-pointer"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
           </div>
         </header>
 
