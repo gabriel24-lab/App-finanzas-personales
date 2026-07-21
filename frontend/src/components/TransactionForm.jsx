@@ -10,7 +10,7 @@ import {
 import { TRANSACTION_TYPES } from "../types";
 import { InfoTooltip } from "./InfoTooltip";
 
-export function TransactionForm({ categories = [], onAddTransaction }) {
+export function TransactionForm({ categories = [], onAddTransaction, wallet }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState(TRANSACTION_TYPES.expense);
@@ -18,12 +18,18 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
   const [date, setDate] = useState("");
   const [error, setError] = useState("");
 
+  const locale = wallet?.currency_code ? (
+    {
+      USD: "en-US", EUR: "de-DE", COP: "es-CO", MXN: "es-MX",
+      ARS: "es-AR", CLP: "es-CL", PEN: "es-PE", BRL: "pt-BR",
+      UYU: "es-UY", GBP: "en-GB", CAD: "en-CA", CHF: "de-CH", JPY: "ja-JP",
+    }[wallet.currency_code] || "es-CO"
+  ) : "es-CO";
+
   const formatAmountInput = (value) => {
-    const cleaned = value.replace(/[^0-9,\.]/g, "");
+    const cleaned = String(value).replace(/[^0-9,\.]/g, "");
     if (!cleaned) return "";
 
-    const dotCount = (cleaned.match(/\./g) || []).length;
-    const commaCount = (cleaned.match(/,/g) || []).length;
     const lastComma = cleaned.lastIndexOf(",");
     const lastDot = cleaned.lastIndexOf(".");
     const separator = lastComma > lastDot ? "," : ".";
@@ -45,12 +51,17 @@ export function TransactionForm({ categories = [], onAddTransaction }) {
     }
 
     const numericInteger = integerPart.replace(/[^0-9]/g, "") || "0";
-    const formattedInteger = new Intl.NumberFormat("es-CO").format(
+    const formattedInteger = new Intl.NumberFormat(locale).format(
       Number(numericInteger),
     );
 
+    const decimalSeparator = new Intl.NumberFormat(locale).format(1.1).charAt(1);
+    const endsWithSeparator = cleaned.endsWith(",") || cleaned.endsWith(".");
+
     if (decimalPart) {
-      return `${formattedInteger},${decimalPart.slice(0, 2)}`;
+      return `${formattedInteger}${decimalSeparator}${decimalPart.slice(0, 2)}`;
+    } else if (endsWithSeparator) {
+      return `${formattedInteger}${decimalSeparator}`;
     }
 
     return formattedInteger;

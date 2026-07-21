@@ -10,6 +10,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { getInsights } from "../api";
+import { useLanguage } from "../context/LanguageContext";
 
 const ICON_MAP = {
   "trending-up": TrendingUp,
@@ -20,12 +21,13 @@ const ICON_MAP = {
 };
 
 const SEVERITY_STYLES = {
-  positive: "border-emerald-100 bg-emerald-50 text-emerald-800 dark:text-white",
-  warning: "border-amber-100 bg-amber-50 text-amber-800 dark:text-white",
-  neutral: "border-neutral-100 bg-neutral-50 text-neutral-700 dark:text-white",
+  positive: "border-emerald-100 bg-emerald-50 text-neutral-900",
+  warning: "border-amber-100 bg-amber-50 text-neutral-900",
+  neutral: "border-neutral-100 bg-neutral-50 text-neutral-900",
 };
 
 export function InsightsPanel({ token, walletId }) {
+  const { t } = useLanguage();
   const [insights, setInsights] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +56,7 @@ export function InsightsPanel({ token, walletId }) {
     return (
       <div className="flex items-center gap-2 rounded-2xl border border-neutral-100 bg-white px-4 py-3 text-sm text-neutral-400 shadow-sm">
         <Loader2 className="h-4 w-4 animate-spin" />
-        Analizando tus finanzas...
+        {t("dashboard.insights.loading")}
       </div>
     );
   }
@@ -65,7 +67,7 @@ export function InsightsPanel({ token, walletId }) {
     <div className="space-y-3">
       <div className="flex items-center gap-2 px-1">
         <Lightbulb className="h-4 w-4 text-amber-500" />
-        <h3 className="text-sm font-bold text-neutral-800">Insights del mes</h3>
+        <h3 className="text-sm font-bold text-neutral-800">{t("dashboard.insights.title")}</h3>
       </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {insights.map((insight, i) => {

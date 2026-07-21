@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import gsap from "gsap";
 import { Wallet, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
 import { InfoTooltip } from "./InfoTooltip";
+import { useLanguage } from "../context/LanguageContext";
 
 const easeOut = [0.22, 1, 0.36, 1];
 
@@ -23,6 +24,7 @@ const containerVariants = {
 
 export function KPICards({ transactions = [], wallet }) {
   const cardsRef = useRef(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -101,8 +103,8 @@ export function KPICards({ transactions = [], wallet }) {
         <div className="relative">
           <div className="flex items-start justify-between">
             <p className="flex items-center gap-1.5 text-sm font-medium text-white/80">
-              Balance total
-              <InfoTooltip text="Es lo que te queda hoy: la suma de todos tus ingresos menos todos tus gastos. Si es positivo, te sobra dinero; si es negativo, gastaste más de lo que ganaste." />
+              {t("dashboard.kpi.balance")}
+              <InfoTooltip text={t("dashboard.kpi.balanceTooltip")} />
             </p>
             <div className="rounded-2xl bg-white/10 p-2 text-white backdrop-blur">
               <Wallet className="h-4 w-4" />
@@ -145,8 +147,8 @@ export function KPICards({ transactions = [], wallet }) {
         <div className="relative">
           <div className="flex items-start justify-between">
             <p className="flex items-center gap-1.5 text-sm font-medium text-neutral-500">
-              Ingresos totales
-              <InfoTooltip text="Todo el dinero que ha entrado: sueldo, ventas, regalos u otros ingresos que hayas registrado." />
+              {t("dashboard.kpi.income")}
+              <InfoTooltip text={t("dashboard.kpi.incomeTooltip")} />
             </p>
             <div className="rounded-2xl bg-emerald-50 p-2.5 text-emerald-600">
               <ArrowUpRight className="h-4 w-4" />
@@ -184,8 +186,8 @@ export function KPICards({ transactions = [], wallet }) {
         <div className="relative">
           <div className="flex items-start justify-between">
             <p className="flex items-center gap-1.5 text-sm font-medium text-neutral-500">
-              Gastos totales
-              <InfoTooltip text="Todo el dinero que ha salido: compras, servicios, suscripciones y cualquier otro gasto que hayas registrado." />
+              {t("dashboard.kpi.expense")}
+              <InfoTooltip text={t("dashboard.kpi.expenseTooltip")} />
             </p>
             <div className="rounded-2xl bg-rose-50 p-2.5 text-rose-600">
               <ArrowDownRight className="h-4 w-4" />
@@ -204,8 +206,8 @@ export function KPICards({ transactions = [], wallet }) {
         <div className="mt-4 flex items-center gap-1.5 text-[11px] font-medium text-neutral-600">
           <TrendingUp className="h-3.5 w-3.5" />
           {totals.expense > totals.income
-            ? "Gastaste más de lo que ingresó"
-            : "Vas bien: gastas menos de lo que ingresa"}
+            ? t("dashboard.kpi.overspent")
+            : t("dashboard.kpi.underbudget")}
         </div>
       </motion.div>
     </motion.div>

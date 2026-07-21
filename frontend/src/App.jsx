@@ -573,6 +573,7 @@ function Dashboard() {
                   <TransactionForm
                     categories={categories}
                     onAddTransaction={handleAddTransaction}
+                    wallet={wallet}
                   />
                 </div>
                 <UpcomingPayments
@@ -602,6 +603,7 @@ function Dashboard() {
                   categories={categories}
                   budgets={budgets}
                   onUpdateBudget={handleUpdateBudget}
+                  wallet={wallet}
                 />
               </motion.div>
             )}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PlusCircle, PiggyBank, Tags, Check, X, Sparkles } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 const easeOut = [0.22, 1, 0.36, 1];
 const STORAGE_PREFIX = "app_finanzas_onboarding_dismissed_";
@@ -25,6 +26,7 @@ export function OnboardingChecklist({
   onGoToCategories,
 }) {
   const storageKey = `${STORAGE_PREFIX}${userId}`;
+  const { t } = useLanguage();
   const [dismissed, setDismissed] = useState(
     () => localStorage.getItem(storageKey) === "true",
   );
@@ -33,23 +35,23 @@ export function OnboardingChecklist({
     () => [
       {
         id: "transaction",
-        label: "Registra tu primer movimiento",
-        hint: "Usa el formulario de la izquierda para anotar un ingreso o un gasto.",
+        label: t("dashboard.onboarding.step1.title"),
+        hint: t("dashboard.onboarding.step1.hint"),
         done: hasTransactions,
         Icon: PlusCircle,
       },
       {
         id: "budget",
-        label: "Define un presupuesto",
-        hint: "Ponle un límite mensual a una categoría de gasto.",
+        label: t("dashboard.onboarding.step2.title"),
+        hint: t("dashboard.onboarding.step2.hint"),
         done: hasBudget,
         Icon: PiggyBank,
         onClick: onGoToBudgets,
       },
       {
         id: "categories",
-        label: "Ajusta tus categorías",
-        hint: "Ya te dejamos categorías por defecto: edítalas o crea las tuyas.",
+        label: t("dashboard.onboarding.step3.title"),
+        hint: t("dashboard.onboarding.step3.hint"),
         done: hasCustomCategory,
         Icon: Tags,
         onClick: onGoToCategories,
@@ -61,6 +63,7 @@ export function OnboardingChecklist({
       hasCustomCategory,
       onGoToBudgets,
       onGoToCategories,
+      t,
     ],
   );
 
@@ -105,12 +108,14 @@ export function OnboardingChecklist({
         <div className="relative flex items-center gap-2 pr-9">
           <Sparkles className="h-5 w-5 shrink-0 text-brand-800" />
           <h2 className="text-base font-bold text-neutral-800">
-            Empecemos a organizar tu dinero
+            {t("dashboard.onboarding.title")}
           </h2>
         </div>
         <p className="relative mt-1 text-xs text-neutral-500">
-          {completedCount} de {steps.length} pasos completados. Te toma menos de
-          2 minutos.
+          {t("dashboard.onboarding.progress", {
+            completed: completedCount,
+            total: steps.length,
+          })}
         </p>
 
         <div className="relative mt-2 h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
@@ -154,7 +159,7 @@ export function OnboardingChecklist({
                 <p
                   className={`text-xs font-semibold leading-tight ${
                     step.done
-                      ? "text-emerald-700 line-through dark:text-white"
+                      ? "text-neutral-900"
                       : "text-neutral-800"
                   }`}
                 >
