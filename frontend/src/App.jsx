@@ -643,7 +643,7 @@ function Dashboard() {
                 transition={{ duration: 0.32, ease: easeOut }}
                 className="space-y-6"
               >
-                <SavingsGoals userId={user._id} wallet={wallet} />
+                <SavingsGoals userId={user._id} token={token} wallet={wallet} />
               </motion.div>
             )}
 

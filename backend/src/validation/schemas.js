@@ -114,6 +114,24 @@ const upsertBudgetSchema = z
   })
   .strict();
 
+// --- Goals (metas de ahorro) ---
+
+const createGoalSchema = z
+  .object({
+    user_id: objectId,
+    name: z.string().trim().min(1, "El nombre de la meta es obligatorio.").max(80),
+    target_amount: z.number().positive("La meta total debe ser mayor que cero."),
+    current_amount: z.number().min(0, "El monto ahorrado no puede ser negativo.").optional(),
+    color: hexColor.optional(),
+  })
+  .strict();
+
+const addGoalFundsSchema = z
+  .object({
+    amount: z.number().positive("El monto debe ser mayor que cero."),
+  })
+  .strict();
+
 module.exports = {
   registerSchema,
   loginSchema,
@@ -123,4 +141,6 @@ module.exports = {
   createCategorySchema,
   updateCategorySchema,
   upsertBudgetSchema,
+  createGoalSchema,
+  addGoalFundsSchema,
 };

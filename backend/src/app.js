@@ -9,6 +9,7 @@ const userRoutes = require("./routes/userRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
 const budgetRoutes = require("./routes/budgetRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
+const goalRoutes = require("./routes/goalRoutes");
 const pdfRoutes = require("./routes/pdfRoutes");
 const { notFoundHandler, errorHandler } = require("./middleware/errorHandler");
 
@@ -101,6 +102,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/budgets", budgetRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/goals", goalRoutes);
 app.use("/api/reports", pdfRoutes);
 
 app.use(notFoundHandler);

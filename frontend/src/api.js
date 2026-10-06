@@ -232,6 +232,56 @@ export async function upsertBudgetApi(token, userId, category, monthlyLimit) {
   });
 }
 
+// --- Metas de ahorro ---
+
+function toFrontendGoal(g) {
+  return {
+    id: g._id,
+    name: g.name,
+    targetAmount: g.target_amount,
+    currentAmount: g.current_amount,
+    color: g.color,
+    createdAt: g.createdAt,
+  };
+}
+
+export async function fetchGoals(token, userId) {
+  const { goals } = await request(`/goals/${userId}`, { token });
+  return goals.map(toFrontendGoal);
+}
+
+export async function createGoalApi(
+  token,
+  userId,
+  { name, targetAmount, currentAmount, color },
+) {
+  const { goal } = await request("/goals", {
+    token,
+    method: "POST",
+    body: JSON.stringify({
+      user_id: userId,
+      name,
+      target_amount: targetAmount,
+      current_amount: currentAmount,
+      color,
+    }),
+  });
+  return toFrontendGoal(goal);
+}
+
+export async function addGoalFundsApi(token, goalId, amount) {
+  const { goal } = await request(`/goals/${goalId}/funds`, {
+    token,
+    method: "POST",
+    body: JSON.stringify({ amount }),
+  });
+  return toFrontendGoal(goal);
+}
+
+export async function deleteGoalApi(token, goalId) {
+  await request(`/goals/${goalId}`, { token, method: "DELETE" });
+}
+
 // --- Reportes y analítica (Fase 1) ---
 
 export async function getComparativeReport(token, walletId) {

@@ -4,21 +4,70 @@ import { Target, Plus, Trash2, Check, X, PartyPopper } from "lucide-react";
 import { COLOR_OPTIONS } from "../iconMap";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { useLanguage } from "../context/LanguageContext";
+import {
+  fetchGoals,
+  createGoalApi,
+  addGoalFundsApi,
+  deleteGoalApi,
+} from "../api";
 
 const easeOut = [0.22, 1, 0.36, 1];
-const STORAGE_PREFIX = "app_finanzas_goals_";
 
-function loadGoals(userId) {
+// Clave que usaban las versiones anteriores para guardar las metas SOLO en
+// este navegador. Ahora las metas viven en la base de datos; esta clave se
+// conserva únicamente para migrar una vez las metas que ya existían.
+const LEGACY_STORAGE_PREFIX = "app_finanzas_goals_";
+
+function readLegacyGoals(userId) {
   try {
-    const raw = localStorage.getItem(`${STORAGE_PREFIX}${userId}`);
-    return raw ? JSON.parse(raw) : [];
+    const raw = localStorage.getItem(`${LEGACY_STORAGE_PREFIX}${userId}`);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
 }
 
-function saveGoals(userId, goals) {
-  localStorage.setItem(`${STORAGE_PREFIX}${userId}`, JSON.stringify(goals));
+// Migraciones en curso por usuario, para que una segunda ejecución del
+// efecto espere a la primera en lugar de cargar una lista incompleta.
+const pendingMigrations = new Map();
+
+function migrateLegacyGoals(token, userId) {
+  if (pendingMigrations.has(userId)) return pendingMigrations.get(userId);
+  const promise = doMigrateLegacyGoals(token, userId).finally(() => {
+    pendingMigrations.delete(userId);
+  });
+  pendingMigrations.set(userId, promise);
+  return promise;
+}
+
+// Sube a la base de datos las metas que estaban solo en el navegador y,
+// si todo sale bien, limpia el almacenamiento local para no duplicarlas.
+async function doMigrateLegacyGoals(token, userId) {
+  const legacy = readLegacyGoals(userId);
+  if (legacy.length === 0) return;
+
+  const key = `${LEGACY_STORAGE_PREFIX}${userId}`;
+  // Se borra antes de subir para que una segunda ejecución simultánea
+  // (p. ej. React StrictMode en desarrollo) no las suba dos veces.
+  const backup = localStorage.getItem(key);
+  localStorage.removeItem(key);
+
+  try {
+    // De la más antigua a la más reciente para conservar el orden.
+    for (const g of [...legacy].reverse()) {
+      await createGoalApi(token, userId, {
+        name: g.name,
+        targetAmount: g.targetAmount,
+        currentAmount: g.currentAmount,
+        color: /^#[0-9a-fA-F]{6}$/.test(g.color || "") ? g.color : undefined,
+      });
+    }
+  } catch (err) {
+    // Si falla, se restaura para reintentar en la próxima visita.
+    if (backup !== null) localStorage.setItem(key, backup);
+    throw err;
+  }
 }
 
 function GoalForm({ onCancel, onSubmit }) {
@@ -40,12 +89,10 @@ function GoalForm({ onCancel, onSubmit }) {
       return;
     }
     onSubmit({
-      id: Date.now().toString(),
       name: name.trim(),
       targetAmount,
       currentAmount: Math.min(currentAmount, targetAmount),
       color: COLOR_OPTIONS[Math.floor(Math.random() * COLOR_OPTIONS.length)],
-      createdAt: new Date().toISOString(),
     });
   };
 
@@ -251,18 +298,44 @@ function GoalCard({ goal, formatCurrency, onAddFunds, onDelete }) {
   );
 }
 
-export function SavingsGoals({ userId, wallet }) {
-  const [goals, setGoals] = useState(() => loadGoals(userId));
+export function SavingsGoals({ userId, token, wallet }) {
+  const [goals, setGoals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [actionError, setActionError] = useState("");
   const [adding, setAdding] = useState(false);
   const currencyCode = wallet?.currency_code || "COP";
 
+  // Carga las metas desde el servidor (así se ven igual en cualquier
+  // dispositivo) y, antes, migra las que estuvieran solo en este navegador.
   useEffect(() => {
-    setGoals(loadGoals(userId));
-  }, [userId]);
+    let cancelled = false;
 
-  useEffect(() => {
-    saveGoals(userId, goals);
-  }, [userId, goals]);
+    async function load() {
+      setLoading(true);
+      setLoadError("");
+      try {
+        try {
+          await migrateLegacyGoals(token, userId);
+        } catch {
+          // Si la migración falla no bloqueamos la carga; se reintentará.
+        }
+        const data = await fetchGoals(token, userId);
+        if (!cancelled) setGoals(data);
+      } catch (err) {
+        if (!cancelled) {
+          setLoadError(err.message || "No se pudieron cargar tus metas.");
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [token, userId]);
 
   const formatCurrency = useMemo(
     () => (value) =>
@@ -274,22 +347,25 @@ export function SavingsGoals({ userId, wallet }) {
     [currencyCode],
   );
 
-  const handleCreate = (goal) => {
-    setGoals((prev) => [goal, ...prev]);
-    setAdding(false);
+  const handleCreate = async (values) => {
+    setActionError("");
+    try {
+      const created = await createGoalApi(token, userId, values);
+      setGoals((prev) => [created, ...prev]);
+      setAdding(false);
+    } catch (err) {
+      setActionError(err.message || "No se pudo crear la meta.");
+    }
   };
 
-  const handleAddFunds = (id, amount) => {
-    setGoals((prev) =>
-      prev.map((g) =>
-        g.id === id
-          ? {
-              ...g,
-              currentAmount: Math.min(g.currentAmount + amount, g.targetAmount),
-            }
-          : g,
-      ),
-    );
+  const handleAddFunds = async (id, amount) => {
+    setActionError("");
+    try {
+      const updated = await addGoalFundsApi(token, id, amount);
+      setGoals((prev) => prev.map((g) => (g.id === id ? updated : g)));
+    } catch (err) {
+      setActionError(err.message || "No se pudo agregar el ahorro.");
+    }
   };
 
   const { t } = useLanguage();
@@ -303,10 +379,17 @@ export function SavingsGoals({ userId, wallet }) {
     setPendingDeleteGoalId(null);
   };
 
-  const confirmDeleteGoal = () => {
+  const confirmDeleteGoal = async () => {
     if (!pendingDeleteGoalId) return;
-    setGoals((prev) => prev.filter((g) => g.id !== pendingDeleteGoalId));
+    const id = pendingDeleteGoalId;
     setPendingDeleteGoalId(null);
+    setActionError("");
+    try {
+      await deleteGoalApi(token, id);
+      setGoals((prev) => prev.filter((g) => g.id !== id));
+    } catch (err) {
+      setActionError(err.message || "No se pudo eliminar la meta.");
+    }
   };
 
   return (
@@ -338,6 +421,18 @@ export function SavingsGoals({ userId, wallet }) {
         )}
       </AnimatePresence>
 
+      {actionError && (
+        <p className="mt-3 text-xs font-medium text-rose-600">{actionError}</p>
+      )}
+
+      {loading && (
+        <p className="mt-3 text-xs text-neutral-500">Cargando tus metas...</p>
+      )}
+
+      {!loading && loadError && (
+        <p className="mt-3 text-xs font-medium text-rose-600">{loadError}</p>
+      )}
+
       <div className="mt-3 space-y-3">
         <AnimatePresence initial={false}>
           {goals.map((goal) => (
@@ -351,7 +446,7 @@ export function SavingsGoals({ userId, wallet }) {
           ))}
         </AnimatePresence>
 
-        {goals.length === 0 && !adding && (
+        {!loading && !loadError && goals.length === 0 && !adding && (
           <div className="rounded-2xl border border-dashed border-neutral-200 py-8 px-4 text-center">
             <p className="text-sm font-semibold text-neutral-700">
               Todavía no tienes metas de ahorro
